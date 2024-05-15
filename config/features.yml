@@ -1,0 +1,20 @@
+# Paths and parameters relative to references
+---
+hosts:  # Add more in case of multi-host, remove entries in case of environmental sample
+  chicken: resources/reference/chicken_39_sub.fa.gz
+  # GRCh38: resources/references/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.fna.gz
+  # GRCg7b: resources/references/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.fna.gz
+  # Sscrofa11.1: resources/references/GCF_000003025.6_Sscrofa11.1/GCF_000003025.6_Sscrofa11.1_genomic.fna.gz
+
+magscot:
+  pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
+  tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
+
+databases:
+  dram: resources/databases/dram/20230811
+  gtdbtk: resources/databases/gtdbtk/release214
+  singlem: resources/databases/singlem/S3.2.1.GTDB_r214.metapackage_20231006.smpkg.zb
+  kraken2:  # add entries as necessary
+    refseq500: resources/databases/kraken2/kraken2_RefSeqV205_Complete_500GB
+  virify: resources/databases/virify
+  checkm2: resources/databases/checkm2/uniref100.KO.1.dmnd

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+snakemake \
+    --use-conda \
+    -j 24 \
+    --notemp \
+    --conda-frontend mamba \
+    --rerun-incomplete \
+    "$@"
