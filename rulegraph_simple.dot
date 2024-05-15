@@ -1,0 +1,106 @@
+digraph snakemake_dag {
+    rankdir=LR;
+    // newrank=true;
+    graph[bgcolor=white, margin=0, compound=true];
+    node[shape=box, style=rounded, fontname=sans, fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+
+    subgraph cluster_0 {
+        label = "Input";
+        shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+        reference [label = "Reference\nGenome", color = "0.36 0.6 0.85"];
+        fastq     [label = "FASTQ\nreads",      color = "0.37 0.6 0.85"];
+    }
+
+
+
+    subgraph cluster_1 {
+        label = "Preprocess";
+        shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+        bowtie2   [label = "bowtie2\nHost", color = "0.64 0.6 0.85"];
+        extract   [label = "Extract\nNon-Host",    color = "0.46 0.6 0.85"];
+        fastp     [label = "fastp",                color = "0.41 0.6 0.85"];
+        {
+            rankdir=LR;
+            nonpareil [label = "Nonpareil",            color = "0.23 0.6 0.85", style = "dashed,rounded"];
+            singlem   [label = "SingleM",              color = "0.11 0.6 0.85", style = "dashed,rounded"];
+            kraken2   [label = "kraken2",              color = "0.32 0.6 0.85"];
+        }
+        fastp   -> bowtie2
+        fastp   -> nonpareil
+        fastp   -> singlem
+        fastp   -> kraken2
+        bowtie2 -> extract
+
+    }
+
+
+    subgraph cluster_2 {
+        label = "Assemble";
+        shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+        megahit [label = "MEGAHIT", color = "0.11 0.6 0.85"];
+        concoct  [label = "CONCOCT",  color = "0.36 0.6 0.85"];
+        maxbin2  [label = "MaxBin2",  color = "0.52 0.6 0.85"];
+        metabat2 [label = "MetaBAT2", color = "0.02 0.6 0.85"];
+        magscot  [label = "MAGScoT",  color = "0.23 0.6 0.85"];
+        drep   [label = "dRep",    color = "0.32 0.6 0.85", style = "dashed,rounded"];
+
+        megahit -> concoct
+        megahit -> maxbin2
+        megahit -> metabat2
+        metabat2 -> magscot
+        concoct  -> magscot
+        maxbin2  -> magscot
+        magscot  -> drep
+    }
+
+
+
+
+    subgraph cluster_6_space {
+        margin = 10;
+        style = invis;
+        subgraph cluster_6 {
+            label = "Quantify";
+            shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin=10;
+            bowtie2_drep [label = "bowtie2\nMAGs", color = "0.22 0.86 0.33", style = "dashed,rounded"];
+            coverm       [label = "CoverM",  color = "0.44 0.6 0.85", style = "dashed,rounded"];
+        }
+        bowtie2_drep -> coverm
+    }
+
+    subgraph cluster_7_space {
+        margin = 10;
+        style = invis;
+        subgraph cluster_7 {
+            label = "Annotate";
+            shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin=10;
+            gtdbtk [label = "GTDB-TK", color = "0.34 0.6 0.85", style = "dashed,rounded"];
+            dram   [label = "DRAM",    color = "0.01 0.6 0.85", style = "dashed,rounded"];
+            checkm [label = "CheckM2", color = "0.35 0.44 0.72", style = "rounded"];
+        }
+        gtdbtk -> dram
+
+    }
+
+    reference -> bowtie2
+    fastq     -> fastp
+    extract   -> megahit
+    megahit   -> virify
+    drep      -> gtdbtk
+    drep      -> bowtie2_drep
+    drep      -> checkm
+
+    subgraph cluster_5_space {
+        margin = 10;
+        style = invis;
+        subgraph cluster_5 {
+            label = "Virify";
+            shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
+            virify [label = "virify", color = "0.35 0.22 0.86", style = "dashed,rounded"]
+
+        }
+    }
+
+
+}

@@ -1,0 +1,12 @@
+# metabat2: environment to bin mags
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bowtie2=2.5.1
+  - samtools=1.17
+  - seqtk=1.3
+  - pip:
+    - vamb==4.1.3

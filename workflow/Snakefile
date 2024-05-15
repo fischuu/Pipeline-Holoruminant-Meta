@@ -1,0 +1,56 @@
+# Main entrypoint of the workflow.
+# Please follow the best practices:
+# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
+# in particular regarding the standardized folder structure mentioned there.
+
+import pandas as pd
+import yaml
+
+# Import configuration files
+params = yaml.load(open("config/params.yml", "r"), Loader=yaml.SafeLoader)
+features = yaml.load(open("config/features.yml", "r"), Loader=yaml.SafeLoader)
+samples = pd.read_table("config/samples.tsv", comment="#", dtype="str")
+
+# Generate useful variables
+samples = (
+    samples.assign(assembly_id=samples.assembly_ids.str.replace(" ", "").str.split(","))
+    .explode("assembly_id")
+    .sort_values(by=["assembly_id", "sample_id", "library_id"])
+)
+samples = samples.assign(assembly_id=samples.assembly_id.str.strip())
+
+SAMPLES = samples.sample_id.unique()
+SAMPLE_LIBRARY = samples[["sample_id", "library_id"]].values.tolist()
+ASSEMBLY_SAMPLE_LIBRARY = (
+    samples[["assembly_id", "sample_id", "library_id"]].dropna(axis=0).values.tolist()
+)
+ASSEMBLIES = [
+    assembly_id
+    for assembly_id in samples.assembly_id.unique()
+    if not pd.isna(assembly_id)
+]
+KRAKEN2_DBS = features["databases"]["kraken2"]
+HOST_NAMES = [] if features["hosts"] is None else list(features["hosts"].keys())
+LAST_HOST = HOST_NAMES[-1] if len(HOST_NAMES) > 0 else None
+
+
+# Import subworkflows
+include: "rules/folders.smk"
+include: "rules/helpers/__main__.smk"
+include: "rules/reads/__main__.smk"
+include: "rules/reference/__main__.smk"
+include: "rules/preprocess/__main__.smk"
+include: "rules/assemble/__main__.smk"
+include: "rules/quantify/__main__.smk"
+include: "rules/annotate/__main__.smk"
+include: "rules/report/__main__.smk"
+include: "rules/virify/__main__.smk"
+
+
+rule all:
+    """Run the entire pipeline"""
+    input:
+        rules.reads.input,
+        rules.preprocess.input,
+        rules.assemble.input,
+        rules.report.input,
