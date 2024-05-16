@@ -7,6 +7,8 @@ rule _assemble__drep__separate_bins:
         DREP / "separate_bins.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
@@ -36,6 +38,8 @@ rule _assemble__drep__run:
         DREP / "drep.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 24
     params:
         out_dir=DREP,
@@ -90,6 +94,8 @@ rule _assemble__drep__join_genomes:
         DREP / "dereplicated_genomes.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 8
     shell:
         """
