@@ -8,6 +8,8 @@ rule _assemble__concoct:
         CONCOCT / "{assembly_id}.log",
     conda:
         "concoct.yml"
+    singularity:
+        docker["concoct"]
     resources:
         mem_mb=double_ram(8),
     retries: 5
