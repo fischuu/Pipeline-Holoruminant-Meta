@@ -13,6 +13,8 @@ rule _annotate__dram__annotate:
         DRAM / "annotate.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["annotate"]
     threads: 24
     params:
         min_contig_size=1500,
@@ -104,6 +106,8 @@ rule _annotate__dram__distill:
         DRAM / "distill.log2",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["annotate"]
     resources:
         mem_mb=16 * 1024,
         runtime=24 * 60,
