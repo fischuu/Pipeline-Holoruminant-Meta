@@ -8,6 +8,8 @@ rule _assemble__bowtie2__build:
         ASSEMBLE_INDEX / "{assembly_id}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 24
     resources:
         mem_mb=double_ram(params["assemble"]["bowtie2-build"]["memory_gb"]),
@@ -46,6 +48,8 @@ rule _assemble__bowtie2__map:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 24
     params:
         samtools_mem=params["assemble"]["samtools"]["mem"],
