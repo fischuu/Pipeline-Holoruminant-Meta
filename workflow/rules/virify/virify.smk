@@ -6,6 +6,8 @@ rule _virify__download_db:
         VIRIFY / "databases.log",
     conda:
         "virify.yml"
+    singularity:
+        docker["virify"]
     threads: 1
     shell:
         """
@@ -34,6 +36,8 @@ rule _virify__run:
         VIRIFY / "{assembly_id}.log",
     conda:
         "virify.yml"
+    singularity:
+        docker["virify"]
     threads: 4
     params:
         mem_gb=12,
@@ -64,6 +68,8 @@ rule virify__run:
         [VIRIFY / assembly_id for assembly_id in ASSEMBLIES],
     conda:
         "virify.yml"
+    singularity:
+        docker["virify"]
     log:
         VIRIFY / "all.log",
     shell:

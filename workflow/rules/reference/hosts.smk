@@ -9,6 +9,8 @@ rule _reference__hosts__recompress:
     threads: 24
     conda:
         "__environment__.yml"
+    singularity:
+        docker["reference"]
     shell:
         """
         (gzip -dc {input.fa_gz} | bgzip -@ {threads} > {output}) 2> {log}
