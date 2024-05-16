@@ -10,6 +10,8 @@ rule _reads__link:
         READS / "{sample}.{library}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["reads"]
     resources:  # run it superfast
         mem_mb=1024,
         runtime=60,
