@@ -35,6 +35,8 @@ rule _preprocess__kraken2__assign:
         kraken_db_shm="/dev/shm/{kraken_db}",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["preprocess"]
     shell:
         """
         {{

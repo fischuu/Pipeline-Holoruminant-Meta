@@ -17,6 +17,8 @@ rule _preprocess__nonpareil__run:
         NONPAREIL / "{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["preprocess"]
     params:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
         reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
@@ -55,6 +57,8 @@ rule _preprocess__nonpareil__aggregate:
         NONPAREIL / "nonpareil.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["preprocess"]
     params:
         input_dir=NONPAREIL,
     shell:

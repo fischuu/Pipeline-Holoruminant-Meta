@@ -11,6 +11,8 @@ rule _preprocess__samtools__stats_cram:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.stats.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["preprocess"]
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 

@@ -14,6 +14,8 @@ rule _preprocess__fastp__run:
         FASTP / "{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["preprocess"]
     params:
         adapter_forward=get_forward_adapter,
         adapter_reverse=get_reverse_adapter,
