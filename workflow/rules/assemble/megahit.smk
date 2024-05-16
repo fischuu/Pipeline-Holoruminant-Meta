@@ -14,6 +14,8 @@ rule _assemble__megahit:
         log=MEGAHIT / "{assembly_id}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 24
     params:
         out_dir=lambda w: MEGAHIT / w.assembly_id,
