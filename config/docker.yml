@@ -1,0 +1,3 @@
+# Paths to used docker container
+---
+helpers: "docker://fischuu/hrp_helpers:0.1"
