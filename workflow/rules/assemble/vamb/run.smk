@@ -28,6 +28,8 @@ rule vamb_concatenate_one:
         VAMB / "concatenated/{assembly_id}.log",
     conda:
         "vamb.yml"
+    singularity:
+        docker["vamb"]
     params:
         min_length=params["bin"]["vamb"]["min_length"],
     shell:
@@ -50,6 +52,8 @@ rule vamb_index_one:
         VAMB / "indexes/{assembly_id}.log",
     conda:
         "vamb.yml"
+    singularity:
+        docker["vamb"]
     threads: 24
     shell:
         """
@@ -72,6 +76,8 @@ rule vamb_map_one:
         VAMB / "bams/{assembly_id}.{sample_id}.{library_id}.log",
     conda:
         "vamb.yml"
+    singularity:
+        docker["vamb"]
     threads: 24
     shell:
         """
@@ -102,6 +108,8 @@ rule vamb_one:
         VAMB / "bins/{assembly_id}.log",
     conda:
         "vamb.yml"
+    singularity:
+        docker["vamb"]
     params:
         extra="",
     threads: 1
