@@ -9,6 +9,8 @@ rule _assemble__maxbin2__run:
         MAXBIN2 / "{assembly_id}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 4
     params:
         seed=1,
