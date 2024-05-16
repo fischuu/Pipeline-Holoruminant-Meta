@@ -10,6 +10,8 @@ rule _assemble__metabat2__run:
         METABAT2 / "{assembly_id}.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     params:
         bins_prefix=lambda w: METABAT2 / f"{w.assembly_id}/bin",
         bams=compose_bams_for_metabat2_run,
