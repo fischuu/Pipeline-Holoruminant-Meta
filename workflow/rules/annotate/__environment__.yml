@@ -1,5 +1,3 @@
-# dereplicate: environment to dereplicate bins
----
 name: dereplicate
 channels:
   - conda-forge
