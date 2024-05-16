@@ -8,6 +8,8 @@ rule _assemble__magscot__prodigal:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 24
     resources:
         runtime=24 * 60,
@@ -49,6 +51,8 @@ rule _assemble__magscot__hmmsearch_pfam:
         MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 4
     resources:
         runtime=24 * 60,
@@ -79,6 +83,8 @@ rule _assemble__magscot__hmmsearch_tigr:
         MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     threads: 4
     resources:
         runtime=24 * 60,
@@ -112,6 +118,8 @@ rule _assemble__magscot__join_hmms:
         MAGSCOT / "{assembly_id}" / "hmm.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     shell:
         """
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
@@ -140,6 +148,8 @@ rule _assemble__magscot__merge_contig_to_bin:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     shell:
         """
         for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
@@ -179,6 +189,8 @@ rule _assemble__magscot__run:
         MAGSCOT / "{assembly_id}/magscot.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     params:
         out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
     resources:
@@ -206,6 +218,8 @@ rule _assemble__magscot__reformat:
         MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     resources:
         mem_mb=8 * 1024,
     shell:
@@ -228,6 +242,8 @@ rule _assemble__magscot__rename:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["assemble"]
     resources:
         mem_mb=8 * 1024,
     shell:
