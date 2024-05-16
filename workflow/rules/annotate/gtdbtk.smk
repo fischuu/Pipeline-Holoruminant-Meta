@@ -12,6 +12,8 @@ rule _annotate__gtdbtk__classify:
         GTDBTK / "gtdbtk_classify.log",
     conda:
         "gtdbtk.yml"
+    singularity:
+        docker["gtdbtk"]
     params:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
