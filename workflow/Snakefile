@@ -8,8 +8,10 @@ import yaml
 
 # Import configuration files
 params = yaml.load(open("config/params.yml", "r"), Loader=yaml.SafeLoader)
+docker = yaml.load(open("config/docker.yml", "r"), Loader=yaml.SafeLoader)
 features = yaml.load(open("config/features.yml", "r"), Loader=yaml.SafeLoader)
 samples = pd.read_table("config/samples.tsv", comment="#", dtype="str")
+
 
 # Generate useful variables
 samples = (

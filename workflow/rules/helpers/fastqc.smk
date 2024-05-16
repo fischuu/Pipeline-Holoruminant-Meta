@@ -7,6 +7,8 @@ rule _helpers__fastqc:
         zip="{prefix}_fastqc.zip",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["helpers"]
     log:
         "{prefix}_fastqc.log",
     shell:
