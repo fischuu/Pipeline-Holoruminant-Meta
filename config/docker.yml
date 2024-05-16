@@ -2,9 +2,13 @@
 ---
 annotate: "docker://fischuu/hrp_annotate:0.1"
 assemble: "docker://fischuu/hrp_assemble:0.1"
+checkm2: "docker://fischuu/hrp_checkm2:0.1"
+concoct: "docker://fischuu/hrp_concoct:0.1"
+gtdbtk: "docker://fischuu/hrp_gtdbtk:0.1"
 helpers: "docker://fischuu/hrp_helpers:0.1"
 preprocess: "docker://fischuu/hrp_preprocess:0.1"
 quantify: "docker://fischuu/hrp_quantify:0.1"
 reads: "docker://fischuu/hrp_reads:0.1"
 reference: "docker://fischuu/hrp_reference:0.1"
 report: "docker://fischuu/hrp_report:0.1"
+virify: "docker://fischuu/hrp_virify:0.1"
