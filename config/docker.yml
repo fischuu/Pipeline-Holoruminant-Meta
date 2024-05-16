@@ -1,3 +1,5 @@
 # Paths to used docker container
 ---
+annotate: "docker://fischuu/hrp_annotate:0.1"
 helpers: "docker://fischuu/hrp_helpers:0.1"
+preprocess: "docker://fischuu/hrp_preprocess:0.1"
