@@ -8,6 +8,8 @@ rule annotate__quast:
         QUAST / "quast.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["annotate"]
     threads: 4
     resources:
         mem_mb=8 * 1024,
