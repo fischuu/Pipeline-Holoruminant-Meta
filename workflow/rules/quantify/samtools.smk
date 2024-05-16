@@ -11,6 +11,8 @@ rule _quantify__samtools__stats_cram:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
     conda:
         "__environment__.yml"
+    singularity:
+        docker["quantify"]
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
