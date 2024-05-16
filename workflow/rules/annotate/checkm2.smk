@@ -10,6 +10,8 @@ rule _annotate__checkm2__predict:
     threads: 24
     conda:
         "checkm2.yml"
+    singularity:
+        docker["checkm2"]
     params:
         out_dir=CHECKM / "predict",
     resources:
