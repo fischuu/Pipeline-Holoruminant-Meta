@@ -9,6 +9,8 @@ rule _helpers__fastqc:
         "__environment__.yml"
     singularity:
         docker["helpers"]
+    resources:
+        time =  config["resources"]["time"]["shortrun"]
     log:
         "{prefix}_fastqc.log",
     shell:

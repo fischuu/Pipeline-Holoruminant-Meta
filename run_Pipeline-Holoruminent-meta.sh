@@ -2,10 +2,11 @@
 ################################################################################
 pipelineFolder="/users/fischerd/git/Pipeline-Holoruminant-Meta"
 projectFolder="/scratch/project_2009831/Pipe_dev"
+Profile=$pipelineFolder/config/profiles/Puhti
 
 # Make Snakemake available 
 ################################################################################
-module load snakemake/7.17.1
+module load snakemake/8.4.6
 
 # For use with Apptainer, export these variables
 ################################################################################
@@ -31,10 +32,11 @@ mkdir -p $APPTAINER_TMPDIR
 snakemake -s $pipelineFolder/workflow/Snakefile \
           --jobs 150 \
           --use-singularity \
+          --configfile $projectFolder/config/config.yaml \
+          --profile $Profile \
           --singularity-args "-B /scratch,/projappl,/users,/dev/shm:/tmp,/run:/run" \
           --latency-wait 60 \
           --scheduler greedy \
-	        --cluster-cancel scancel \
           $@
 
 #          --cluster-config $projectFolder/Snakebite-GBS_server-config.yaml \

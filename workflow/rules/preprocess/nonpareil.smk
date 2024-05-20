@@ -22,8 +22,10 @@ rule _preprocess__nonpareil__run:
     params:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
         reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        runtime=24 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     shell:
         """
         gzip \
@@ -59,6 +61,9 @@ rule _preprocess__nonpareil__aggregate:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     params:
         input_dir=NONPAREIL,
     shell:

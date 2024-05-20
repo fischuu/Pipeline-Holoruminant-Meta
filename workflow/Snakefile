@@ -6,12 +6,11 @@
 import pandas as pd
 import yaml
 
-# Import configuration files
-params = yaml.load(open("config/params.yml", "r"), Loader=yaml.SafeLoader)
-docker = yaml.load(open("config/docker.yml", "r"), Loader=yaml.SafeLoader)
-features = yaml.load(open("config/features.yml", "r"), Loader=yaml.SafeLoader)
-samples = pd.read_table("config/samples.tsv", comment="#", dtype="str")
-
+# Import configuration files (as defined in the main configuration)
+params = yaml.load(open(config["params-file"], "r"), Loader=yaml.SafeLoader)
+docker = yaml.load(open(config["docker-file"], "r"), Loader=yaml.SafeLoader)
+features = yaml.load(open(config["features-file"], "r"), Loader=yaml.SafeLoader)
+samples = pd.read_table(config["sample-file"], comment="#", dtype="str")
 
 # Generate useful variables
 samples = (

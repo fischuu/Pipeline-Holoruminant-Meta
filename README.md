@@ -2,7 +2,166 @@ This pipeline is a fork from the Snakemake workflow
 
 https://github.com/3d-omics/mg_assembly/
 
-and tailored to the needs of the Holoruminant project. The text below is still from the original repository and needs to be adjusted.
+and tailored to the needs of the Holoruminant project.
+
+Requirements:
+Snakemake > 8.x
+
+Supports:
+SLURM executor / local execution
+conda environment
+docker/singularity/apptainer support
+
+Fileformats:
+It is assumed that host genomes, that are used for decontamination, are gzipped.
+
+# Installation
+You can install the pipeline by cloning this repository
+
+The recommended setup is to have a separated pipeline folder (the cloned repository), that
+carries the functionality and that must not changed by the user.
+
+Then the project should have somewhere an own folder and a few configuration files are copied
+to it. These are mainly
+
+```
+pipelineFolder="/some/path"
+projectFolder="/some/other/path"
+cd $pipelineFolder
+cp -r config $projectFolder/
+cp -r resources $projectFolder/
+cp -r run_Pipeline-Holoruminent-meta.sh $projectFolder/
+```
+
+Before starting, a few configuration files need to be added.
+
+## run_Pipeline-Holoruminent-meta.sh
+...
+
+## config/config.yaml
+...
+
+## config/profiles/
+...
+
+## config/features.yaml
+...
+
+## config/params.yaml
+...
+
+## config/samples.ysv
+...
+
+# Usage
+The pipeline can run the entire workflow at once. However, normally it is recommended to run different modules from the pipeline separated to get better control over the results and also to be able to react quicker to possible errors.
+
+In the following it is assumed that the pipeline runs on a server that utilised SLURM and Singularity. Other setups are also supported, but currently untested. In case you have a different setup and want to contribute a profile/configuration, please reach out.
+
+## 'reads' -module
+
+The reads module can be started by
+
+```
+bash run_Pipeline-Holoruminent-meta.sh reads
+```
+
+and it triggers a set of rules:
+
+### _reads__link
+This rule makes a link to the original file, with a prettier name than default
+
+It creates output files like this
+
+```
+forward_=READS / "{sample}.{library}_1.fq.gz",
+reverse_=READS / "{sample}.{library}_2.fq.gz",
+```
+
+with `sample` and `library` being taken from the `sample.tsv` file.
+
+### _helpers__fastqc
+This rules creates fastqc reports for the input files and stores them also
+in the results/reads folder as `*.zip` and `*.html` files.
+
+## 'reference' - module
+The reference module can be started by
+
+```
+bash run_Pipeline-Holoruminent-meta.sh reads
+```
+
+This module has essentially the only function to take the gezipped host genomes and
+rezip them to bgzip
+
+### _reference__hosts__recompress
+This function loops through the provided host genomes and then recompresses them.
+
+The results are then stored under `results/reference/hosts/`
+
+## 'preprocess' - module
+A larger subworkflow that consists of several steps
+
+### fastp subworflow
+rule _preprocess__fastp__run:
+    Run fastp on one library. THis is essentially the quality and adapter trimming. The output of quality trimming
+    is then fed into the host decontamination.
+
+### kraken2 subworkflow
+rule _preprocess__kraken2__assign:
+    """
+    Run kraken2 over all samples. Here, also the fastp reads are used, so we have not removed host contamination, when we assign kraken2 to the reads.
+    
+CHECK HOW TO DEFINE DIFFERENT KRAKEN2 DATABASES HERE!
+
+### bowtie_2 subworkflow
+
+This subworflow does a couple of things:
+
+rule _preprocess__bowtie2__build:
+    Build PRE_BOWTIE2 index for the host reference
+
+rule _preprocess__bowtie2__map:
+    Map one library to reference genome using bowtie2
+    
+rule _preprocess__bowtie2__extract_nonhost:
+    Keep only pairs unmapped to the human reference genome, sort by name rather
+    than by coordinate, and convert to FASTQ.
+
+### Nonpareil subworkflow
+rule _preprocess__nonpareil__run:
+    Run nonpareil over one sample. For this step, the host decontaminated reads are used!
+    Rodriguez-R LM & Konstantinidis KT (2014). Nonpareil: A redundancy-based approach to assess the level of coverage in metagenomic datasets. Bioinformatics 30 (5): 629-635.
+    
+### samtools subworflow
+rule _preprocess__samtools__stats_cram:
+    Compute the stats of a cram file using samtools stats. Here, we'll get mapping statistics for the host alignemtns.
+    
+### singlem subworkflow
+This part consists again out of several steps.. In details, these are
+
+SingleM is a tool for profiling shotgun metagenomes. It has a particular strength in detecting microbial lineages which are not in reference databases. The method it uses also makes it suitable for some related tasks, such as assessing eukaryotic contamination, finding bias in genome recovery, computing ecological diversity metrics, and lineage-targeted MAG recovery.
+
+Documentation can be found at https://wwood.github.io/singlem/
+
+Citation
+
+SingleM and Sandpiper: Robust microbial taxonomic profiles from metagenomic data. Ben J Woodcroft, Samuel T. N. Aroney, Rossen Zhao, Mitchell Cunningham, Joshua A. M. Mitchell, Linda Blackall, Gene W Tyson. bioRxiv 2024.01.30.578060; doi: https://doi.org/10.1101/2024.01.30.578060
+
+rule _preprocess__singlem__pipe:
+    Run singlem over one sample
+
+rule _preprocess__singlem__condense:
+    Aggregate all the singlem results into a single table
+    
+rule _preprocess__singlem__microbial_fraction:
+    Run singlem microbial_fraction over one sample
+    
+rule _preprocess__singlem__aggregate_microbial_fraction:
+    Aggregate all the microbial_fraction files into one tsv
+    
+---------------------------------------------------------------------------------
+The text below is still from the original repository and needs to be adjusted.
 
 # Snakemake workflow: `mg_assembly`
 

@@ -18,10 +18,10 @@ rule _preprocess__singlem__pipe:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
-    threads: 1
+    threads: config["resources"]["cpu_per_task"]["single_thread"]
     resources:
-        runtime=48 * 60,
-        mem_mb=16 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     shell:
         """
         singlem pipe \
@@ -56,7 +56,7 @@ rule _preprocess__singlem__condense:
     params:
         input_dir=SINGLEM,
     resources:
-        runtime=6 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]
     shell:
         """
         singlem condense \
@@ -84,6 +84,9 @@ rule _preprocess__singlem__microbial_fraction:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     shell:
         """
         singlem microbial_fraction \
@@ -111,6 +114,9 @@ rule _preprocess__singlem__aggregate_microbial_fraction:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     shell:
         """
         ( csvstack \

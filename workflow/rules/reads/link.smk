@@ -12,9 +12,6 @@ rule _reads__link:
         "__environment__.yml"
     singularity:
         docker["reads"]
-    resources:  # run it superfast
-        mem_mb=1024,
-        runtime=60,
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_} 2>  {log} 1>&2

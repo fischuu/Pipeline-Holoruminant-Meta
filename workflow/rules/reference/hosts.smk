@@ -11,6 +11,8 @@ rule _reference__hosts__recompress:
         "__environment__.yml"
     singularity:
         docker["reference"]
+    resources:
+        time =  config["resources"]["time"]["shortrun"]
     shell:
         """
         (gzip -dc {input.fa_gz} | bgzip -@ {threads} > {output}) 2> {log}
