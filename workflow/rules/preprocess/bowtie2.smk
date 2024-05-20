@@ -15,12 +15,11 @@ rule _preprocess__bowtie2__build:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=double_ram(params["preprocess"]["bowtie2-build"]["memory_gb"]),
-        runtime=24 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
         attempt=get_attempt,
-    retries: 5
     shell:
         """
         bowtie2-build \
@@ -54,16 +53,15 @@ rule _preprocess__bowtie2__map:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     conda:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
     resources:
-        mem_mb=double_ram(params["preprocess"]["bowtie2"]["memory_gb"]),
-        runtime=24 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
         attempt=get_attempt,
-    retries: 5
     shell:
         """
         find \
@@ -114,10 +112,10 @@ rule _preprocess__bowtie2__extract_nonhost:
         docker["preprocess"]
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        runtime=1 * 60,
-        mem_mb=32 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     shell:
         """
         ( samtools view \

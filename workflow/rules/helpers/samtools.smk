@@ -8,6 +8,8 @@ rule _helpers__samtools__index_bam:
         "__environment__.yml"
     singularity:
         docker["helpers"]
+    resources:
+        time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.bam.bai.log",
     shell:
@@ -24,6 +26,8 @@ rule _helpers__samtools__index_cram:
         "__environment__.yml"
     singularity:
         docker["helpers"]
+    resources:
+        time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.cram.crai.log",
     shell:
@@ -40,6 +44,8 @@ rule _helpers__samtools__faidx_fa:
         "__environment__.yml"
     singularity:
         docker["helpers"]
+    resources:
+        time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.fa.fai.log",
     shell:
@@ -57,6 +63,8 @@ rule _helpers__samtools__faidx_fagz:
         "__environment__.yml"
     singularity:
         docker["helpers"]
+    resources:
+        time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.fa.gz.log",
     shell:
@@ -76,6 +84,8 @@ rule _helpers__samtools__idxstats_cram:
         "__environment__.yml"
     singularity:
         docker["helpers"]
+    resources:
+        time =  config["resources"]["time"]["longrun"]
     shell:
         "samtools idxstats {input.cram} > {output.tsv} 2> {log}"
 
@@ -93,5 +103,7 @@ rule _helpers__samtools__flagstats_cram:
         "__environment__.yml"
     singularity:
         docker["helpers"]
+    resources:
+        time =  config["resources"]["time"]["shortrun"]
     shell:
         "samtools flagstats {input.cram} > {output.txt} 2> {log}"

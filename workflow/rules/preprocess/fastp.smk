@@ -21,10 +21,10 @@ rule _preprocess__fastp__run:
         adapter_reverse=get_reverse_adapter,
         extra=params["preprocess"]["fastp"]["extra"],
         length_required=params["preprocess"]["fastp"]["length_required"],
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=8 * 1024,
-        runtime=240,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     shell:
         """
         fastp \

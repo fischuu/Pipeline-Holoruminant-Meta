@@ -1,0 +1,31 @@
+#################################
+##
+## File configuration configuration
+
+features-file: "config/features.yaml"
+params-file: "config/params.yaml"
+docker-file: "config/.docker.yml"
+sample-file: "config/samples.tsv"
+
+
+#################################
+##
+## Server configuration
+
+resources:
+    time: 
+        shortrun: 1
+        longrun: 5
+        verylongrun: 30
+    mem_per_cpu:
+        veryhighmem: 16000
+        highmem: 8000
+        lowmem: 1000
+    cpu_per_task:
+        single_thread: 1
+        multi_thread: 24
+    partition:
+        testing: "test"
+        small: "small"
+        highmem: "highmem"
+        longrun: "longrun"

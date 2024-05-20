@@ -25,10 +25,10 @@ rule _preprocess__kraken2__assign:
         ],
     log:
         KRAKEN2 / "{kraken_db}.log",
-    threads: 8
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=params["preprocess"]["kraken2"]["memory_gb"] * 1024,
-        runtime=48 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"]
     params:
         in_folder=FASTP,
         out_folder=lambda w: KRAKEN2 / w.kraken_db,
