@@ -115,7 +115,8 @@ rule _preprocess__bowtie2__extract_nonhost:
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"]
+        time = config["resources"]["time"]["longrun"],
+        nvme = config["resources"]["nvme"]["small"]
     shell:
         """
         ( samtools view \

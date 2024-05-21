@@ -100,7 +100,11 @@ This function loops through the provided host genomes and then recompresses them
 The results are then stored under `results/reference/hosts/`
 
 ## 'preprocess' - module
-A larger subworkflow that consists of several steps
+A larger subworkflow that consists of several steps. It can be run by
+
+```
+bash run_Pipeline-Holoruminent-meta.sh preprocess
+```
 
 ### fastp subworflow
 rule _preprocess__fastp__run:
@@ -110,9 +114,7 @@ rule _preprocess__fastp__run:
 ### kraken2 subworkflow
 rule _preprocess__kraken2__assign:
     """
-    Run kraken2 over all samples. Here, also the fastp reads are used, so we have not removed host contamination, when we assign kraken2 to the reads.
-    
-CHECK HOW TO DEFINE DIFFERENT KRAKEN2 DATABASES HERE!
+    Run kraken2 over all samples. Here, also the fastp reads are used, so we have not removed host contamination, when we assign kraken2 to the reads. Different databases used with kraken can be added into the configuration file `features.yaml`, intented after the kraken2 entry
 
 ### bowtie_2 subworkflow
 
@@ -138,6 +140,8 @@ rule _preprocess__samtools__stats_cram:
     Compute the stats of a cram file using samtools stats. Here, we'll get mapping statistics for the host alignemtns.
     
 ### singlem subworkflow
+TODO: CHECK WHAT DATABASE TO USE!!!
+
 This part consists again out of several steps.. In details, these are
 
 SingleM is a tool for profiling shotgun metagenomes. It has a particular strength in detecting microbial lineages which are not in reference databases. The method it uses also makes it suitable for some related tasks, such as assessing eukaryotic contamination, finding bias in genome recovery, computing ecological diversity metrics, and lineage-targeted MAG recovery.

@@ -14,9 +14,9 @@ sample-file: "config/samples.tsv"
 
 resources:
     time: 
-        shortrun: 1
-        longrun: 5
-        verylongrun: 30
+        shortrun: 10
+        longrun: 50
+        verylongrun: 300
     mem_per_cpu:
         veryhighmem: 16000
         highmem: 8000
@@ -29,3 +29,6 @@ resources:
         small: "small"
         highmem: "highmem"
         longrun: "longrun"
+    nvme:
+        small: 10
+        large: 50
