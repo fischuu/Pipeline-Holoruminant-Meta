@@ -9,6 +9,9 @@ rule _assemble__drep__separate_bins:
         "__environment__.yml"
     singularity:
         docker["assemble"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
@@ -40,14 +43,13 @@ rule _assemble__drep__run:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
+        attempt=get_attempt,
     params:
         out_dir=DREP,
-    resources:
-        mem_mb=64 * 1024,
-        runtime=7 * 24 * 60,
-        attempt=get_attempt,
-    retries: 5
     shell:
         """
         rm \
@@ -96,7 +98,10 @@ rule _assemble__drep__join_genomes:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 8
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         ( zcat \

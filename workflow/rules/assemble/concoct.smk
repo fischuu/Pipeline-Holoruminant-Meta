@@ -10,9 +10,10 @@ rule _assemble__concoct:
         "concoct.yml"
     singularity:
         docker["concoct"]
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=double_ram(8),
-    retries: 5
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     params:
         workdir=lambda w: CONCOCT / w.assembly_id,
     shell:

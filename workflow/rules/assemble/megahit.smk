@@ -16,18 +16,17 @@ rule _assemble__megahit:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
+        attempt=get_attempt,
     params:
         out_dir=lambda w: MEGAHIT / w.assembly_id,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
         assembly_id=lambda w: w.assembly_id,
-    resources:
-        mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
-        runtime=7 * 24 * 60,
-        attempt=get_attempt,
-    retries: 5
     shell:
         """
         megahit \
