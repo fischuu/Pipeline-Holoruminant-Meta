@@ -18,10 +18,10 @@ rule _annotate__gtdbtk__classify:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
         bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=double_ram(32),
-        runtime=24 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
         attempt=get_attempt,
     retries: 5
     shell:

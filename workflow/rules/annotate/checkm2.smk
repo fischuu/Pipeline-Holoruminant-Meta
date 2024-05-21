@@ -7,15 +7,16 @@ rule _annotate__checkm2__predict:
         CHECKM / "quality_report.tsv",
     log:
         CHECKM / "quality_report.log",
-    threads: 24
     conda:
         "checkm2.yml"
     singularity:
         docker["checkm2"]
     params:
         out_dir=CHECKM / "predict",
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=16 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         rm -rfv {params.out_dir} 2> {log} 1>&2
