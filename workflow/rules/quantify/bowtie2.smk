@@ -10,10 +10,10 @@ rule _quantify__bowtie2__build:
         "__environment__.yml"
     singularity:
         docker["quantify"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=double_ram(params["quantify"]["bowtie2-build"]["memory_gb"]),
-        runtime=24 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         bowtie2-build \
@@ -40,14 +40,14 @@ rule _quantify__bowtie2__map:
         "__environment__.yml"
     singularity:
         docker["quantify"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     params:
         samtools_mem=params["quantify"]["samtools"]["mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    resources:
-        mem_mb=double_ram(params["quantify"]["bowtie2"]["memory_gb"]),
-        runtime=24 * 60,
     shell:
         """
         find \

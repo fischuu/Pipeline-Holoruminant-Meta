@@ -13,6 +13,9 @@ rule _quantify__samtools__stats_cram:
         "__environment__.yml"
     singularity:
         docker["quantify"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 

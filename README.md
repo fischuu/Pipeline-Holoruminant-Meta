@@ -238,6 +238,39 @@ rule _assemble__magscot__rename:
     Rename the contigs in the assembly to match the assembly and bin names  
   
 ### vamb subworkflow
+
+## 'quantify' - module  
+The quantify module quantifies the different assemblies and bins. You can use it like this
+
+```
+bash run_Pipeline-Holoruminant-meta.sh quantify
+```
+
+### bowtie2 subworkflow
+
+rule _quantify__bowtie2__build:
+    Index dereplicated genomes /mag
+    
+rule _quantify__bowtie2__map:
+    Align one sample to the dereplicated genomes
+
+### coverm subworkflow
+
+rule _quantify__coverm__genome:
+    Run CoverM genome for one library and one mag catalogue
+
+rule _quantify__coverm__genome_aggregate:
+    Run coverm genome and a single method
+
+rule _quantify__coverm__contig:
+    Run coverm contig for one library and one mag catalogue
+    
+rule _quantify__coverm__contig_aggregate:
+    Run coverm contig and a single method
+    
+### samtools subworkflow
+rule _quantify__samtools__stats_cram:
+    Get stats from CRAM files using samtools stats.
     
 ---------------------------------------------------------------------------------
 The text below is still from the original repository and needs to be adjusted.
