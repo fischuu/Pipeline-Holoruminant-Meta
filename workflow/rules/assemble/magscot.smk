@@ -13,6 +13,7 @@ rule _assemble__magscot__prodigal:
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        nvme=config["resources"]["nvme"]["small"],
         attempt=get_attempt,
     retries: 5
     shell:
