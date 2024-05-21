@@ -10,10 +10,9 @@ rule _assemble__magscot__prodigal:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        runtime=24 * 60,
-        mem_mb=double_ram(8),
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         attempt=get_attempt,
     retries: 5
     shell:
@@ -53,10 +52,10 @@ rule _assemble__magscot__hmmsearch_pfam:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 4
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        runtime=24 * 60,
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         hmmsearch \
@@ -85,10 +84,10 @@ rule _assemble__magscot__hmmsearch_tigr:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 4
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        runtime=24 * 60,
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         hmmsearch \
@@ -120,6 +119,9 @@ rule _assemble__magscot__join_hmms:
         "__environment__.yml"
     singularity:
         docker["assemble"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
@@ -150,6 +152,9 @@ rule _assemble__magscot__merge_contig_to_bin:
         "__environment__.yml"
     singularity:
         docker["assemble"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
@@ -194,8 +199,8 @@ rule _assemble__magscot__run:
     params:
         out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
     resources:
-        runtime=8 * 60,
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
@@ -221,7 +226,8 @@ rule _assemble__magscot__reformat:
     singularity:
         docker["assemble"]
     resources:
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
@@ -245,7 +251,8 @@ rule _assemble__magscot__rename:
     singularity:
         docker["assemble"]
     resources:
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         ( python workflow/scripts/reformat_fasta_magscot.py \

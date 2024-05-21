@@ -1,24 +1,5 @@
 include: "functions.smk"
 
-
-# rule vamb_concatenate_one:
-#     input:
-#         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
-#     output:
-#         concatenated=VAMB / "concatenated" / "{assembly_id}.fa.gz",
-#     log:
-#         VAMB / "concatenated/{assembly_id}.log",
-#     conda:
-#         "vamb.yml"
-#     shell:
-#         """
-#         concatenate.py \
-#             {output.concatenated} \
-#             {input.assembly} \
-#         2> {log} 1>&2
-#         """
-
-
 rule vamb_concatenate_one:
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",

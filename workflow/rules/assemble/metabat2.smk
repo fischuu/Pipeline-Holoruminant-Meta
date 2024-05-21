@@ -18,10 +18,10 @@ rule _assemble__metabat2__run:
         depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
         workdir=METABAT2,
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        runtime=24 * 60,
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         for cram in {input.crams} ; do

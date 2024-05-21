@@ -10,12 +10,11 @@ rule _assemble__bowtie2__build:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=double_ram(params["assemble"]["bowtie2-build"]["memory_gb"]),
-        runtime=48 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
         attempt=get_attempt,
-    retries: 5
     shell:
         """
         bowtie2-build \
@@ -50,16 +49,15 @@ rule _assemble__bowtie2__map:
         "__environment__.yml"
     singularity:
         docker["assemble"]
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
+        attempt=get_attempt,
     params:
         samtools_mem=params["assemble"]["samtools"]["mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    resources:
-        mem_mb=double_ram(params["assemble"]["bowtie2"]["memory_gb"]),
-        runtime=24 * 60,
-        attempt=get_attempt,
-    retries: 5
     shell:
         """
         find \

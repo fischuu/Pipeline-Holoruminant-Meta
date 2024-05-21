@@ -30,8 +30,11 @@ projectFolder="/some/other/path"
 cd $pipelineFolder
 cp -r config $projectFolder/
 cp -r resources $projectFolder/
+cp -r workflow $projectFolder/
 cp -r run_Pipeline-Holoruminent-meta.sh $projectFolder/
 ```
+
+TODO: THE WORKFLOW ONLY CONTAINS PATHS TO HMM FILES; THAT COULD BE ALSO GENERALISED!
 
 Before starting, a few configuration files need to be added.
 
@@ -112,6 +115,7 @@ rule _preprocess__fastp__run:
     is then fed into the host decontamination.
 
 ### kraken2 subworkflow
+TODO: CHECK; WHAT DATABASE TO USE?! https://github.com/R-Wright-1/kraken_metaphlan_comparison/wiki/Downloading-databases
 rule _preprocess__kraken2__assign:
     """
     Run kraken2 over all samples. Here, also the fastp reads are used, so we have not removed host contamination, when we assign kraken2 to the reads. Different databases used with kraken can be added into the configuration file `features.yaml`, intented after the kraken2 entry
@@ -163,6 +167,77 @@ rule _preprocess__singlem__microbial_fraction:
     
 rule _preprocess__singlem__aggregate_microbial_fraction:
     Aggregate all the microbial_fraction files into one tsv
+    
+## 'assemble' -module
+
+The assemble module runs first several assemblers and combines then the results. It can be initiated by running
+
+```
+bash run_Pipeline-Holoruminent-meta.sh assemble
+```
+    
+It contains of several subworkflows, as
+
+### megahit subworkflow
+rule _assemble__megahit:
+    Run megahit over samples associated to assembly, merging all libraries in the process. This creates the co-assemblies as defined in the samples.tsv file    
+
+### bowtie2 - subworkflow
+
+rule _assemble__bowtie2__build:
+    Index a megahit assembly. Here, we prepare the megahit assembly for mapping
+    
+rule _assemble__bowtie2__map:
+    Map one sample to one megahit assembly. Here, we map then the samples to the megahit assemblies
+    
+### concoct subworkflow
+
+rule _assemble__concoct:
+     This one takes all available assemblies and runs concot for them
+
+### maxbin2 subworkflow
+rule _assemble__maxbin2__run:
+    """Run MaxBin2 over a single assembly, so for each assembly, we get the bins produced from maxbin2
+
+### metabat2 subworkflow
+rule _assemble__metabat2__run:
+    Run metabat2 end-to-end on a single assembly, for all assemblies then
+
+
+### drep subworflow
+rule _assemble__drep__separate_bins:
+    This one takes the magscot output and separates the bins
+    
+rule _assemble__drep__run:
+    Dereplicate all the bins using dRep. This is the depreplication step for the bins
+
+rule _assemble__drep__join_genomes:
+    Join all the dereplicated genomes into a single file.
+
+### magscot subworkflow
+rule _assemble__magscot__prodigal:
+    Run prodigal over a single assembly. So, we predict for each assembly the genes.    
+
+rule _assemble__magscot__hmmsearch_pfam:
+    Run hmmsearch over the predicted proteins of an assembly using Pfam as database  
+  
+rule _assemble__magscot__hmmsearch_tigr:
+    Run hmmsearch over the predicted proteins of an assembly using TIGR as database  
+CHECK HOW TO GET THE TIGR DATABASE!!!
+
+rule _assemble__magscot__join_hmms:
+    Join the results of hmmsearch over TIGR and Pfam
+  
+rule _assemble__magscot__merge_contig_to_bin:
+    Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2  
+
+rule _assemble__magscot__run:
+    Run MAGSCOT over one assembly
+  
+rule _assemble__magscot__rename:
+    Rename the contigs in the assembly to match the assembly and bin names  
+  
+### vamb subworkflow
     
 ---------------------------------------------------------------------------------
 The text below is still from the original repository and needs to be adjusted.
