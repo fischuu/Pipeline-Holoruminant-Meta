@@ -15,15 +15,16 @@ rule _annotate__dram__annotate:
         "__environment__.yml"
     singularity:
         docker["annotate"]
-    threads: 24
     params:
         min_contig_size=1500,
         out_dir=DRAM,
         tmp_dir=DRAM / "annotate",
         parallel_retries=5,
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_mb=32 * 1024,
-        runtime=48 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
+        nvme = config["resources"]["nvme"]["small"]
     shell:
         """
         rm \
@@ -109,8 +110,8 @@ rule _annotate__dram__distill:
     singularity:
         docker["annotate"]
     resources:
-        mem_mb=16 * 1024,
-        runtime=24 * 60,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     params:
         outdir_tmp=DRAM / "distill",
         outdir=DRAM,

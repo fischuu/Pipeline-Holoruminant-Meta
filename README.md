@@ -173,7 +173,7 @@ rule _preprocess__singlem__aggregate_microbial_fraction:
 The assemble module runs first several assemblers and combines then the results. It can be initiated by running
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh assemble
+bash run_Pipeline-Holoruminant-meta.sh assemble
 ```
     
 It contains of several subworkflows, as
@@ -272,6 +272,32 @@ rule _quantify__coverm__contig_aggregate:
 rule _quantify__samtools__stats_cram:
     Get stats from CRAM files using samtools stats.
     
+## 'annotate' module    
+This module takes care of the annotation steps
+
+```
+bash run_Pipeline-Holoruminant-meta.sh annotation
+```
+    
+### quast subworkflow
+rule annotate__quast:
+    Run quast over one the dereplicated mags
+    
+### GTDBtk subworkflow
+rule _annotate__gtdbtk__classify:
+    Run GTDB-Tk over the dereplicated genomes
+    
+### DRAM subworkflow
+rule _annotate__dram__annotate:
+    Annotate dereplicate genomes with DRAM
+
+rule _annotate__dram__distill:
+    Distill DRAM annotations    
+
+### CheckM2 subworkflow
+rule _annotate__checkm2__predict:
+    Run CheckM2 over the dereplicated mags
+
 ---------------------------------------------------------------------------------
 The text below is still from the original repository and needs to be adjusted.
 
