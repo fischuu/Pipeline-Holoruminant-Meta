@@ -50,6 +50,11 @@ rule _assemble__drep__run:
         attempt=get_attempt,
     params:
         out_dir=DREP,
+        completeness=params["assemble"]["drep"]["completeness"],
+        contamination=params["assemble"]["drep"]["contamination"],
+        P_ani=params["assemble"]["drep"]["P_ani"],
+        S_ani=params["assemble"]["drep"]["S_ani"],
+        extra=params["assemble"]["drep"]["extra"]
     shell:
         """
         rm \
@@ -65,8 +70,11 @@ rule _assemble__drep__run:
         dRep dereplicate \
             {params.out_dir} \
             --processors {threads} \
-            --completeness 50 \
-            --S_ani 0.9 \
+            --completeness {params.completeness} \
+            --contamination {params.contamination} \
+            --P_ani {params.P_ani} \
+            --S_ani {params.S_ani} \
+            {params.extra} \
             --genomes {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
 
@@ -81,6 +89,8 @@ rule _assemble__drep__run:
                 ${{folder}} \
             2>> {log} 1>&2
         done
+
+        find {output.dereplicated_genomes} -type f ! -name "*.gz" -exec gzip {{}} \\;
 
         mv {log}.{resources.attempt} {log}
         """

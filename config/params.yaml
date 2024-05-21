@@ -23,6 +23,12 @@ assemble:
     memory_gb: 32
   samtools:
     mem: 1G
+  drep:
+    completeness: 20  # Default: 50, different value might be relicts from testing
+    contamination: 50 # Default: 50, different value might be relicts from testing
+    P_ani: 0.8  # Default: ??? , different value might be relicts from testing
+    S_ani: 0.98  # Default: 0.9 , different value might be relicts from testing
+    extra: " --SkipMash " # Default: "", different value might be relicts from testing
 
 quantify:
   bowtie2-build:
