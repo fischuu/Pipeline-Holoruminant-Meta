@@ -14,12 +14,6 @@ export APPTAINER_TMPDIR="/scratch/project_2009831/tmp"
 export APPTAINER_CACHEDIR="/scratch/project_2009831/tmp"
 mkdir -p $APPTAINER_TMPDIR
 
-# For use of Apptainer, export these variables
-################################################################################
-#export SINGULARITY_TMPDIR="/scratch/project_2001746/tmp"
-#export SINGULARITY_CACHEDIR="/scratch/project_2001746/tmp"
-#mkdir -p $SINGULARITY_TMPDIR
-
 # Create the rulegraph
 ################################################################################
 #snakemake -s $pipelineFolder/workflow/Snakefile \
@@ -38,6 +32,3 @@ snakemake -s $pipelineFolder/workflow/Snakefile \
           --latency-wait 60 \
           --scheduler greedy \
           $@
-
-#          --cluster-config $projectFolder/Snakebite-GBS_server-config.yaml \
-#          --cluster "sbatch -t {cluster.time} --account={cluster.account} --gres=nvme:{cluster.nvme} --job-name={cluster.job-name} --tasks-per-node={cluster.ntasks} --cpus-per-task={cluster.cpus-per-task} --mem-per-cpu={cluster.mem-per-cpu} --mail-user={cluster.mail-user} --mail-type={cluster.mail-type} -p {cluster.partition}" \

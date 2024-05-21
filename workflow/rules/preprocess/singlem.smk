@@ -24,6 +24,9 @@ rule _preprocess__singlem__pipe:
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
+        # Command to download the latest DB, uncomment, run, download and move to new place, ugly at the moment!!!
+        #singlem data --output-directory {input.data} 2> {log} 1>&2
+        
         singlem pipe \
             --forward {input.forward_} \
             --reverse {input.reverse_} \
