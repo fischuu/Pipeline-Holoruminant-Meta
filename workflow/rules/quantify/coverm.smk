@@ -1,36 +1,3 @@
-# rule _quantify__coverm__cram_to_bam:
-#     """Convert cram to bam
-
-#     Note: this step is needed because coverm probably does not support cram. The
-#     log from coverm shows failures to get the reference online, but nonetheless
-#     it works.
-#     """
-#     input:
-#         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
-#         crai=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-#         reference=DREP / "dereplicated_genomes.fa.gz",
-#         fai=DREP / "dereplicated_genomes.fa.gz.fai",
-#     output:
-#         bam=temp(COVERM / "bams" / "{sample_id}.{library_id}.bam"),
-#     log:
-#         COVERM / "bams" / "{sample_id}.{library_id}.bam.log",
-#     conda:
-#         "__environment__.yml"
-#     resources:
-#         runtime=1 * 60,
-#         mem_mb=4 * 1024,
-#     shell:
-#         """
-#         samtools view \
-#             --exclude-flags 4 \
-#             --reference {input.reference} \
-#             --output {output.bam} \
-#             --fast \
-#             {input.cram} \
-#         2> {log}
-#         """
-
-
 rule _quantify__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
@@ -44,6 +11,9 @@ rule _quantify__coverm__genome:
         "__environment__.yml"
     singularity:
         docker["quantify"]
+    resources:
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     log:
         COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -84,7 +54,8 @@ rule _quantify__coverm__genome_aggregate:
     params:
         input_dir=lambda w: COVERM / "genome" / w.method,
     resources:
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -152,7 +123,8 @@ rule _quantify__coverm__contig_aggregate:
     params:
         input_dir=lambda w: COVERM / "contig" / w.method,
     resources:
-        mem_mb=8 * 1024,
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
