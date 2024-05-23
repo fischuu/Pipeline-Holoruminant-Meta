@@ -298,6 +298,11 @@ rule _annotate__dram__distill:
 rule _annotate__checkm2__predict:
     Run CheckM2 over the dereplicated mags
 
+
+# DRAM database generation
+Apptainer> DRAM-setup.py export_config > /scratch/project_2009831/Pipe_dev/my_dram_config.txt
+Apptainer> export DRAM_CONFIG_LOCATION=/scratch/project_2009831/Pipe_dev/my_dram_config.txt
+Apptainer> DRAM-setup.py prepare_databases --output_dir /scratch/project_2009831/Pipe_dev/resources/databases/dram/20230811/
 ---------------------------------------------------------------------------------
 The text below is still from the original repository and needs to be adjusted.
 
