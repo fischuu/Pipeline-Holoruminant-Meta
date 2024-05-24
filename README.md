@@ -303,6 +303,9 @@ rule _annotate__checkm2__predict:
 Apptainer> DRAM-setup.py export_config > /scratch/project_2009831/Pipe_dev/my_dram_config.txt
 Apptainer> export DRAM_CONFIG_LOCATION=/scratch/project_2009831/Pipe_dev/my_dram_config.txt
 Apptainer> DRAM-setup.py prepare_databases --output_dir /scratch/project_2009831/Pipe_dev/resources/databases/dram/20230811/
+
+https://github.com/WrightonLabCSU/DRAM/issues/26#issuecomment-685212290
+
 ---------------------------------------------------------------------------------
 The text below is still from the original repository and needs to be adjusted.
 
