@@ -276,7 +276,7 @@ rule _quantify__samtools__stats_cram:
 This module takes care of the annotation steps
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh annotation
+bash run_Pipeline-Holoruminant-meta.sh annotate
 ```
     
 ### quast subworkflow
@@ -286,6 +286,10 @@ rule annotate__quast:
 ### GTDBtk subworkflow
 rule _annotate__gtdbtk__classify:
     Run GTDB-Tk over the dereplicated genomes
+
+TODO: THE DATABASE NEEDS TO BE FETCHED AUTOMATICALLY, CURRENTLY THE USER NEEDS TO DO IT!    
+TODO: UPDATE TO 2.4.0 (use release 220 instead)
+wget https://data.ace.uq.edu.au/public/gtdb/data/releases/release214/214.0/auxillary_files/gtdbtk_r214_data.tar.gz
     
 ### DRAM subworkflow
 rule _annotate__dram__annotate:
@@ -293,6 +297,26 @@ rule _annotate__dram__annotate:
 
 rule _annotate__dram__distill:
     Distill DRAM annotations    
+
+TODO: ALSO HERE THE DB NEEDS TO BE INSTALLED MANUALLY!
+This needs quite much resources, so run it best in a sbatch script
+
+
+#!/bin/bash
+#SBATCH --job-name=create_dram_db
+#SBATCH --account=project_2009831
+#SBATCH --partition=hugemem
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=40
+#SBATCH --mem=800G
+#SBATCH --time=24:00:00
+#SBATCH --output=create_dram_db.out
+#SBATCH --error=create_dram_db.err
+
+singularity shell -B /scratch,/projappl,/users,/dev/shm:/tmp,/run:/run .snakemake/singularity/675d014754a2522c1e382e4b6f21b014.simg
+DRAM-setup.py export_config > my_old_config.txt
+export DRAM_CONFIG_LOCATION=my_old_config.txt
+DRAM-setup.py prepare_databases --output_dir resources/databases/dram/20230811/
 
 ### CheckM2 subworkflow
 rule _annotate__checkm2__predict:
