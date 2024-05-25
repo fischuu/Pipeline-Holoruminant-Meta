@@ -21,12 +21,15 @@ rule _annotate__checkm2__predict:
         """
         rm -rfv {params.out_dir} 2> {log} 1>&2
 
+# Run this only if the dmnd file from below does not exist...
+    #    checkm2 database --download --path {input.db}
+
         checkm2 predict \
             --threads {threads} \
             --input {input.mags} \
             --extension .fa.gz \
             --output-directory {params.out_dir} \
-            --database_path {input.db}/uniref100.KO.1.dmnd \
+            --database_path {input.db}/CheckM2_database/uniref100.KO.1.dmnd \
             --remove_intermediates \
         2>> {log} 1>&2
 
