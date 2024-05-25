@@ -8,5 +8,6 @@ rule annotate:
     """Evaluate the dereplication steps"""
     input:
         rules.annotate__quast.output,
-        rules.annotate__checkm2.output,
-        rules.annotate__dram.input,
+        rules._annotate__checkm2__predict.output,
+        rules._annotate__gtdbtk__classify.output,
+ #       rules.annotate__dram.input,

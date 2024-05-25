@@ -321,7 +321,7 @@ DRAM-setup.py prepare_databases --output_dir resources/databases/dram/20230811/
 ### CheckM2 subworkflow
 rule _annotate__checkm2__predict:
     Run CheckM2 over the dereplicated mags
-
+Install the database manually first
 
 # DRAM database generation
 Apptainer> DRAM-setup.py export_config > /scratch/project_2009831/Pipe_dev/my_dram_config.txt
