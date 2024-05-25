@@ -22,8 +22,7 @@ rule _annotate__gtdbtk__classify:
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
-        attempt=get_attempt,
-    retries: 5
+        attempt=get_attempt
     shell:
         """
         rm \

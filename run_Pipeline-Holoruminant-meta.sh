@@ -14,6 +14,9 @@ export APPTAINER_TMPDIR="/scratch/project_2009831/tmp"
 export APPTAINER_CACHEDIR="/scratch/project_2009831/tmp"
 mkdir -p $APPTAINER_TMPDIR
 
+export SINGULARITY_TMPDIR="/scratch/project_2009831/tmp"
+export SINGULARITY_CACHEDIR="/scratch/project_2009831/tmp"
+
 # Create the rulegraph
 ################################################################################
 #snakemake -s $pipelineFolder/workflow/Snakefile \

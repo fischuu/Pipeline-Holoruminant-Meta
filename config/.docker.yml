@@ -1,12 +1,13 @@
 # Paths to used docker container
 ---
-annotate: "docker://fischuu/hrp_annotate:0.1"
-assemble: "docker://fischuu/hrp_assemble:0.1"
+annotate: "docker://fischuu/hrp_annotate:0.2"
+assemble: "docker://fischuu/hrp_assemble:0.2"
 checkm2: "docker://fischuu/hrp_checkm2:0.1"
 concoct: "docker://fischuu/hrp_concoct:0.1"
+dram: "docker://fischuu/hrp_dram:0.1"
 gtdbtk: "docker://fischuu/hrp_gtdbtk:0.1"
 helpers: "docker://fischuu/hrp_helpers:0.1"
-preprocess: "docker://fischuu/hrp_preprocess:0.1"
+preprocess: "docker://fischuu/hrp_preprocess:0.2"
 quantify: "docker://fischuu/hrp_quantify:0.1"
 reads: "docker://fischuu/hrp_reads:0.2"
 reference: "docker://fischuu/hrp_reference:0.1"

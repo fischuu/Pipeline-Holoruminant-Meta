@@ -14,7 +14,7 @@ rule _annotate__dram__annotate:
     conda:
         "__environment__.yml"
     singularity:
-        docker["annotate"]
+        docker["dram"]
     params:
         min_contig_size=1500,
         out_dir=DRAM,
@@ -108,7 +108,7 @@ rule _annotate__dram__distill:
     conda:
         "__environment__.yml"
     singularity:
-        docker["annotate"]
+        docker["dram"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
