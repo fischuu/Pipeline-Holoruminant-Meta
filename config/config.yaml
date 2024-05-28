@@ -14,12 +14,12 @@ sample-file: "config/samples.tsv"
 
 resources:
     time: 
-        shortrun: 10
-        longrun: 50
-        verylongrun: 300
+        shortrun: 300
+        longrun: 1800
+        verylongrun: 36000
     mem_per_cpu:
-        veryhighmem: 16000
-        highmem: 8000
+        veryhighmem: 160000
+        highmem: 18000
         lowmem: 1000
     cpu_per_task:
         single_thread: 1

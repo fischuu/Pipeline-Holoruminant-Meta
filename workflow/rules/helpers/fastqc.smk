@@ -13,5 +13,7 @@ rule _helpers__fastqc:
         time =  config["resources"]["time"]["shortrun"]
     log:
         "{prefix}_fastqc.log",
+    benchmark:
+        "benchmark/{prefix}_fastqc.tsv",
     shell:
         "fastqc {input} 2> {log} 1>&2"

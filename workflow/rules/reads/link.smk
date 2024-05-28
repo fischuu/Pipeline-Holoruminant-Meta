@@ -7,7 +7,9 @@ rule _reads__link:
         forward_=READS / "{sample}.{library}_1.fq.gz",
         reverse_=READS / "{sample}.{library}_2.fq.gz",
     log:
-        READS / "{sample}.{library}.log",
+        READS / "{sample}.{library}.log"
+    benchmark:
+        READS / "benchmark/{sample}.{library}.tsv"
     conda:
         "__environment__.yml"
     singularity:

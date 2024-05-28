@@ -116,6 +116,9 @@ rule _preprocess__fastp__run:
 
 ### kraken2 subworkflow
 TODO: CHECK; WHAT DATABASE TO USE?! https://github.com/R-Wright-1/kraken_metaphlan_comparison/wiki/Downloading-databases
+
+wget https://genome-idx.s3.amazonaws.com/kraken/k2_nt_20231129.tar.gz
+
 rule _preprocess__kraken2__assign:
     """
     Run kraken2 over all samples. Here, also the fastp reads are used, so we have not removed host contamination, when we assign kraken2 to the reads. Different databases used with kraken can be added into the configuration file `features.yaml`, intented after the kraken2 entry
@@ -167,6 +170,14 @@ rule _preprocess__singlem__microbial_fraction:
     
 rule _preprocess__singlem__aggregate_microbial_fraction:
     Aggregate all the microbial_fraction files into one tsv
+    
+### metaphlan4
+For metaphlan 4 I downloaded the database like this
+
+```
+metaphlan --install --index mpa_vJun23_CHOCOPhlAnSGB_202403 --bowtie2db metaphlan4/
+ metaphlan ERR2019411_1.fastq.gz,ERR2019411_2.fastq.gz --bowtie2out metagenomeERR.bowtie2.bz2 --nproc 20 --input_type fastq -o profiled_metagenome.txt --bowtie2db metaphlan4/
+```
     
 ## 'assemble' -module
 

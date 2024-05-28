@@ -12,6 +12,8 @@ rule _helpers__samtools__index_bam:
         time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.bam.bai.log",
+    benchmark:
+        "benchmark/{prefix}.bam.bai.tsv",
     shell:
         "samtools index {input} 2> {log} 1>&2"
 
@@ -30,6 +32,8 @@ rule _helpers__samtools__index_cram:
         time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.cram.crai.log",
+    benchmark:
+        "benchmark/{prefix}.cram.crai.tsv",
     shell:
         "samtools index {input} 2> {log} 1>&2"
 
@@ -48,6 +52,8 @@ rule _helpers__samtools__faidx_fa:
         time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.fa.fai.log",
+    benchmark:
+        "benchmark/{prefix}.fa.fai.tsv",
     shell:
         "samtools faidx {input} 2> {log} 1>&2"
 
@@ -67,6 +73,8 @@ rule _helpers__samtools__faidx_fagz:
         time =  config["resources"]["time"]["longrun"]
     log:
         "{prefix}.fa.gz.log",
+    benchmark:
+        "benchmark/{prefix}.fa.gz.tsv",
     shell:
         "samtools faidx {input} 2> {log} 1>&2"
 
@@ -80,6 +88,8 @@ rule _helpers__samtools__idxstats_cram:
         tsv="{prefix}.idxstats.tsv",
     log:
         "{prefix}.idxstats.log",
+    benchmark:
+        "benchmark/{prefix}.idxstats.tsv",
     conda:
         "__environment__.yml"
     singularity:
