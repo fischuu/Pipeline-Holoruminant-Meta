@@ -53,8 +53,8 @@ Before starting, a few configuration files need to be added.
 ## config/params.yaml
 ...
 
-## config/samples.ysv
-...
+## config/samples.tsv
+There is a script in the script folder to create the sample sheet
 
 # Usage
 The pipeline can run the entire workflow at once. However, normally it is recommended to run different modules from the pipeline separated to get better control over the results and also to be able to react quicker to possible errors.
@@ -118,6 +118,8 @@ rule _preprocess__fastp__run:
 TODO: CHECK; WHAT DATABASE TO USE?! https://github.com/R-Wright-1/kraken_metaphlan_comparison/wiki/Downloading-databases
 
 wget https://genome-idx.s3.amazonaws.com/kraken/k2_nt_20231129.tar.gz
+
+https://github.com/R-Wright-1/kraken_metaphlan_comparison/wiki/Downloading-databases
 
 rule _preprocess__kraken2__assign:
     """
