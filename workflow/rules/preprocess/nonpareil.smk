@@ -15,6 +15,8 @@ rule _preprocess__nonpareil__run:
         npo=touch(NONPAREIL / "{sample_id}.{library_id}.npo"),
     log:
         NONPAREIL / "{sample_id}.{library_id}.log",
+    benchmark:
+        NONPAREIL / "benchmark/{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
     singularity:
@@ -32,7 +34,7 @@ rule _preprocess__nonpareil__run:
             --decompress \
             --stdout \
             {input.forward_} \
-        > {params.forward_fq} 2> {log}
+        > {params.reads} 2> {log}
 
         nonpareil \
             -s {params.reads} \
@@ -57,6 +59,8 @@ rule _preprocess__nonpareil__aggregate:
         NONPAREIL / "nonpareil.tsv",
     log:
         NONPAREIL / "nonpareil.log",
+    benchmark:
+        NONPAREIL / "benchmark/nonpareil.tsv",
     conda:
         "__environment__.yml"
     singularity:

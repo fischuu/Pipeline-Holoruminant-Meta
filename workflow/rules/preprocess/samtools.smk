@@ -9,6 +9,8 @@ rule _preprocess__samtools__stats_cram:
         txt=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.stats.txt",
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.stats.log",
+    benchmark:
+        PRE_BOWTIE2 / "benchmark/{genome}" / "{sample_id}.{library_id}.stats.tsv"
     conda:
         "__environment__.yml"
     singularity:
