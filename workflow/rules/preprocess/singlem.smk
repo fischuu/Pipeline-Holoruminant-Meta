@@ -14,6 +14,8 @@ rule _preprocess__singlem__pipe:
         condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv",
     log:
         SINGLEM / "pipe" / "{sample_id}.{library_id}.log",
+    benchmark:
+        SINGLEM / "benchmark/pipe" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
     singularity:
@@ -52,6 +54,8 @@ rule _preprocess__singlem__condense:
         condense=SINGLEM / "singlem.tsv",
     log:
         SINGLEM / "singlem.log",
+    benchmark:
+        SINGLEM / "benchmark/singlem.tsv",
     conda:
         "__environment__.yml"
     singularity:
@@ -83,6 +87,8 @@ rule _preprocess__singlem__microbial_fraction:
         / "{sample_id}.{library_id}.tsv",
     log:
         SINGLEM / "microbial_fraction" / "{sample_id}.{library_id}.log",
+    benchmark:
+        SINGLEM / "benchmark/microbial_fraction" / "{sample_id}.{library_id}.tsv"
     conda:
         "__environment__.yml"
     singularity:
@@ -113,6 +119,8 @@ rule _preprocess__singlem__aggregate_microbial_fraction:
         tsv=SINGLEM / "microbial_fraction.tsv",
     log:
         SINGLEM / "microbial_fraction.log",
+    benchmark:
+        SINGLEM / "benchmark/microbial_fraction.tsv"
     conda:
         "__environment__.yml"
     singularity:

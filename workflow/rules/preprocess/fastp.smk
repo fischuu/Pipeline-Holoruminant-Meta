@@ -12,6 +12,8 @@ rule _preprocess__fastp__run:
         json=FASTP / "{sample_id}.{library_id}_fastp.json",
     log:
         FASTP / "{sample_id}.{library_id}.log",
+    benchmark:
+        FASTP / "benchmark/{sample_id}.{library_id}.tsv"
     conda:
         "__environment__.yml"
     singularity:

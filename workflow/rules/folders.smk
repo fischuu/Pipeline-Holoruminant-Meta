@@ -13,10 +13,11 @@ NONHOST = PRE / "nonhost/"
 
 # preprocess evaluation
 NONPAREIL = PRE / "nonpareil/"
+METAPHLAN = PRE / "metaphlan/"
+HUMANN = PRE / "humann/"
 SINGLEM = PRE / "singlem/"
 PRE_COVERM = PRE / "coverm/"
 KRAKEN2 = PRE / "kraken2/"
-
 
 # assemble
 ASSEMBLE = Path("results/assemble/")

@@ -25,14 +25,18 @@ rule _preprocess__kraken2__assign:
         ],
     log:
         KRAKEN2 / "{kraken_db}.log",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    benchmark:
+        KRAKEN2 / "benchmark/{kraken_db}.tsv",
+    threads: config["resources"]["cpu_per_task"]["kraken_thread"]
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"]
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["krakenmem"],
+        time =  config["resources"]["time"]["longrun"],
+        partition = config["resources"]["partition"]["kraken"],
+        nvme = config["resources"]["nvme"]["kraken"]
     params:
         in_folder=FASTP,
         out_folder=lambda w: KRAKEN2 / w.kraken_db,
-        kraken_db_shm="/dev/shm/{kraken_db}",
+        kraken_db_shm=lambda w:  os.path.join(KRAKEN2SHM, w.kraken_db),
     conda:
         "__environment__.yml"
     singularity:
@@ -41,6 +45,8 @@ rule _preprocess__kraken2__assign:
         """
         {{
             echo Running kraken2 in $(hostname) 2>> {log} 1>&2
+
+            echo Using quick disc space: {params.kraken_db_shm} 2>> {log} 1>&2
 
             mkdir --parents {params.kraken_db_shm}
             mkdir --parents {params.out_folder}

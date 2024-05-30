@@ -11,6 +11,8 @@ rule _preprocess__bowtie2__build:
         mock=touch(PRE_INDEX / "{genome}"),
     log:
         PRE_INDEX / "{genome}.log",
+    benchmark:
+        PRE_INDEX / "benchmark/{genome}.tsv",
     conda:
         "__environment__.yml"
     singularity:
@@ -49,6 +51,8 @@ rule _preprocess__bowtie2__map:
         cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.log",
+    benchmark:
+        PRE_BOWTIE2 / "benchmark/{genome}" / "{sample_id}.{library_id}.tsv"
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
         rg_id=compose_rg_id,
@@ -106,6 +110,8 @@ rule _preprocess__bowtie2__extract_nonhost:
         reverse_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz",
     log:
         PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}.log",
+    benchmark:
+        PRE_BOWTIE2 / "benchmark/non{genome}" / "{sample_id}.{library_id}.tsv"
     conda:
         "__environment__.yml"
     singularity:

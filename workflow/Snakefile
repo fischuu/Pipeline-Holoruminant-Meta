@@ -30,7 +30,9 @@ ASSEMBLIES = [
     for assembly_id in samples.assembly_id.unique()
     if not pd.isna(assembly_id)
 ]
+KRAKEN2SHM = config["kraken_tmp_storage"]
 KRAKEN2_DBS = features["databases"]["kraken2"]
+METAPHLAN_DBS = features["databases"]["metaphlan4"]
 HOST_NAMES = [] if features["hosts"] is None else list(features["hosts"].keys())
 LAST_HOST = HOST_NAMES[-1] if len(HOST_NAMES) > 0 else None
 
