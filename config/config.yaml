@@ -7,6 +7,8 @@ params-file: "config/params.yaml"
 docker-file: "config/.docker.yml"
 sample-file: "config/samples.tsv"
 
+#kraken_tmp_storage: "/dev/shm"       # Use this one, if you have enough memory (e.g. for full kraken up to 3TB)
+kraken_tmp_storage: "$LOCAL_SCRATCH"
 
 #################################
 ##
@@ -18,17 +20,21 @@ resources:
         longrun: 1800
         verylongrun: 36000
     mem_per_cpu:
-        veryhighmem: 160000
-        highmem: 18000
-        lowmem: 1000
+        krakenmem: 140000  # We use /dev/shm, make sure there is enough RAM on node to host the database! between 100GB and 1.5TB!
+        veryhighmem: 1400000
+        highmem: 160000
+        lowmem: 16000
     cpu_per_task:
         single_thread: 1
         multi_thread: 24
+        kraken_thread: 20   # We use /dev/shm, which can consume the nodes RAM without safeguard, so make sure no other job runs on the node!!!
     partition:
         testing: "test"
         small: "small"
-        highmem: "highmem"
+        kraken: "small"
+        highmem: "hugemem"
         longrun: "longrun"
     nvme:
         small: 10
         large: 50
+        kraken: 250
