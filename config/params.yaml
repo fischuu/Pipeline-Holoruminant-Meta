@@ -12,6 +12,8 @@ preprocess:
       mem_per_thread: 1G
   kraken2:
     memory_gb: 32
+  nonpareil:
+    X: 100    #Default: 1000, smaller for testing!!!
 
 assemble:
   megahit:

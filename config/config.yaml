@@ -9,6 +9,7 @@ sample-file: "config/samples.tsv"
 
 #kraken_tmp_storage: "/dev/shm"       # Use this one, if you have enough memory (e.g. for full kraken up to 3TB)
 kraken_tmp_storage: "$LOCAL_SCRATCH"
+tmp_storage: "$LOCAL_SCRATCH"
 
 #################################
 ##

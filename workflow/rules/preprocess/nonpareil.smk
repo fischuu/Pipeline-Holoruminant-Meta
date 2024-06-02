@@ -23,18 +23,15 @@ rule _preprocess__nonpareil__run:
         docker["preprocess"]
     params:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
-        reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
+        reads=lambda w: NONPAREIL /  f"{w.sample_id}.{w.library_id}_1.fq",
+        X=params["preprocess"]["nonpareil"]["X"],
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
-        gzip \
-            --decompress \
-            --stdout \
-            {input.forward_} \
-        > {params.reads} 2> {log}
+        gunzip -f -c {input.forward_} > {params.reads} 2> {log}
 
         nonpareil \
             -s {params.reads} \
@@ -42,6 +39,7 @@ rule _preprocess__nonpareil__run:
             -b {params.prefix} \
             -f fastq \
             -t {threads} \
+            -X {params.X} \
         2>> {log} 1>&2
 
         rm --force {params.reads} 2>> {log} 1>&2
