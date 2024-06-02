@@ -19,6 +19,7 @@ rule _assemble__magscot__prodigal:
     retries: 5
     shell:
         """
+        
         ( gzip \
             --decompress \
             --stdout \

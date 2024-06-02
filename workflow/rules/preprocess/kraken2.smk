@@ -29,7 +29,8 @@ rule _preprocess__kraken2__assign:
         KRAKEN2 / "benchmark/{kraken_db}.tsv",
     threads: config["resources"]["cpu_per_task"]["kraken_thread"]
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["krakenmem"],
+        cpu_per_task=config["resources"]["cpu_per_task"]["kraken_thread"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["krakenmem"] // config["resources"]["cpu_per_task"]["kraken_thread"], 
         time =  config["resources"]["time"]["longrun"],
         partition = config["resources"]["partition"]["kraken"],
         nvme = config["resources"]["nvme"]["kraken"]
