@@ -15,9 +15,6 @@ rule _preprocess__PhyloFlash__run:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
-    params:
-        out_folder=HUMANN,
-        out_name="{sample_id}.{library_id}",
     threads: config["resources"]["mem_per_cpu"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["mem_per_cpu"]["multi_thread"]
@@ -33,25 +30,25 @@ rule _preprocess__PhyloFlash__run:
         """
 
 
-rule _preprocess__humann__condense:
-    """Aggregate all the HumanN results into a single table"""
+rule _preprocess__phyloflash__condense:
+    """Aggregate all the PhyloFlash results into a single table"""
     input:
         genefamily_data=[
-            HUMANN / "{sample_id}.{library_id}_genefamilies.tsv"
+            PHYLOFLASH / f"{sample_id}.{library_id}_genefamilies.tsv"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
     output:
-        HUMANN / "humann_genefamilies.tsv",
+        PHYLOFLASH / "phyloflash_genefamilies.tsv",
     log:
-        HUMANN / "humann.log",
+        PHYLOFLASH / "phyloflash.log",
     benchmark:
-        HUMANN / "benchmark/humann.tsv",
+        PHYLOFLASH / "benchmark/phyloflash.tsv",
     conda:
         "__environment__.yml"
     singularity:
         docker["preprocess"]
     params:
-        input_dir=HUMANN,
+        input_dir=PHYLOFLASH,
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]
     shell:
@@ -60,6 +57,6 @@ rule _preprocess__humann__condense:
         2> {log} 1>&2
         """
 
-rule preprocess__humann:
+rule preprocess__phyloflash:
     input:
-        rules._preprocess__humann__condense.output
+        rules._preprocess__phyloflash__condense.output
