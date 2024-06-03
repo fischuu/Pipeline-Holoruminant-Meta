@@ -1,17 +1,16 @@
-rule _preprocess__humann__run:
-    """Run HumanN3 over one sample
+rule _preprocess__PhyloFlash__run:
+    """Run PhyloFlash over one sample
     """
     input:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        prot_dbs=features["databases"]["humann_prot_dbs"],
-        nt_dbs=features["databases"]["humann_nt_dbs"],
+        phyloflash_dbs=PHYLOFLASH_DBS,
     output:
-        humann_out=HUMANN / "{sample_id}.{library_id}_genefamilies.tsv",
+        phyloflash_out=PHYLOFLASH / "{sample_id}.{library_id}_genefamilies.tsv",
     log:
-        HUMANN / "log" / "{sample_id}.{library_id}.log",
+        PHYLOFLASH / "log" / "{sample_id}.{library_id}.log",
     benchmark:
-        HUMANN / "benchmark" / "{sample_id}.{library_id}.tsv",
+        PHYLOFLASH / "benchmark" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
     singularity:
@@ -19,17 +18,18 @@ rule _preprocess__humann__run:
     params:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
+    threads: config["resources"]["mem_per_cpu"]["multi_thread"]
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        cpu_per_task=config["resources"]["mem_per_cpu"]["multi_thread"]
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["mem_per_cpu"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
-        cat {input.forward_} {input.reverse_} | \
-        humann --input - --output {params.out_folder} \
-        --protein-database {input.prot_dbs} \
-        --nucleotide-database {input.nt_dbs} \
-        --output-basename {params.out_name}
-
+        phyloFlash.pl -dbhome {input.phyloflash_dbs} \
+                      -lib Phyloflash -CPUs {threads} \
+                      -read1 {input.forward_} \
+                      -read2 {input.reverse_} \
+                      -almosteverything
         """
 
 

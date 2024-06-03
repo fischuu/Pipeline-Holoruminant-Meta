@@ -23,5 +23,6 @@ databases:
     # refseq500: resources/databases/kraken2/kraken2_RefSeqV205_Complete_500GB # This db requires about 1.4TB of RAM
     standard: resources/databases/kraken2/kraken2_Standard_20240112  # This db requires about 140GB of RAM
   metaphlan4: resources/databases/metaphlan4/
+  phyloflash: resources/databases/phyloflash/138.1
   singlem: resources/databases/singlem/S3.2.1.GTDB_r214.metapackage_20231006.smpkg.zb
   virify: resources/databases/virify
