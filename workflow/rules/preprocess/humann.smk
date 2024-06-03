@@ -37,7 +37,7 @@ rule _preprocess__humann__condense:
     """Aggregate all the HumanN results into a single table"""
     input:
         genefamily_data=[
-            HUMANN / "{sample_id}.{library_id}_genefamilies.tsv"
+            HUMANN / f"{sample_id}.{library_id}_genefamilies.tsv"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
     output:

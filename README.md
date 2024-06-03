@@ -9,7 +9,7 @@ Snakemake > 8.x
 
 Supports:
 SLURM executor / local execution
-conda environment
+conda environment (not tested)
 docker/singularity/apptainer support
 
 Fileformats:
@@ -23,6 +23,38 @@ carries the functionality and that must not changed by the user.
 
 Then the project should have somewhere an own folder and a few configuration files are copied
 to it. These are mainly
+
+```
+# Go to project scratch space
+  cd /scratch/project_2009831
+
+# Create project directory
+  mkdir Pipe_test
+
+# Clone the pipeline
+  git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
+```
+
+Then we need to download the precompiled databases and reference genomes
+
+```
+# Change to the project folder
+  cd Pipe_test
+
+# Get the used reference genomes for host contamination removal
+  wget https://a3s.fi/Holoruminant/reference.tar.gz
+  tar -xvf reference.tar.gz
+
+# Get the example read data
+  wget https://a3s.fi/Holoruminant/reads.tar.gz
+  tar -xvf reads.tar.gz
+
+
+```
+
+```
+
+
 
 ```
 pipelineFolder="/some/path"
