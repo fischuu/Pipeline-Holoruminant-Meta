@@ -27,7 +27,8 @@ rule _preprocess__metaphlan__run:
                   --nproc {threads} \
                   --input_type fastq \
                   -o {output.mp_out} \
-                  --bowtie2db {input.data}
+                  --bowtie2db {input.data} \
+        2>> {log} 1>&2
         """
 
 
@@ -54,8 +55,9 @@ rule _preprocess__metaphlan__condense:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]
     shell:
         """
-        cat {input.profiled_data} > {output}
-        2> {log} 1>&2
+         merge_metaphlan_tables.py {input.profiled_data} > {output}
+        #cat {input.profiled_data} > {output}
+        #2> {log} 1>&2
         """
 
 rule preprocess__metaphlan:

@@ -6,8 +6,10 @@ rule _preprocess__humann__run:
         reverse_=get_final_reverse_from_pre,
         prot_dbs=features["databases"]["humann_prot_dbs"],
         nt_dbs=features["databases"]["humann_nt_dbs"],
+        mp_out=METAPHLAN / "profiled" / "{sample_id}.{library_id}.txt",
     output:
         humann_out=HUMANN / "{sample_id}.{library_id}_genefamilies.tsv",
+        cat= temp(HUMANN / "{sample_id}.{library_id}_concatenated.fastq.gz"),
     log:
         HUMANN / "log" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -24,11 +26,14 @@ rule _preprocess__humann__run:
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
-        cat {input.forward_} {input.reverse_} | \
-        humann --input - --output {params.out_folder} \
+        cat {input.forward_} {input.reverse_} > {output.cat}
+        
+        humann --input {output.cat} --output {params.out_folder} \
         --protein-database {input.prot_dbs} \
         --nucleotide-database {input.nt_dbs} \
-        --output-basename {params.out_name}
+        --output-basename {params.out_name} \
+        --taxonomic-profile {input.mp_out} \
+        2>> {log} 1>&2
 
         """
 
