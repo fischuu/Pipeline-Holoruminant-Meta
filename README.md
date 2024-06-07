@@ -375,6 +375,10 @@ Apptainer> DRAM-setup.py prepare_databases --output_dir /scratch/project_2009831
 
 https://github.com/WrightonLabCSU/DRAM/issues/26#issuecomment-685212290
 
+# Bakta
+The bakta database I downloaded is 5.1:
+https://zenodo.org/records/10522951
+
 ---------------------------------------------------------------------------------
 The text below is still from the original repository and needs to be adjusted.
 

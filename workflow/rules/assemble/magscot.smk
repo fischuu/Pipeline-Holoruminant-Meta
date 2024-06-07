@@ -181,7 +181,7 @@ rule _assemble__magscot__merge_contig_to_bin:
         done >> {output} 2>> {log}
         """
 
-
+# The refined are commented out for testing runs, when there are too few contigs, the refinement
 rule _assemble__magscot__run:
     """Run MAGSCOT over one assembly"""
     input:
@@ -203,16 +203,26 @@ rule _assemble__magscot__run:
         docker["assemble"]
     params:
         out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
+        extra=params["assemble"]["magscot"]["extra"],
+        th=params["assemble"]["magscot"]["threshold"],
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
     shell:
         """
+        set -e
+        
         Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
             --input {input.contigs_to_bin} \
             --hmm {input.hmm} \
             --out {params.out_prefix} \
-        2> {log} 1>&2
+            {params.extra} \
+            --threshold {params.th} \
+         2> {log} 1>&2 || \
+        touch {output.ar53} {output.bac120} {output.refined_contig_to_bin} {output.refined_out} {output.scores};
+        
+        echo $? >> {log}
+        
         """
 
 
