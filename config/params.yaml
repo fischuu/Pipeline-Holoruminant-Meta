@@ -31,6 +31,9 @@ assemble:
     P_ani: 0.8  # Default: ??? , different value might be relicts from testing
     S_ani: 0.98  # Default: 0.9 , different value might be relicts from testing
     extra: " --SkipMash " # Default: "", different value might be relicts from testing
+  magscot:
+    extra: "" # Default: "", different value might be relicts from testing
+    threshold : "0.01" # Scoring minimum completeness threshold [default=0.5]"
 
 quantify:
   bowtie2-build:
