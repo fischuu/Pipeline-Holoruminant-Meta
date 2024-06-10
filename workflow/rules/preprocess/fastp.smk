@@ -46,6 +46,14 @@ rule _preprocess__fastp__run:
             --thread {threads} \
             {params.extra} \
         2> {log} 1>&2
+        
+        # Check the integrity of the gzipped files and log the output
+        echo "Checking integrity of output files" >> {log}
+        gzip -t {output.forward_} 2>> {log}
+        gzip -t {output.reverse_} 2>> {log}
+        gzip -t {output.unpaired1} 2>> {log}
+        gzip -t {output.unpaired2} 2>> {log}
+        echo "Integrity check completed" >> {log}
         """
 
 
