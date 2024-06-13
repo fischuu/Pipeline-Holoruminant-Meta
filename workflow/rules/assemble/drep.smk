@@ -11,7 +11,7 @@ rule _assemble__drep__separate_bins:
         docker["assemble"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        time =  config["resources"]["time"]["shortrun"],
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
@@ -46,8 +46,8 @@ rule _assemble__drep__run:
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
+        time =  config["resources"]["time"]["shortrun"],
         attempt=get_attempt,
     params:
         out_dir=DREP,
@@ -112,8 +112,8 @@ rule _assemble__drep__join_genomes:
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
+        time =  config["resources"]["time"]["shortrun"],
     shell:
         """
         ( zcat \
