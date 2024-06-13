@@ -1,4 +1,4 @@
-rule _preprocess__PhyloFlash__run:
+rule _preprocess__phyloflash__run:
     """Run PhyloFlash over one sample
     """
     input:
@@ -23,7 +23,7 @@ rule _preprocess__PhyloFlash__run:
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["small"]
     params:
-        lib="{sample_id}.{library_id}",
+        lib="{sample_id}_{library_id}",
         outdir=PHYLOFLASH
     shell:
         """
