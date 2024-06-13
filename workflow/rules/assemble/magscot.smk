@@ -218,8 +218,9 @@ rule _assemble__magscot__run:
             --out {params.out_prefix} \
             {params.extra} \
             --threshold {params.th} \
-         2> {log} 1>&2 || \
-        touch {output.ar53} {output.bac120} {output.refined_contig_to_bin} {output.refined_out} {output.scores};
+         2> {log} 1>&2 
+         
+#        touch {output.ar53} {output.bac120} {output.refined_contig_to_bin} {output.refined_out} {output.scores};
         
         echo $? >> {log}
         
@@ -241,10 +242,12 @@ rule _assemble__magscot__reformat:
     singularity:
         docker["assemble"]
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
+        time =  config["resources"]["time"]["shortrun"],
     shell:
         """
+        set -e
+        
         Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
             --input-file {input.refined_contig_to_bin} \
             --output-file {output.clean} \
@@ -266,8 +269,8 @@ rule _assemble__magscot__rename:
     singularity:
         docker["assemble"]
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
+        time =  config["resources"]["time"]["shortrun"],
     shell:
         """
         ( python workflow/scripts/reformat_fasta_magscot.py \

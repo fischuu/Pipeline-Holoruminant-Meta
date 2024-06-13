@@ -6,7 +6,8 @@ rule _preprocess__PhyloFlash__run:
         reverse_=get_final_reverse_from_pre,
         phyloflash_dbs=PHYLOFLASH_DBS,
     output:
-        phyloflash_out=PHYLOFLASH / "{sample_id}.{library_id}_genefamilies.tsv",
+        phyloflash_out=PHYLOFLASH / "{sample_id}.{library_id}.phyloFlash.html",
+        phyloflash_log=PHYLOFLASH / "{sample_id}.{library_id}.phyloFlash.log",
     log:
         PHYLOFLASH / "log" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -14,19 +15,26 @@ rule _preprocess__PhyloFlash__run:
     conda:
         "__environment__.yml"
     singularity:
-        docker["preprocess"]
-    threads: config["resources"]["mem_per_cpu"]["multi_thread"]
+        docker["phyloflash"]
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        cpu_per_task=config["resources"]["mem_per_cpu"]["multi_thread"]
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["mem_per_cpu"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"]
+        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
+        time =  config["resources"]["time"]["longrun"],
+        nvme = config["resources"]["nvme"]["small"]
+    params:
+        lib="{sample_id}.{library_id}",
+        outdir=PHYLOFLASH
     shell:
         """
         phyloFlash.pl -dbhome {input.phyloflash_dbs} \
-                      -lib Phyloflash -CPUs {threads} \
+                      -lib {params.lib} -CPUs {threads} \
                       -read1 {input.forward_} \
                       -read2 {input.reverse_} \
                       -almosteverything
+
+        mkdir -p {params.outdir}
+        mv {params.lib}.* {params.outdir}
         """
 
 
@@ -34,11 +42,11 @@ rule _preprocess__phyloflash__condense:
     """Aggregate all the PhyloFlash results into a single table"""
     input:
         genefamily_data=[
-            PHYLOFLASH / f"{sample_id}.{library_id}_genefamilies.tsv"
+            PHYLOFLASH / f"{sample_id}.{library_id}.phyloFlash.log"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
     output:
-        PHYLOFLASH / "phyloflash_genefamilies.tsv",
+        PHYLOFLASH / "phyloflash_all.log",
     log:
         PHYLOFLASH / "phyloflash.log",
     benchmark:
@@ -46,7 +54,7 @@ rule _preprocess__phyloflash__condense:
     conda:
         "__environment__.yml"
     singularity:
-        docker["preprocess"]
+        docker["phyloflash"]
     params:
         input_dir=PHYLOFLASH,
     resources:
