@@ -6,8 +6,8 @@ rule _preprocess__phyloflash__run:
         reverse_=get_final_reverse_from_pre,
         phyloflash_dbs=PHYLOFLASH_DBS,
     output:
-        phyloflash_out=PHYLOFLASH / "{sample_id}.{library_id}.phyloFlash.html",
-        phyloflash_log=PHYLOFLASH / "{sample_id}.{library_id}.phyloFlash.log",
+        phyloflash_out=PHYLOFLASH / "{sample_id}_{library_id}.phyloFlash.html",
+        phyloflash_log=PHYLOFLASH / "{sample_id}_{library_id}.phyloFlash.log",
     log:
         PHYLOFLASH / "log" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -42,7 +42,7 @@ rule _preprocess__phyloflash__condense:
     """Aggregate all the PhyloFlash results into a single table"""
     input:
         genefamily_data=[
-            PHYLOFLASH / f"{sample_id}.{library_id}.phyloFlash.log"
+            PHYLOFLASH / f"{sample_id}_{library_id}.phyloFlash.log"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
     output:

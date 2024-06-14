@@ -34,7 +34,6 @@ MAGSCOT = ASSEMBLE / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
 DREP = ASSEMBLE / "drep/"
 
-
 # quantify
 QUANT = Path("results/quantify/")
 QUANT_INDEX = QUANT / "index/"
@@ -48,6 +47,7 @@ GTDBTK = ANN / "gtdbtk/"
 QUAST = ANN / "quast/"
 DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
+BAKTA = ANN / "bakta"
 
 # Viral prediction
 VIRIFY = Path("results/virify/")

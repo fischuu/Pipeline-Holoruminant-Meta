@@ -44,8 +44,8 @@ quantify:
     mem: 1G
   coverm:
     genome:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
+      methods:  ["count", "covered_bases", "length", "tpm"]  # https://github.com/wwood/CoverM#calculation-methods
       min_covered_fraction: 0.0
       separator: "@"
     contig:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
+      methods:  ["count", "covered_bases", "length", "tpm"]  # https://github.com/wwood/CoverM#calculation-methods
