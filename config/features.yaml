@@ -17,6 +17,7 @@ databases:
   bakta: resources/databases/bakta/db
   checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
   dram: resources/databases/dram/20240524/
+  eggnog: resources/databases/eggnog/
   gtdbtk: resources/databases/gtdbtk/release214
   humann_nt_dbs: resources/databases/humann/chocophlan
   humann_prot_dbs: resources/databases/humann/uniref

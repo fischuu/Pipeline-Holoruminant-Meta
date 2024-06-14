@@ -48,6 +48,7 @@ QUAST = ANN / "quast/"
 DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
 BAKTA = ANN / "bakta"
+EGGNOG = ANN / "eggnog"
 
 # Viral prediction
 VIRIFY = Path("results/virify/")

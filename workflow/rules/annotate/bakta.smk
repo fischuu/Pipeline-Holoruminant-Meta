@@ -21,7 +21,7 @@ rule _annotate__bakta:
     shell:
         """
         bakta --db {params.db} \
-              --force --verbose \
+              --force \
               --output {params.out_dir} \
               --prefix bakta \
               --threads {threads} \
