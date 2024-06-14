@@ -49,6 +49,7 @@ DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
 BAKTA = ANN / "bakta"
 EGGNOG = ANN / "eggnog"
+PHYLOPPHLAN = ANN / "phylophlan"
 
 # Viral prediction
 VIRIFY = Path("results/virify/")
