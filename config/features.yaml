@@ -14,7 +14,8 @@ magscot:
   tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
 
 databases:
-  checkm2: resources/databases/checkm2/
+  bakta: resources/databases/bakta/db
+  checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
   dram: resources/databases/dram/20240524/
   gtdbtk: resources/databases/gtdbtk/release214
   humann_nt_dbs: resources/databases/humann/chocophlan
