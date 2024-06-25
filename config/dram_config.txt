@@ -1,0 +1,152 @@
+{
+  "search_databases": {
+    "kegg": null,
+    "kofam_hmm": "resources/databases/dram/20240524/kofam_profiles.hmm",
+    "kofam_ko_list": "resources/databases/dram/20240524/kofam_ko_list.tsv",
+    "uniref": "resources/databases/dram/20240524/uniref90.20240524.mmsdb",
+    "pfam": "resources/databases/dram/20240524/pfam.mmspro",
+    "dbcan": "resources/databases/dram/20240524/dbCAN-HMMdb-V11.txt",
+    "viral": "resources/databases/dram/20240524/refseq_viral.20240524.mmsdb",
+    "peptidase": "resources/databases/dram/20240524/peptidases.20240524.mmsdb",
+    "vogdb": "resources/databases/dram/20240524/vog_latest_hmms.txt",
+    "camper_hmm": null,
+    "camper_fa_db": null,
+    "camper_hmm_cutoffs": null,
+    "camper_fa_db_cutoffs": null
+  },
+  "database_descriptions": {
+    "pfam_hmm": "resources/databases/dram/20240524/Pfam-A.hmm.dat.gz",
+    "dbcan_fam_activities": "resources/databases/dram/20240524/CAZyDB.08062022.fam-activities.txt",
+    "dbcan_subfam_ec": "resources/databases/dram/20240524/CAZyDB.08062022.fam.subfam.ec.txt",
+    "vog_annotations": "resources/databases/dram/20240524/vog_annotations_latest.tsv.gz"
+  },
+  "dram_sheets": {
+    "camper_distillate": null,
+    "genome_summary_form": "resources/databases/dram/20240524/genome_summary_form.20240524.tsv",
+    "module_step_form": "resources/databases/dram/20240524/module_step_form.20240524.tsv",
+    "etc_module_database": "resources/databases/dram/20240524/etc_mdoule_database.20240524.tsv",
+    "function_heatmap_form": "resources/databases/dram/20240524/function_heatmap_form.20240524.tsv",
+    "amg_database": "resources/databases/dram/20240524/amg_database.20240524.tsv"
+  },
+  "dram_version": "1.5.0",
+  "description_db": "resources/databases/dram/20240524/description_db.sqlite",
+  "setup_info": {
+    "kofam_hmm": {
+      "name": "KOfam db",
+      "citation": "T. Aramaki, R. Blanc-Mathieu, H. Endo, K. Ohkubo, M. Kanehisa, S. Goto, and H. Ogata, \"Kofamkoala: Kegg ortholog assignment based on profile hmm and adaptive score threshold,\" Bioinformatics, vol. 36, no. 7, pp. 2251\u20132252, 2020.",
+      "Download time": "05/24/2024, 07:54:27",
+      "Origin": "Downloaded by DRAM"
+    },
+    "kofam_ko_list": {
+      "name": "KOfam KO list",
+      "citation": "T. Aramaki, R. Blanc-Mathieu, H. Endo, K. Ohkubo, M. Kanehisa, S. Goto, and H. Ogata, \"Kofamkoala: Kegg ortholog assignment based on profile hmm and adaptive score threshold,\" Bioinformatics, vol. 36, no. 7, pp. 2251\u20132252, 2020.",
+      "Download time": "05/24/2024, 07:54:31",
+      "Origin": "Downloaded by DRAM"
+    },
+    "uniref": {
+      "name": "UniRef db",
+      "description_db_updated": "Unknown, or Never",
+      "citation": "Y. Wang, Q. Wang, H. Huang, W. Huang, Y. Chen, P. B. McGarvey, C. H. Wu, C. N. Arighi, and U. Consortium, \"A crowdsourcing open platform for literature curation in uniprot,\" PLoS Biology, vol. 19, no. 12, p. e3001464, 2021.",
+      "version": "90",
+      "Download time": "05/24/2024, 08:25:13",
+      "Origin": "Downloaded by DRAM"
+    },
+    "pfam": {
+      "name": "Pfam db",
+      "citation": "J. Mistry, S. Chuguransky, L. Williams, M. Qureshi, G. A. Salazar, E. L. Sonnhammer, S. C. Tosatto, L. Paladin, S. Raj, L. J. Richardson et al., \"Pfam: The protein families database in 2021,\" Nucleic acids research, vol. 49, no. D1, pp. D412\u2013D419, 2021.",
+      "Download time": "05/24/2024, 08:29:08",
+      "Origin": "Downloaded by DRAM"
+    },
+    "pfam_hmm": {
+      "name": "Pfam hmm dat",
+      "description_db_updated": "Unknown, or Never",
+      "citation": "J. Mistry, S. Chuguransky, L. Williams, M. Qureshi, G. A. Salazar, E. L. Sonnhammer, S. C. Tosatto, L. Paladin, S. Raj, L. J. Richardson et al., \"Pfam: The protein families database in 2021,\" Nucleic acids research, vol. 49, no. D1, pp. D412\u2013D419, 2021.",
+      "Download time": "05/24/2024, 08:29:09",
+      "Origin": "Downloaded by DRAM"
+    },
+    "dbcan": {
+      "name": "dbCAN db",
+      "citation": "Y. Yin, X. Mao, J. Yang, X. Chen, F. Mao, and Y. Xu, \"dbcan: a web resource for automated carbohydrate-active enzyme annotation,\" Nucleic acids research, vol. 40, no. W1, pp. W445\u2013W451, 2012.",
+      "version": "11",
+      "Download time": "05/24/2024, 08:29:15",
+      "Origin": "Downloaded by DRAM"
+    },
+    "dbcan_fam_activities": {
+      "name": "dbCAN family activities",
+      "citation": "Y. Yin, X. Mao, J. Yang, X. Chen, F. Mao, and Y. Xu, \"dbcan: a web resource for automated carbohydrate-active enzyme annotation,\" Nucleic acids research, vol. 40, no. W1, pp. W445\u2013W451, 2012.",
+      "version": "11",
+      "upload_date": "08062022",
+      "Download time": "05/24/2024, 08:29:15",
+      "Origin": "Downloaded by DRAM"
+    },
+    "dbcan_subfam_ec": {
+      "name": "dbCAN subfamily EC numbers",
+      "citation": "Y. Yin, X. Mao, J. Yang, X. Chen, F. Mao, and Y. Xu, \"dbcan: a web resource for automated carbohydrate-active enzyme annotation,\" Nucleic acids research, vol. 40, no. W1, pp. W445\u2013W451, 2012.",
+      "version": "11",
+      "upload_date": "08062022",
+      "Download time": "05/24/2024, 08:29:17",
+      "Origin": "Downloaded by DRAM"
+    },
+    "vogdb": {
+      "name": "VOGDB db",
+      "citation": "J. Thannesberger, H.-J. Hellinger, I. Klymiuk, M.-T. Kastner, F. J. Rieder, M. Schneider, S. Fister, T. Lion, K. Kosulin, J. Laengle et al., \"Viruses comprise an extensive pool of mobile genetic elements in eukaryote cell cultures and human clinical samples,\" The FASEB Journal, vol. 31, no. 5, pp. 1987\u20132000, 2017.",
+      "version": "latest",
+      "Download time": "05/24/2024, 08:29:29",
+      "Origin": "Downloaded by DRAM"
+    },
+    "vog_annotations": {
+      "name": "VOG annotations",
+      "description_db_updated": "Unknown, or Never",
+      "citation": "J. Thannesberger, H.-J. Hellinger, I. Klymiuk, M.-T. Kastner, F. J. Rieder, M. Schneider, S. Fister, T. Lion, K. Kosulin, J. Laengle et al., \"Viruses comprise an extensive pool of mobile genetic elements in eukaryote cell cultures and human clinical samples,\" The FASEB Journal, vol. 31, no. 5, pp. 1987\u20132000, 2017.",
+      "version": "latest",
+      "Download time": "05/24/2024, 08:29:29",
+      "Origin": "Downloaded by DRAM"
+    },
+    "viral": {
+      "name": "RefSeq Viral db",
+      "description_db_updated": "Unknown, or Never",
+      "citation": "J. R. Brister, D. Ako-Adjei, Y. Bao, and O. Blinkova, \"Ncbi viral genomes resource,\" Nucleic acids research, vol. 43, no. D1, pp. D571\u2013D577, 2015. [3] M. Kanehisa, M. Furumichi, Y. Sato, M. Ishiguro-Watanabe, and M. Tan-abe, \"Kegg: integrating viruses and cellular organisms,\" Nucleic acids research, vol. 49, no. D1, pp. D545\u2013D551, 2021.",
+      "viral_files": 1,
+      "Download time": "05/24/2024, 08:29:36",
+      "Origin": "Downloaded by DRAM"
+    },
+    "peptidase": {
+      "name": "MEROPS peptidase db",
+      "description_db_updated": "Unknown, or Never",
+      "citation": "N. D. Rawlings, A. J. Barrett, P. D. Thomas, X. Huang, A. Bateman, and R. D. Finn, \"The merops database of proteolytic enzymes, their substrates and inhibitors in 2017 and a comparison with peptidases in the panther database,\" Nucleic acids research, vol. 46, no. D1, pp. D624\u2013D632, 2018.",
+      "Download time": "05/24/2024, 08:29:43",
+      "Origin": "Downloaded by DRAM"
+    },
+    "genome_summary_form": {
+      "name": "Genome summary form",
+      "branch": "master",
+      "Download time": "05/24/2024, 08:29:43",
+      "Origin": "Downloaded by DRAM"
+    },
+    "module_step_form": {
+      "name": "Module step form",
+      "branch": "master",
+      "Download time": "05/24/2024, 08:29:43",
+      "Origin": "Downloaded by DRAM"
+    },
+    "function_heatmap_form": {
+      "name": "Function heatmap form",
+      "branch": "master",
+      "Download time": "05/24/2024, 08:29:44",
+      "Origin": "Downloaded by DRAM"
+    },
+    "amg_database": {
+      "name": "AMG database",
+      "branch": "master",
+      "Download time": "05/24/2024, 08:29:44",
+      "Origin": "Downloaded by DRAM"
+    },
+    "etc_module_database": {
+      "name": "ETC module database",
+      "branch": "master",
+      "Download time": "05/24/2024, 08:29:44",
+      "Origin": "Downloaded by DRAM"
+    }
+  },
+  "log_path": null
+}

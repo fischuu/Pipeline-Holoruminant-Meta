@@ -6,6 +6,8 @@ features-file: "config/features.yaml"
 params-file: "config/params.yaml"
 docker-file: "config/.docker.yml"
 sample-file: "config/samples.tsv"
+dram-config: "config/dram_config.txt"
+proteinortho-config: "config/proteinortho_config.txt"
 
 #kraken_tmp_storage: "/dev/shm"       # Use this one, if you have enough memory (e.g. for full kraken up to 3TB)
 kraken_tmp_storage: "$LOCAL_SCRATCH"

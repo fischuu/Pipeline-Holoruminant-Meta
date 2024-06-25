@@ -40,7 +40,6 @@ QUANT_INDEX = QUANT / "index/"
 QUANT_BOWTIE2 = QUANT / "bowtie2/"
 COVERM = QUANT / "coverm/"
 
-
 # dereplicate evaluation
 ANN = Path("results/annotate/")
 GTDBTK = ANN / "gtdbtk/"
@@ -49,11 +48,11 @@ DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
 BAKTA = ANN / "bakta"
 EGGNOG = ANN / "eggnog"
-PHYLOPPHLAN = ANN / "phylophlan"
+PHYLOPHLAN = ANN / "phylophlan"
+PROTEINORTHO = ANN / "proteinortho"
 
 # Viral prediction
 VIRIFY = Path("results/virify/")
-
 
 # reports
 REPORT = Path("reports/")
