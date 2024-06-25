@@ -3,7 +3,8 @@ rule _annotate__bakta:
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",
     output:
-        BAKTA / "bakta.tsv",
+        tsv=BAKTA / "bakta.tsv",
+        faa=BAKTA / "bakta.faa",
     log:
         BAKTA / "bakta.log",
     conda:

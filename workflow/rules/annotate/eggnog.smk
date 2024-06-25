@@ -22,7 +22,7 @@ rule _annotate__eggnog:
         nvme = config["resources"]["nvme"]["large"]
     shell:
         """
-        cp {params.fa} $TMPDIR  2>> {log} 1>&2;
+        cp {params.db}/* $TMPDIR  2>> {log} 1>&2;
         
         emapper.py -m diamond \
                    --data_dir $TMPDIR \

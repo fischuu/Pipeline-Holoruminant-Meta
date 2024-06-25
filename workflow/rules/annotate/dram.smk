@@ -1,7 +1,7 @@
 rule _annotate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
-        dereplicated_genomes=DREP / "dereplicated_genomes",
+        dereplicated_genomes=DREP / "dereplicated_genomes.fa.gz",
         gtdbtk_summary=GTDBTK / "gtdbtk.summary.tsv",
         dram_db=features["databases"]["dram"],
     output:
@@ -16,6 +16,7 @@ rule _annotate__dram__annotate:
     singularity:
         docker["dram"]
     params:
+        config=config["dram-config"],
         min_contig_size=1500,
         out_dir=DRAM,
         tmp_dir=DRAM / "annotate",
@@ -25,49 +26,17 @@ rule _annotate__dram__annotate:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"]
+#        nvme = config["resources"]["nvme"]["small"]
     shell:
         """
-        rm \
-            --recursive \
-            --force \
-            --verbose {params.tmp_dir} \
-        2>> {log} 1>&2
-
-        mkdir \
-            --parents \
-            {params.tmp_dir} \
-        2>>{log} 1>&2
-
-        DRAM-setup.py set_database_locations \
-            --amg_database_loc          {input.dram_db}/amg_database.*.tsv \
-            --dbcan_fam_activities_loc  {input.dram_db}/CAZyDB.*.fam-activities.txt \
-            --dbcan_loc                 {input.dram_db}/dbCAN-HMMdb-V*.txt \
-            --dbcan_subfam_ec_loc       {input.dram_db}/CAZyDB.*.fam.subfam.ec.txt \
-            --description_db_loc        {input.dram_db}/description_db.sqlite \
-            --etc_module_database_loc   {input.dram_db}/etc_mdoule_database.*.tsv \
-            --function_heatmap_form_loc {input.dram_db}/function_heatmap_form.*.tsv \
-            --genome_summary_form_loc   {input.dram_db}/genome_summary_form.*.tsv \
-            --kofam_hmm_loc             {input.dram_db}/kofam_profiles.hmm \
-            --kofam_ko_list_loc         {input.dram_db}/kofam_ko_list.tsv \
-            --module_step_form_loc      {input.dram_db}/module_step_form.*.tsv \
-            --peptidase_loc             {input.dram_db}/peptidases.*.mmsdb \
-            --pfam_hmm_loc              {input.dram_db}/Pfam-A.hmm.dat.gz \
-            --pfam_loc                  {input.dram_db}/pfam.mmspro \
-            --viral_loc                 {input.dram_db}/refseq_viral.*.mmsdb \
-            --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
-            --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
-        2>> {log} 1>&2
-
-        parallel \
-            --jobs {threads} \
-            --retries {params.parallel_retries} \
-            DRAM.py annotate \
-                --input_fasta {{}} \
-                --output_dir {params.tmp_dir}/{{/.}} \
-                --threads 1 \
+        rm -rf {params.tmp_dir}
+        
+        DRAM.py annotate \
+                --config_loc {params.config} \
+                --input_fasta {input.dereplicated_genomes} \
+                --output_dir {params.tmp_dir} \
+                --threads {threads} \
                 --gtdb_taxonomy {input.gtdbtk_summary} \
-        ::: {input.dereplicated_genomes}/*.fa.gz \
         2>> {log} 1>&2
 
         for file in annotations trnas rrnas ; do
@@ -114,31 +83,13 @@ rule _annotate__dram__distill:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
     params:
+        config=config["dram-config"],
         outdir_tmp=DRAM / "distill",
         outdir=DRAM,
     shell:
         """
-        DRAM-setup.py set_database_locations \
-            --amg_database_loc          {input.dram_db}/amg_database.*.tsv \
-            --dbcan_fam_activities_loc  {input.dram_db}/CAZyDB.*.fam-activities.txt \
-            --dbcan_loc                 {input.dram_db}/dbCAN-HMMdb-V*.txt \
-            --dbcan_subfam_ec_loc       {input.dram_db}/CAZyDB.*.fam.subfam.ec.txt \
-            --description_db_loc        {input.dram_db}/description_db.sqlite \
-            --etc_module_database_loc   {input.dram_db}/etc_mdoule_database.*.tsv \
-            --function_heatmap_form_loc {input.dram_db}/function_heatmap_form.*.tsv \
-            --genome_summary_form_loc   {input.dram_db}/genome_summary_form.*.tsv \
-            --kofam_hmm_loc             {input.dram_db}/kofam_profiles.hmm \
-            --kofam_ko_list_loc         {input.dram_db}/kofam_ko_list.tsv \
-            --module_step_form_loc      {input.dram_db}/module_step_form.*.tsv \
-            --peptidase_loc             {input.dram_db}/peptidases.*.mmsdb \
-            --pfam_hmm_loc              {input.dram_db}/Pfam-A.hmm.dat.gz \
-            --pfam_loc                  {input.dram_db}/pfam.mmspro \
-            --viral_loc                 {input.dram_db}/refseq_viral.*.mmsdb \
-            --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
-            --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
-        2>> {log} 1>&2
-
         DRAM.py distill \
+            --config_loc {params.config} \
             --input_file {input.annotations} \
             --rrna_path {input.rrnas} \
             --trna_path {input.trnas} \
