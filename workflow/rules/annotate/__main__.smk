@@ -5,7 +5,7 @@ include: "dram.smk"
 include: "eggnog.smk"
 include: "checkm2.smk"
 include: "proteinortho.smk"
-
+include: "phylophlan.smk"
 
 rule annotate:
     """Evaluate the dereplication steps"""
@@ -17,3 +17,4 @@ rule annotate:
         rules._annotate__gtdbtk__classify.output,
         rules.annotate__dram.input,
         rules._annotate__proteinortho.output,
+        rules._annotate__phylophlan.input,

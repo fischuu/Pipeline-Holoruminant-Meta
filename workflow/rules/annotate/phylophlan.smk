@@ -1,39 +1,47 @@
-rule _annotate__phylophlan:
-    """Run phylophlan over the dereplicated mags"""
+rule _annotate__phylophlan_run:
+    """
+    Run phylophlan for the dereplicated genomes
+    """
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",
+        database=lambda w: features["databases"]["phylophlan"][w.phylophlan_db],
     output:
-        PHYLOPHLAN ,
+        out_folder=directory(PHYLOPHLAN / "{phylophlan_db}"),
     log:
-        PHYLOPHLAN / "phylophlan.log",
-    conda:
-        "annotate.yml"
-    singularity:
-        docker["annotate"]
-    params:
-        out_dir=EGGNOG,
-        db=features["databases"]["eggnog"],
-        prefix="eggnog"
+        PHYLOPHLAN / "{phylophlan_db}.log",
+    benchmark:
+        PHYLOPHLAN / "benchmark/{phylophlan_db}.tsv",
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["large"]
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
+        time=config["resources"]["time"]["longrun"],
+        nvme=config["resources"]["nvme"]["large"]
+    params:
+        diversity=params["annotate"]["phylophlan"]["diversity"],
+        config_folder=config["phylophlan-config"],
+        out_folder=lambda w: PHYLOPHLAN / w.phylophlan_db,
+    conda:
+        "__environment__.yml"
+    singularity:
+        docker["annotate"]
     shell:
         """
-        cp {params.fa} $TMPDIR  2>> {log} 1>&2;
-        
-        emapper.py -m diamond \
-                   --data_dir $TMPDIR \
-                   --itype metagenome \
-                   --genepred prodigal \
-                   --dbmem \
-                   --no_annot \
-                   --no_file_comments \
-                   --cpu {threads} \
-                   -i {input.contigs} \
-                   --output_dir {params.out_dir} \
-                   -o {params.prefix}  \
-                   2>> {log} 1>&2;
+            echo Running Phylophlan on $(hostname) 2>> {log} 1>&2
+
+            phylophlan -i {input.contigs} \
+                       -d {input.database} \
+                       --diversity {params.diversity} \
+                       -f {params.config_folder} \
+                       --nproc {threads} \
+                       --output_folder {params.out_folder} \
+                       2>> {log} 1>&2
         """
+
+rule _annotate__phylophlan:
+    """Run phylophlan over all databases."""
+    input:
+        [
+            PHYLOPHLAN / phylophlan_db 
+            for phylophlan_db in features["databases"]["phylophlan"]
+        ],

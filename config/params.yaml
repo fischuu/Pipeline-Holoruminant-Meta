@@ -49,3 +49,7 @@ quantify:
       separator: "@"
     contig:
       methods:  ["count", "covered_bases", "length", "tpm"]  # https://github.com/wwood/CoverM#calculation-methods
+
+annotate:
+  phylophlan:
+    diversity: "high"

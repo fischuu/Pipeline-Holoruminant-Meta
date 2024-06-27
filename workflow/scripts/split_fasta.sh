@@ -10,14 +10,17 @@ mkdir -p $output_dir
 # Initialize variables
 entry=""
 header=""
+index=0
 
-# Function to sanitize filenames
+# Function to sanitize and truncate filenames
 sanitize_filename() {
     local filename="$1"
     # Remove the leading '>'
     filename="${filename#>}"
     # Replace spaces and special characters with underscores
     filename=$(echo "$filename" | tr -c '[:alnum:]_' '_')
+    # Truncate the filename to the first 10 characters
+    filename=${filename:0:50}
     echo "$filename"
 }
 
@@ -28,9 +31,12 @@ do
         # If the line starts with '>', it's a header line
         # Save the previous entry to a file
         if [[ -n $header ]]; then
-            # Create a sanitized filename from the header
+            # Create a sanitized and truncated filename from the header
             filename=$(sanitize_filename "$header")
+            # Add the running index to the filename
+            filename="${filename}_${index}"
             echo -e "$entry" > "$output_dir/$filename.fasta"
+            index=$((index + 1))
         fi
         # Start a new entry
         header=$line
@@ -44,6 +50,7 @@ done < "$input_fasta"
 # Save the last entry to a file
 if [[ -n $header ]]; then
     filename=$(sanitize_filename "$header")
+    filename="${filename}_${index}"
     echo -e "$entry" > "$output_dir/$filename.fasta"
 fi
 

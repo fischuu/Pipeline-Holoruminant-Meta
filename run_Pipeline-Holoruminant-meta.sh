@@ -20,7 +20,7 @@ export SINGULARITY_CACHEDIR="/scratch/project_2009831/tmp"
 # Create the rulegraph
 ################################################################################
 #snakemake -s $pipelineFolder/workflow/Snakefile \
-#          --configfile $projectFolder/Snakebite-GBS_config.yaml \
+#          --configfile $projectFolder/config/config.yaml \
 #          --rulegraph | dot -T png > $projectFolder/workflow.png
 
 
