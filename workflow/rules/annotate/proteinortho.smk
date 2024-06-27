@@ -10,9 +10,11 @@ rule _annotate__proteinortho_splitfaa:
         cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
         time =  config["resources"]["time"]["longrun"],
+    params:
+        script_folder=config["script_folder"],
     shell:
         """
-        scripts/split_fasta.sh {input} {output}\
+        {params.script_folder}/split_fasta.sh {input} {output}\
               2>> {log} 1>&2
         """
 

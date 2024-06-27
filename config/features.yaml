@@ -18,7 +18,7 @@ databases:
   checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
   dram: resources/databases/dram/20240524/
   eggnog: resources/databases/eggnog/
-  gtdbtk: resources/databases/gtdbtk/release220
+  gtdbtk: resources/databases/gtdbtk/release214
   humann_nt_dbs: resources/databases/humann/chocophlan
   humann_prot_dbs: resources/databases/humann/uniref
   kraken2:  # add entries as necessary, intended by two spaces
@@ -26,5 +26,8 @@ databases:
     standard: resources/databases/kraken2/kraken2_Standard_20240112  # This db requires about 140GB of RAM
   metaphlan4: resources/databases/metaphlan4/
   phyloflash: resources/databases/phyloflash/138.1
+  phylophlan: # add entries as necessary, intended by two spaces
+    amphora2: /scratch/project_2009831/Pipe_dev/resources/databases/phylophlan/amphora2
+    phylophlan: /scratch/project_2009831/Pipe_dev/resources/databases/phylophlan/phylophlan
   singlem: resources/databases/S4.3.0.GTDB_r220.metapackage_20240523.smpkg.zb
   virify: resources/databases/virify

@@ -8,6 +8,8 @@ docker-file: "config/.docker.yml"
 sample-file: "config/samples.tsv"
 dram-config: "config/dram_config.txt"
 proteinortho-config: "config/proteinortho_config.txt"
+phylophlan-config: "config/phylophlan/"
+script_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/workflow/scripts"
 
 #kraken_tmp_storage: "/dev/shm"       # Use this one, if you have enough memory (e.g. for full kraken up to 3TB)
 kraken_tmp_storage: "$LOCAL_SCRATCH"
