@@ -2,7 +2,7 @@ This pipeline is a fork from the Snakemake workflow
 
 https://github.com/3d-omics/mg_assembly/
 
-and tailored to the needs of the Holoruminant project.
+and tailored and extended to the needs of the Holoruminant project.
 
 Requirements:
 Snakemake > 8.x
@@ -25,36 +25,61 @@ Then the project should have somewhere an own folder and a few configuration fil
 to it. These are mainly
 
 ```
-# Go to project scratch space
+# Go to the folder, to where you would like to clone the pipeline
+ cd /users/fischerd/git
+
+# First, clone the pipeline
+  git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
+  
+# Setting ENV variable to get downstream code more generic (so, this is the path to where you cloned the pipeline)
+  cd Pipeline-Holoruminant-Meta
+  PIPELINEFOLDER=$(pwd)
+  
+# If previous don't work, you can set it also manually like this
+  PIPELINEFOLDER="/users/fischerd/git/Pipeline-Holoruminant-Meta"
+```
+
+We setup a project folder in our scratch space of the HPC, here we will run the pipeline
+
+```
+# Go to the project space
   cd /scratch/project_2009831
 
-# Create project directory
-  mkdir Pipe_test
-
-# Clone the pipeline
-  git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
+# Create a folder for the new project
+  mkdir My_holor_project
+  cd My_holor_project   
+  
+# For convenience, I set again a ENV variable, so that the code later will be generic
+  PROJECTFOLDER=$(pwd)
+  
+# Or manually the same thing:  
+  PROJECTFOLDER="/scratch/project_2009831/My_holor_project"
 ```
 
 Then we need to download the precompiled databases and reference genomes
 
 ```
-# Change to the project folder
-  cd Pipe_test
+# Change to the project folder and prepare folders
+  cd $PROJECTFOLDER
+  mkdir -p reads
+  mkdir -p resources/databases
+  mkdir -p resources/reference
+
+# Get the various reference databases (this might take a while)
+  cd $PROJECTFOLDER/resources/databases
 
 # Get the used reference genomes for host contamination removal
+  cd $PROJECTFOLDER/resources/referece
   wget https://a3s.fi/Holoruminant/reference.tar.gz
   tar -xvf reference.tar.gz
 
 # Get the example read data
+  cd $PROJECTFOLDER/reads
   wget https://a3s.fi/Holoruminant/reads.tar.gz
   tar -xvf reads.tar.gz
-
-
 ```
 
-```
-
-
+Now we copy the configuration files from the pipeline folder to the project folder, to adjust the configurations to the project specifics
 
 ```
 pipelineFolder="/some/path"

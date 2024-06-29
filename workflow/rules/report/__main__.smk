@@ -8,8 +8,9 @@ rule report:
     input:
         rules.report__step.input,
         rules.report__sample.input,
+        rules._report__preprocess.output,
 
-rule preprocess:
-    """Report the results from the preprocess module"""
+rule report_preprocess:
+    """Report preprocess module"""
     input:
-        rules._report__preprocess_rules.output,
+        rules._report__preprocess.output,
