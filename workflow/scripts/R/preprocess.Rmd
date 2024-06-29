@@ -1,0 +1,50 @@
+---
+title: "Holoruminant MetaG pipeline"
+subtitle: "Preprocessing module"
+author: "t.b.a."
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float:
+      toc_collapsed: true
+    number_sections: true
+    theme: lumen
+    df_print: paged
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+library("GenomicTools")
+library("xtable")   # Needed for LaTeX output of the tables
+library("viridis")  # Needed for the colouring of the plots
+library("rjson")    # Needed for multiqc dgsb etail data
+library("DT")
+library("kableExtra")
+library("edgeR")
+library("ICS")
+library("tsne")
+library("lle")
+library("kernlab")
+options(scipen=999,
+        stringsAsFactors=FALSE)
+knitr::opts_chunk$set(echo = FALSE,
+                      cache = FALSE,
+                      cache.lazy = FALSE,
+                      dev = c('png', 'pdf'),
+                      fig.align = 'center', fig.height = 5, fig.width = 8.5)
+
+reportColours <- c("#FF8200", "#00B5E2", "#78BE20", "#7F3F98", "#E13C98", "#0033A0", "#54585A")
+```
+
+```{r, include=FALSE}
+# Init Step to make sure that the dependencies are loaded
+htmltools::tagList(datatable(cars))
+#htmltools::tagList(ggplotly(ggplot()))
+```
+
+
+```{r}
+cat("Hello report!")
+```
