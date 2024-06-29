@@ -10,7 +10,7 @@ include: "nonpareil.smk"
 include: "samtools.smk"
 include: "singlem.smk"
 
-rule preprocess_rules:
+rule preprocess:
     """Run the preprocessing steps, included he evaluation ones"""
     input:
         rules.preprocess__bowtie2.input,
