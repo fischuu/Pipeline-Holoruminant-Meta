@@ -93,14 +93,15 @@ Then we need to download the precompiled databases and reference genomes
   tar -xvf singlem.tar.gz
 
 # Get the used reference genomes for host contamination removal
-  cd $PROJECTFOLDER/resources/reference
+  cd $PROJECTFOLDER
   wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reference.tar.gz
   tar -xvf reference.tar.gz
 
 # Get the example read data
-  cd $PROJECTFOLDER/reads
+  cd $PROJECTFOLDER
   wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reads.tar.gz
   tar -xvf reads.tar.gz
+  
 ```
 
 Now we copy the configuration files from the pipeline folder to the project folder, to adjust the configurations to the project specifics
@@ -108,31 +109,67 @@ Now we copy the configuration files from the pipeline folder to the project fold
 ```
 cd $PIPELINEFOLDER
 cp -r config $PROJECTFOLDER
-cp -r resources $PROJECTFOLDER
 cp -r workflow $PROJECTFOLDER
 cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 ```
 
 # Setting up the pipeline
 
-
 ## run_Pipeline-Holoruminent-meta.sh
-...
+This is the pipeline starting wrapper script. It takes care of enabling Snakemake (e.g. in case you have it as a module on your server) and also wraps the Snakemake options nicely. Further, it handles to setup the environment variables for tmp and cache folder of apptainer or singularity and also can be used to prepare the rulegraph.
+
+Enter the required values and paths according to the comments in the file.
 
 ## config/config.yaml
-...
+Here are the paths to the different configuration files stored, which do not need any adjustments from the user. However, currently, also the path to the script folder needs to be given (you need to fill this here).
+
+In addition, the specs for the resource allocations are provided here. The defaults are currently not calibrated and need still some closer evaluation. Adjust the values to your needs and names from your hpc (like queue names)
 
 ## config/profiles/
-...
+Here are the HPC profiles stored. The current default configuration is adjusted to our system called Puhti and is located in the subfolder `Puhti/` in the file `config.yaml`. For your own system, create a new subfolder with the name of your system and copy the config file from `Puhti/` there to adjust. Please do not rename the yaml file, it needs to be `config.yaml`. 
+
+Here, set your typical default resources and check what requriements your generic slurm (or whatever executor you use) command has. In essence, the `cluster-generic-submit-cmd` needs to match the requirements of your system, e.g. the `slurm_account` option might be very specific on our system Puhti and might not be accepted or required on your system.
 
 ## config/features.yaml
-...
+Here we can adjust the reference genomes and databases that should be used from the pipeline. The
+current defaults are for the Holoruminant project and have as such a very specific set of reference genomes that are used for filtering and checking contaminations. Adjust yours in the `hosts:` section. Here, you can just use a own name, followed by collon and the path to it. Reference genomes are expected to be gzipped.
+
+in the `databases:` section the paths to the corresponding databases are used. The default paths meet the folder structure you will obtain, when you download the databases from our server. The main adjustments to do are a) the kraken path and b) phylophlan. Here, sub-databases can be given and the tools run one after another the searches against these databases. In case of kraken, we provide a small standard database as well as a rather large one called `refseq500`. Just comment out the ones you do not want to use.
 
 ## config/params.yaml
-...
+This file contains the tuning parameters of the different tools. This file is far from being complete and is currently not calibrated. So, please check if the tools use the parameters you want them to use and add if needed the parameters to the rule and the params file.
 
 ## config/samples.tsv
-There is a script in the script folder to create the sample sheet
+This file contains the sample information and is required by the pipeline. 
+
+The file has this structure
+
+| sample_id  | library_id | forward_filename              | reverse_filename              | forward_adapter                           | reverse_adapter                           | assembly_ids |
+|------------|------------|-------------------------------|-------------------------------|-------------------------------------------|-------------------------------------------|--------------|
+| ERR2019410 | lib1       | reads/ERR2019410_1.fastq.gz   | reads/ERR2019410_2.fastq.gz   | AGATCGGAAGAGCACACGTCTGAACTCCAGTCA         | AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT         | ERR2019410   |
+| ERR2019412 | lib1       | reads/ERR2019412_1.fastq.gz   | reads/ERR2019412_2.fastq.gz   | AGATCGGAAGAGCACACGTCTGAACTCCAGTCA         | AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT         | ERR2019412   |
+
+
+where we can give the 
+
+* `sample_id` , unique sample identified
+* `library_id`, library identifiier for repeated libraries
+* `forward_filename`, relative path to the forward read file of that sample
+* `reverse_filename`, relative path to the reverse read file of that sample
+* `forward_adapter`, adapter sequence from the forward read
+* `reverse_adapter`, adapter sequence from the reverse read
+* `assembly_ids`, group name for the co-assembly this sample should be used in
+
+I am not sure, tbh, if currently several assembly_ids per sample are allowed, this would need to be tested.
+
+There is a script in the script folder to create the sample sheet. For that, you can run
+
+```
+cd $PROJECTFOLDER
+bash $PIPELINEFOLDER/workflow/scripts/createSampleSheet.sh
+```
+
+It should create the `samples.tsv` for the samples located in the `reads/` folder. You need to adjust the script maybe accoring to your names of the reads or the adapter sequences you use.
 
 # Usage
 The pipeline can run the entire workflow at once. However, normally it is recommended to run different modules from the pipeline separated to get better control over the results and also to be able to react quicker to possible errors.
