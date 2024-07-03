@@ -1,4 +1,5 @@
-# Paths to used docker container
+# Paths to used docker containers, the defaults should be correct for most of the users and should
+# only need adjustments in expert usage situations.
 ---
 annotate: "docker://fischuu/hrp_annotate:0.4"
 assemble: "docker://fischuu/hrp_assemble:0.2"

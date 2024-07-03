@@ -27,7 +27,7 @@ databases:
   metaphlan4: resources/databases/metaphlan4/
   phyloflash: resources/databases/phyloflash/138.1
   phylophlan: # add entries as necessary, intended by two spaces
-    amphora2: /scratch/project_2009831/Pipe_dev/resources/databases/phylophlan/amphora2
-    phylophlan: /scratch/project_2009831/Pipe_dev/resources/databases/phylophlan/phylophlan
+    amphora2: resources/databases/phylophlan/amphora2
+    phylophlan: resources/databases/phylophlan/phylophlan
   singlem: resources/databases/S4.3.0.GTDB_r220.metapackage_20240523.smpkg.zb
   virify: resources/databases/virify

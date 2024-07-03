@@ -2,6 +2,8 @@
 ##
 ## File configuration configuration
 
+script_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/workflow/scripts"
+
 features-file: "config/features.yaml"
 params-file: "config/params.yaml"
 docker-file: "config/.docker.yml"
@@ -9,9 +11,8 @@ sample-file: "config/samples.tsv"
 dram-config: "config/dram_config.txt"
 proteinortho-config: "config/proteinortho_config.txt"
 phylophlan-config: "config/phylophlan/"
-script_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/workflow/scripts"
 
-#kraken_tmp_storage: "/dev/shm"       # Use this one, if you have enough memory (e.g. for full kraken up to 3TB)
+
 kraken_tmp_storage: "$LOCAL_SCRATCH"
 tmp_storage: "$LOCAL_SCRATCH"
 
@@ -20,25 +21,30 @@ tmp_storage: "$LOCAL_SCRATCH"
 ## Server configuration
 
 resources:
-    time: 
-        shortrun: 300
+# Time allocations in minutes, for rules that run only short, long or very long 
+    time:
+        shortrun: 300 
         longrun: 1800
         verylongrun: 36000
+# Memory allocations in MB for different profiles
     mem_per_cpu:
         krakenmem: 140000  # We use /dev/shm, make sure there is enough RAM on node to host the database! between 100GB and 1.5TB!
         veryhighmem: 1400000
         highmem: 160000
         lowmem: 16000
+# CPU settings for single thread and multi thread jobs
     cpu_per_task:
         single_thread: 1
         multi_thread: 24
-        kraken_thread: 20   # We use /dev/shm, which can consume the nodes RAM without safeguard, so make sure no other job runs on the node!!!
+        kraken_thread: 20   # We use /dev/shm, which can consume the nodes RAM without safeguard, so make sure no other job runs on the node!!! For that, allocate all cpus from the node where kraken will run
+# Partition names for slurm executor
     partition:
         testing: "test"
         small: "small"
         kraken: "small"
         highmem: "hugemem"
         longrun: "longrun"
+# If your system supports fast nvme disc, set this values, otherwise set to 0 (not tested, as our system has nvme discs!)
     nvme:
         small: 10
         large: 50
