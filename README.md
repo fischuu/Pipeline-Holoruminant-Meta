@@ -67,33 +67,54 @@ Then we need to download the precompiled databases and reference genomes
 
 # Get the various reference databases (this might take a while)
   cd $PROJECTFOLDER/resources/databases
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/bakta.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/checkm2.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/dram.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/eggnog.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/gtdbtk.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/humann.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/kraken2.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/metaphlan4.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/phyloflash.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/phylophlan.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/singlem.tar.gz
+
+# Unpack all the databases
+  tar -xvf bakta.tar.gz
+  tar -xvf checkm2.tar.gz
+  tar -xvf dram.tar.gz
+  tar -xvf eggnog.tar.gz
+  tar -xvf gtdbtk.tar.gz
+  tar -xvf humann.tar.gz
+  tar -xvf kraken2.tar.gz
+  tar -xvf metaphlan4.tar.gz
+  tar -xvf phyloflash.tar.gz
+  tar -xvf phylophlan.tar.gz
+  tar -xvf singlem.tar.gz
 
 # Get the used reference genomes for host contamination removal
-  cd $PROJECTFOLDER/resources/referece
-  wget https://a3s.fi/Holoruminant/reference.tar.gz
+  cd $PROJECTFOLDER/resources/reference
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reference.tar.gz
   tar -xvf reference.tar.gz
 
 # Get the example read data
   cd $PROJECTFOLDER/reads
-  wget https://a3s.fi/Holoruminant/reads.tar.gz
+  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reads.tar.gz
   tar -xvf reads.tar.gz
 ```
 
 Now we copy the configuration files from the pipeline folder to the project folder, to adjust the configurations to the project specifics
 
 ```
-pipelineFolder="/some/path"
-projectFolder="/some/other/path"
-cd $pipelineFolder
-cp -r config $projectFolder/
-cp -r resources $projectFolder/
-cp -r workflow $projectFolder/
-cp -r run_Pipeline-Holoruminent-meta.sh $projectFolder/
+cd $PIPELINEFOLDER
+cp -r config $PROJECTFOLDER
+cp -r resources $PROJECTFOLDER
+cp -r workflow $PROJECTFOLDER
+cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 ```
 
-TODO: THE WORKFLOW ONLY CONTAINS PATHS TO HMM FILES; THAT COULD BE ALSO GENERALISED!
+# Setting up the pipeline
 
-Before starting, a few configuration files need to be added.
 
 ## run_Pipeline-Holoruminent-meta.sh
 ...
