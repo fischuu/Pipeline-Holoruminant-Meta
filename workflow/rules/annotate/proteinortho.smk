@@ -39,7 +39,7 @@ rule _annotate__proteinortho:
     shell:
         """
         proteinortho {input}/*.fasta \
-                     --cpus {threads} \
-                     --project {output.project} \
+                     -cpus={threads} \
+                     -project={output.project} \
               2>> {log} 1>&2
         """

@@ -3,7 +3,7 @@ rule _annotate__phylophlan_run:
     Run phylophlan for the dereplicated genomes
     """
     input:
-        contigs=DREP / "dereplicated_genomes.fa.gz",
+        contigs=DREP / "dereplicated_genomes",
         database=lambda w: features["databases"]["phylophlan"][w.phylophlan_db],
     output:
         out_folder=directory(PHYLOPHLAN / "{phylophlan_db}"),
@@ -35,6 +35,8 @@ rule _annotate__phylophlan_run:
                        -f {params.config_folder} \
                        --nproc {threads} \
                        --output_folder {params.out_folder} \
+                       --genome_extension fa \
+                       --verbose \
                        2>> {log} 1>&2
         """
 

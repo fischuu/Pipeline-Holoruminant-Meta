@@ -115,7 +115,7 @@ cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 
 # Setting up the pipeline
 
-## run_Pipeline-Holoruminent-meta.sh
+## run_Pipeline-Holoruminant-meta.sh
 This is the pipeline starting wrapper script. It takes care of enabling Snakemake (e.g. in case you have it as a module on your server) and also wraps the Snakemake options nicely. Further, it handles to setup the environment variables for tmp and cache folder of apptainer or singularity and also can be used to prepare the rulegraph.
 
 Enter the required values and paths according to the comments in the file.
@@ -184,13 +184,13 @@ Here some basic steps for the reads are performed.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh reads
+bash run_Pipeline-Holoruminant-meta.sh reads
 ```
 
 For testing, please check first the dry-run with commands printed by running the command like this
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh reads -np
+bash run_Pipeline-Holoruminant-meta.sh reads -np
 ```
 
 For all other modules this works in a similar fashion, just add the `-np`-option for testing.
@@ -201,7 +201,7 @@ The reference host genomes are recompressed in this module
 Usage:
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh reference
+bash run_Pipeline-Holoruminant-meta.sh reference
 ```
 
 ## preprocess-module
@@ -211,38 +211,47 @@ analysis and database searches.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh preprocess
+bash run_Pipeline-Holoruminant-meta.sh preprocess
+
+# Generate the module report
+bash run_Pipeline-Holoruminant-meta.sh report_preprocess
 ```
 
 ## assemble-module
+This module runs all the assembly related tasks, like creating the metagenome and then the binning and combination of different binners.
 
 Usage:
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh assemble
+bash run_Pipeline-Holoruminant-meta.sh assemble
 ```
 
 ## quantify-module
 
+After creating the assemblies, this module does the mapping of the reads and generates the quantification tables for the samples.
+
 Usage:
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh quantify
+bash run_Pipeline-Holoruminant-meta.sh quantify
 ```
 ## annotate-module
 
+This module is the annotation workhorse, it aligns the mags against various databases and generates the annotation for them.
+
 Usage:
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh annotate
+bash run_Pipeline-Holoruminant-meta.sh annotate
 ```
 
 ## report-module
+Different modules create reports, here all reports at once can be generated. Otherwise, individual reports can also be reported after each module.
 
 Usage:
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh report
+bash run_Pipeline-Holoruminant-meta.sh report
 ```
 
 # Some old notes that could be deleted or adjusted later
@@ -251,7 +260,7 @@ bash run_Pipeline-Holoruminent-meta.sh report
 The reads module can be started by
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh reads
+bash run_Pipeline-Holoruminant-meta.sh reads
 ```
 
 and it triggers a set of rules:
@@ -276,7 +285,7 @@ in the results/reads folder as `*.zip` and `*.html` files.
 The reference module can be started by
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh reads
+bash run_Pipeline-Holoruminant-meta.sh reads
 ```
 
 This module has essentially the only function to take the gezipped host genomes and
@@ -291,7 +300,7 @@ The results are then stored under `results/reference/hosts/`
 A larger subworkflow that consists of several steps. It can be run by
 
 ```
-bash run_Pipeline-Holoruminent-meta.sh preprocess
+bash run_Pipeline-Holoruminant-meta.sh preprocess
 ```
 
 ### fastp subworflow
