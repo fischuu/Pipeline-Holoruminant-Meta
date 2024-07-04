@@ -13,7 +13,7 @@ rule _report__preprocess:
     conda:
         "__environment__.yml"
     singularity:
-        docker["report"]
+        docker["r_report"]
     params:
        script=PREPROCESS_R,
        features=config["features-file"],

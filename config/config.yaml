@@ -10,7 +10,7 @@ docker-file: "config/.docker.yml"
 sample-file: "config/samples.tsv"
 dram-config: "config/dram_config.txt"
 proteinortho-config: "config/proteinortho_config.txt"
-phylophlan-config: "config/phylophlan/"
+phylophlan-config: "config/phylophlan/supertree_aa.cfg"
 
 
 kraken_tmp_storage: "$LOCAL_SCRATCH"
