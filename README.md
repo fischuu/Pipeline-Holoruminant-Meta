@@ -185,6 +185,9 @@ Usage:
 
 ```
 bash run_Pipeline-Holoruminant-meta.sh reads
+
+# Generate the module report
+bash run_Pipeline-Holoruminant-meta.sh report_preprocess
 ```
 
 For testing, please check first the dry-run with commands printed by running the command like this
