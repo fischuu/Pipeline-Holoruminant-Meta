@@ -3,11 +3,9 @@ rule _annotate__eggnog:
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",
     output:
-        EGGNOG ,
+        directory(EGGNOG) ,
     log:
         EGGNOG / "eggnog.log",
-    conda:
-        "annotate.yml"
     singularity:
         docker["eggnog"]
     params:
