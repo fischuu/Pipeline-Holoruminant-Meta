@@ -7,8 +7,6 @@ rule _annotate__bakta:
         faa=BAKTA / "bakta.faa",
     log:
         BAKTA / "bakta.log",
-    conda:
-        "annotate.yml"
     singularity:
         docker["annotate"]
     params:

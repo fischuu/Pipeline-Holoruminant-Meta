@@ -27,8 +27,6 @@ rule _annotate__proteinortho:
         project=PROTEINORTHO / "proteinortho",
     log:
         PROTEINORTHO / "proteinortho.log",
-    conda:
-        "annotate.yml"
     singularity:
         docker["annotate"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
