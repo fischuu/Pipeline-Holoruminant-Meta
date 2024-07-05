@@ -1,4 +1,5 @@
 READS = Path("results/reads/")
+WD = os.getcwd()
 
 # reference
 REFERENCE = Path("results/reference/")
