@@ -23,26 +23,24 @@ rule _preprocess__fastp__run:
         adapter_reverse=get_reverse_adapter,
         extra=params["preprocess"]["fastp"]["extra"],
         length_required=params["preprocess"]["fastp"]["length_required"],
+        temp_forward_=FASTP / "{sample_id}.{library_id}_tmp_1.fq",
+        temp_reverse_=FASTP / "{sample_id}.{library_id}_tmp_2.fq",
+        temp_unpaired1=FASTP / "{sample_id}.{library_id}_tmp_u1.fq",
+        temp_unpaired2=FASTP / "{sample_id}.{library_id}_tmp_u2.fq",
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"]
     shell:        """
-        # Define intermediate and final output file paths
-        intermediate_out1=$(mktemp {output.forward_}.XXXXXX)
-        intermediate_out2=$(mktemp {output.reverse_}.XXXXXX)
-        intermediate_unpaired1=$(mktemp {output.unpaired1}.XXXXXX)
-        intermediate_unpaired2=$(mktemp {output.unpaired2}.XXXXXX)
-
         # Run fastp with intermediate files
         fastp \
             --in1 {input.forward_} \
             --in2 {input.reverse_} \
-            --out1 "$intermediate_out1" \
-            --out2 "$intermediate_out2" \
-            --unpaired1 "$intermediate_unpaired1" \
-            --unpaired2 "$intermediate_unpaired2" \
+            --out1 {params.temp_forward_} \
+            --out2 {params.temp_reverse_} \
+            --unpaired1 {params.temp_unpaired1} \
+            --unpaired2 {params.temp_unpaired2} \
             --html {output.html} \
             --json {output.json} \
             --verbose \
@@ -54,16 +52,17 @@ rule _preprocess__fastp__run:
         2> {log} 1>&2
 
         # Compress the outputs using bgzip
-        bgzip -l 9 -@ {threads} "$intermediate_out1"
-        bgzip -l 9 -@ {threads} "$intermediate_out2"
-        bgzip -l 9 -@ {threads} "$intermediate_unpaired1"
-        bgzip -l 9 -@ {threads} "$intermediate_unpaired2"
+        bgzip -l 9 -@ {threads} {params.temp_forward_}
+        bgzip -l 9 -@ {threads} {params.temp_reverse_}
+        bgzip -l 9 -@ {threads} {params.temp_unpaired1}
+        bgzip -l 9 -@ {threads} {params.temp_unpaired2}
 
         # Move the compressed files to the final destination
-        mv "$intermediate_out1.gz" {output.forward_}
-        mv "$intermediate_out2.gz" {output.reverse_}
-        mv "$intermediate_unpaired1.gz" {output.unpaired1}
-        mv "$intermediate_unpaired2.gz" {output.unpaired2}
+        mv {params.temp_forward_}.gz {output.forward_}
+        mv {params.temp_reverse_}.gz {output.reverse_}
+        mv {params.temp_unpaired1}.gz {output.unpaired1}
+        mv {params.temp_unpaired2}.gz {output.unpaired2}
+
 
         # Check the integrity of the gzipped files and log the output
         echo "Checking integrity of output files" >> {log}
