@@ -23,10 +23,10 @@ rule _preprocess__fastp__run:
         adapter_reverse=get_reverse_adapter,
         extra=params["preprocess"]["fastp"]["extra"],
         length_required=params["preprocess"]["fastp"]["length_required"],
-        temp_forward_=FASTP / "{sample_id}.{library_id}_tmp_1.fq",
-        temp_reverse_=FASTP / "{sample_id}.{library_id}_tmp_2.fq",
-        temp_unpaired1=FASTP / "{sample_id}.{library_id}_tmp_u1.fq",
-        temp_unpaired2=FASTP / "{sample_id}.{library_id}_tmp_u2.fq",
+        temp_forward_=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_1.fq",
+        temp_reverse_=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_2.fq",
+        temp_unpaired1=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_u1.fq",
+        temp_unpaired2=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_u2.fq",
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
