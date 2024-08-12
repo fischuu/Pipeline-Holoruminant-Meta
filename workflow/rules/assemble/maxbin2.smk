@@ -44,7 +44,7 @@ rule _assemble__maxbin2__run:
         find \
             {output.workdir} \
             -name "*.fa" \
-            -exec pigz --best --verbose {{}} \; \
+            -exec pigz --best --verbose {{}} \
         2>> {log} 1>&2
 
         rm \

@@ -1,0 +1,14 @@
+executor: cluster-generic
+# executor: local
+jobs: 5
+default-resources:
+    time: "'02:00:00'"
+    mem_per_cpu: 4000
+    cpu_per_task: 1
+    # partition: "small"
+    partition: "'long.q'"
+    project: "'project_2009831'"
+    nvme: 0
+cluster-generic-submit-cmd: "qsub -cwd -l h_rt={resources.time} -l mem_free={resources.mem_per_cpu} -pe smp {resources.cpu_per_task} -q {resources.partition} -A {resources.project} -N job_{jobid}-{rule}"
+
+# cluster-generic-submit-cmd: "sbatch --time {resources.time} --account={resources.slurm_account} --gres=nvme:{resources.nvme} --job-name='{jobid}-{rule}' --tasks-per-node=1 --cpus-per-task={resources.cpu_per_task} --mem-per-cpu={resources.mem_per_cpu} --partition={resources.partition}"
