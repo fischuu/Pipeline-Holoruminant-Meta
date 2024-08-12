@@ -26,5 +26,5 @@ rule _report__reads:
     shell:"""
        R -e "working_dir <- '{params.wd}'; \
              features_file <- '{params.features}'; \
-             rmarkdown::render('{params.script}',output_file='{output}')" &> {log}
+             rmarkdown::render('{params.wd}/{params.script}',output_file='{params.wd}/{output}')" &> {log}
     """

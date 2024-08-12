@@ -25,8 +25,6 @@ library("kableExtra")
 library("edgeR")
 library("ICS")
 library("tsne")
-library("lle")
-library("kernlab")
 options(scipen=999,
         stringsAsFactors=FALSE)
 knitr::opts_chunk$set(echo = FALSE,
