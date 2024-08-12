@@ -30,13 +30,20 @@ rule _preprocess__fastp__run:
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
+        # Define intermediate and final output file paths
+        intermediate_out1=$(mktemp {output.forward_}.XXXXXX)
+        intermediate_out2=$(mktemp {output.reverse_}.XXXXXX)
+        intermediate_unpaired1=$(mktemp {output.unpaired1}.XXXXXX)
+        intermediate_unpaired2=$(mktemp {output.unpaired2}.XXXXXX)
+
+        # Run fastp with intermediate files
         fastp \
             --in1 {input.forward_} \
             --in2 {input.reverse_} \
-            --out1 >(bgzip -l 9 -@ {threads} > {output.forward_}) \
-            --out2 >(bgzip -l 9 -@ {threads} > {output.reverse_}) \
-            --unpaired1 >(bgzip -l 9 -@ {threads} > {output.unpaired1}) \
-            --unpaired2 >(bgzip -l 9 -@ {threads} > {output.unpaired2}) \
+            --out1 "$intermediate_out1" \
+            --out2 "$intermediate_out2" \
+            --unpaired1 "$intermediate_unpaired1" \
+            --unpaired2 "$intermediate_unpaired2" \
             --html {output.html} \
             --json {output.json} \
             --verbose \
@@ -46,7 +53,19 @@ rule _preprocess__fastp__run:
             --thread {threads} \
             {params.extra} \
         2> {log} 1>&2
-        
+
+        # Compress the outputs using bgzip
+        bgzip -l 9 -@ {threads} "$intermediate_out1"
+        bgzip -l 9 -@ {threads} "$intermediate_out2"
+        bgzip -l 9 -@ {threads} "$intermediate_unpaired1"
+        bgzip -l 9 -@ {threads} "$intermediate_unpaired2"
+
+        # Move the compressed files to the final destination
+        mv "$intermediate_out1.gz" {output.forward_}
+        mv "$intermediate_out2.gz" {output.reverse_}
+        mv "$intermediate_unpaired1.gz" {output.unpaired1}
+        mv "$intermediate_unpaired2.gz" {output.unpaired2}
+
         # Check the integrity of the gzipped files and log the output
         echo "Checking integrity of output files" >> {log}
         gzip -t {output.forward_} 2>> {log}
@@ -55,7 +74,6 @@ rule _preprocess__fastp__run:
         gzip -t {output.unpaired2} 2>> {log}
         echo "Integrity check completed" >> {log}
         """
-
 
 rule preprocess__fastp:
     """Get all files from fastp"""

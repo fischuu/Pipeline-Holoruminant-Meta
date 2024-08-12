@@ -65,7 +65,7 @@ rule _assemble__metabat2__run:
         find \
             {output.bins} \
             -name "*.fa" \
-            -exec pigz --best --verbose {{}} \; \
+            -exec pigz --best --verbose {{}} \
         2>> {log} 1>&2
         """
 
