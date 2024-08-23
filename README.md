@@ -260,7 +260,8 @@ Usage:
 bash run_Pipeline-Holoruminant-meta.sh report
 ```
 
-# Some old notes that could be deleted or adjusted later
+# Module details
+
 ## 'reads' -module
 
 The reads module can be started by
@@ -277,8 +278,8 @@ This rule makes a link to the original file, with a prettier name than default
 It creates output files like this
 
 ```
-forward_=READS / "{sample}.{library}_1.fq.gz",
-reverse_=READS / "{sample}.{library}_2.fq.gz",
+forward_= results/reads/"{sample}.{library}_1.fq.gz",
+reverse_= results/reads/"{sample}.{library}_2.fq.gz",
 ```
 
 with `sample` and `library` being taken from the `sample.tsv` file.
