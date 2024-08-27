@@ -21,14 +21,17 @@ rule _preprocess__humann__run:
     params:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
         cat {input.forward_} {input.reverse_} > {output.cat}
         
         humann --input {output.cat} --output {params.out_folder} \
+        --threads {threads} \
         --protein-database {input.prot_dbs} \
         --nucleotide-database {input.nt_dbs} \
         --output-basename {params.out_name} \
