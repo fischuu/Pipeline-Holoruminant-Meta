@@ -7,7 +7,7 @@ rule _preprocess__singlem__pipe:
     input:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        data=features["databases"]["singlem"],
+        data=features["databases"]["singlem"], 
     output:
         archive_otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.archive.json",
         otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.otu_table.tsv",
