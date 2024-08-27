@@ -1,0 +1,7 @@
+CHANGELOG
+
+Version 0.1.*:
+
+3: HUMAnN runs no in multithreading mode
+2: protein/nucleotide database mixup in the HUMAnN rule fixed
+1: In rule rule _preprocess__fastp__run the bgzip is now separate (instead of piping) for better trouble shooting
