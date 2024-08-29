@@ -63,7 +63,8 @@ rule _preprocess__singlem__condense:
     params:
         input_dir=SINGLEM,
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
+        time =  config["resources"]["time"]["shortrun"]
     shell:
         """
         singlem condense \

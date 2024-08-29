@@ -69,6 +69,19 @@ extract_values <- function(input_list, field_path) {
 }
 ```
 
+# Overview
+
+The preprocess module runs a couple of tools, mainly:
+
+* fastp	
+* bowtie2 
+* humann
+* kraken2
+* metaphlan 
+* nonpareil
+* phyloflash
+* singlem
+
 # FASTP
 
 The summary of the fastp results
