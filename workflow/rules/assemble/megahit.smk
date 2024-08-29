@@ -24,6 +24,10 @@ rule _assemble__megahit:
         attempt=get_attempt,
     params:
         out_dir=lambda w: MEGAHIT / w.assembly_id,
+        mincount=params["assemble"]["megahit"]["mincount"],
+        kmin=params["assemble"]["megahit"]["kmin"],
+        kmax=params["assemble"]["megahit"]["kmax"],
+        kstep=params["assemble"]["megahit"]["kstep"],
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
@@ -32,6 +36,10 @@ rule _assemble__megahit:
         """
         megahit \
             --num-cpu-threads {threads} \
+            --min-count {params.mincount} \
+            --k-min {params.kmin} \
+            --k-max {params.kmax} \
+            --k-step {params.kstep} \
             --min-contig-len {params.min_contig_len} \
             --verbose \
             --force \
