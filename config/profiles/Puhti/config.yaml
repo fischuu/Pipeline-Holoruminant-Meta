@@ -1,7 +1,7 @@
 executor: cluster-generic
 jobs: 5
 default-resources:
-    time: 2
+    time: 30
     mem_per_cpu: 4000
     cpu_per_task: 1
     partition: "small"
