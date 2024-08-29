@@ -17,6 +17,10 @@ preprocess:
 
 assemble:
   megahit:
+    mincount: 2
+    kmin: 21
+    kmax: 141
+    kstep: 10
     min_contig_len: 1500
     memory_gb: 32
   bowtie2-build:
