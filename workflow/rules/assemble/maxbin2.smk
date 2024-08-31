@@ -19,6 +19,7 @@ rule _assemble__maxbin2__run:
     params:
         seed=1,
         coverage=lambda w: MAXBIN2 / f"{w.assembly_id}/maxbin2.coverage",
+        minLen=params["assemble"]["maxbin"]["min_contig_len"],
     shell:
         """
         mkdir --parents {output.workdir}
@@ -34,6 +35,7 @@ rule _assemble__maxbin2__run:
             -contig {input.assembly} \
             -out {output.workdir}/maxbin2 \
             -abund {params.coverage} \
+            -min_contig_length {params.minLen} \
         2> {log} 1>&2
 
         rename \
