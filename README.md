@@ -25,17 +25,17 @@ Then the project should have somewhere an own folder and a few configuration fil
 to it. These are mainly
 
 ```
-# Go to the folder, to where you would like to clone the pipeline
+# Go to the folder, to where you would like to clone the pipeline, e.g. 
  cd /users/fischerd/git
 
-# First, clone the pipeline
+# First, clone the pipeline into that folder
   git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
   
 # Setting ENV variable to get downstream code more generic (so, this is the path to where you cloned the pipeline)
   cd Pipeline-Holoruminant-Meta
   PIPELINEFOLDER=$(pwd)
   
-# If previous don't work, you can set it also manually like this
+# If previous doesn't work, you can set it also manually like for example this
   PIPELINEFOLDER="/users/fischerd/git/Pipeline-Holoruminant-Meta"
 ```
 
@@ -65,7 +65,7 @@ Then we need to download the precompiled databases and reference genomes
   mkdir -p resources/databases
   mkdir -p resources/reference
 
-# Get the various reference databases (this might take a while)
+# Get the various reference databases (this might take a while, maybe even a few days?!)
   cd $PROJECTFOLDER/resources/databases
   wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/bakta.tar.gz
   wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/checkm2.tar.gz
@@ -92,7 +92,8 @@ Then we need to download the precompiled databases and reference genomes
   tar -xvf phylophlan.tar.gz
   tar -xvf singlem.tar.gz
 
-# Get the used reference genomes for host contamination removal
+# Get the reference genomes relevant for Holorumiant for host contamination removal
+# Obviously, you can also use your own set of reference genomes here instead
   cd $PROJECTFOLDER
   wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reference.tar.gz
   tar -xvf reference.tar.gz
@@ -116,7 +117,7 @@ cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 # Setting up the pipeline
 
 ## run_Pipeline-Holoruminant-meta.sh
-This is the pipeline starting wrapper script. It takes care of enabling Snakemake (e.g. in case you have it as a module on your server) and also wraps the Snakemake options nicely. Further, it handles to setup the environment variables for tmp and cache folder of apptainer or singularity and also can be used to prepare the rulegraph.
+This is the pipeline starting wrapper script. It takes care of enabling Snakemake (e.g. in case you have it as a module on your server) and also wraps the Snakemake options nicely. Furthermore, it handles to setup the environment variables for tmp and cache folders of apptainer or singularity and also can be used to prepare the rulegraph.
 
 Enter the required values and paths according to the comments in the file.
 
@@ -134,7 +135,7 @@ Here, set your typical default resources and check what requriements your generi
 Here we can adjust the reference genomes and databases that should be used from the pipeline. The
 current defaults are for the Holoruminant project and have as such a very specific set of reference genomes that are used for filtering and checking contaminations. Adjust yours in the `hosts:` section. Here, you can just use a own name, followed by collon and the path to it. Reference genomes are expected to be gzipped.
 
-in the `databases:` section the paths to the corresponding databases are used. The default paths meet the folder structure you will obtain, when you download the databases from our server. The main adjustments to do are a) the kraken path and b) phylophlan. Here, sub-databases can be given and the tools run one after another the searches against these databases. In case of kraken, we provide a small standard database as well as a rather large one called `refseq500`. Just comment out the ones you do not want to use.
+In the `databases:` section the paths to the corresponding databases are used. The default paths meet the folder structure you will obtain, when you download the databases from our server. The main adjustments to do are a) the kraken path and b) phylophlan. Here, sub-databases can be given and the tools run one after another the searches against these databases. In case of kraken, we provide a small standard database as well as a rather large one called `refseq500`. Just comment out the ones you do not want to use.
 
 ## config/params.yaml
 This file contains the tuning parameters of the different tools. This file is far from being complete and is currently not calibrated. So, please check if the tools use the parameters you want them to use and add if needed the parameters to the rule and the params file.
@@ -169,14 +170,14 @@ cd $PROJECTFOLDER
 bash $PIPELINEFOLDER/workflow/scripts/createSampleSheet.sh
 ```
 
-It should create the `samples.tsv` for the samples located in the `reads/` folder. You need to adjust the script maybe accoring to your names of the reads or the adapter sequences you use.
+It should create the `samples.tsv` for the samples located in the `reads/` folder. You need to adjust the script maybe accoring to thenames of the reads or the adapter sequences you use.
 
 # Usage
 The pipeline can run the entire workflow at once. However, normally it is recommended to run different modules from the pipeline separated to get better control over the results and also to be able to react quicker to possible errors.
 
 In the following it is assumed that the pipeline runs on a server that utilizes SLURM and Singularity. Other setups are also supported, but currently untested. In case you have a different setup and want to contribute a profile/configuration, please reach out.
 
-For testying and developing, you can add to every command e.g. the option `-np` for a dry-run that prints the used commands.
+For testing and developing, you can add to every command e.g. the option `-np` for a dry-run that prints the used commands.
 
 The different module have also individual reports that can be generated by adding `report_` in front of the module name, when a module is called. 
 
@@ -189,7 +190,7 @@ Usage:
 bash run_Pipeline-Holoruminant-meta.sh reads
 
 # Generate the module report
-bash run_Pipeline-Holoruminant-meta.sh report_preprocess
+bash run_Pipeline-Holoruminant-meta.sh report_reads
 ```
 
 For testing, please check first the dry-run with commands printed by running the command like this
@@ -198,7 +199,7 @@ For testing, please check first the dry-run with commands printed by running the
 bash run_Pipeline-Holoruminant-meta.sh reads -np
 ```
 
-For all other modules this works in a similar fashion, just add the `-np`-option for testing.
+For all other modules this works in a similar fashion, just add the `-np`-option for testing and `report_` to the module to generate a report for the module (not implemented yet for all modules).
 
 ## reference-module
 The reference host genomes are recompressed in this module
@@ -259,7 +260,8 @@ Usage:
 bash run_Pipeline-Holoruminant-meta.sh report
 ```
 
-# Some old notes that could be deleted or adjusted later
+# Module details
+
 ## 'reads' -module
 
 The reads module can be started by
@@ -276,8 +278,8 @@ This rule makes a link to the original file, with a prettier name than default
 It creates output files like this
 
 ```
-forward_=READS / "{sample}.{library}_1.fq.gz",
-reverse_=READS / "{sample}.{library}_2.fq.gz",
+forward_= results/reads/"{sample}.{library}_1.fq.gz",
+reverse_= results/reads/"{sample}.{library}_2.fq.gz",
 ```
 
 with `sample` and `library` being taken from the `sample.tsv` file.

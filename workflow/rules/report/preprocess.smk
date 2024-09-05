@@ -17,6 +17,7 @@ rule _report__preprocess:
     params:
        script=PREPROCESS_R,
        features=config["features-file"],
+       project=WD
     threads: config["resources"]["cpu_per_task"]["single_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
@@ -24,5 +25,7 @@ rule _report__preprocess:
         time=config["resources"]["time"]["longrun"],
     shell:"""
        R -e "features_file <- '{params.features}'; \
-             rmarkdown::render('{params.script}',output_file='{output}')" &> {log}
+             project_folder <- '{params.project}' ; \
+             from_snakemake <- TRUE ; \
+             rmarkdown::render('{params.script}',output_file=file.path('{params.project}','{output}'))" &> {log}
     """
