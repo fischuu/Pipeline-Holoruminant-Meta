@@ -17,8 +17,16 @@ preprocess:
 
 assemble:
   megahit:
-    min_contig_len: 1500
+    mincount: 2
+    kmin: 21  # (complex, set to 27)
+    kmax: 141 # (complex, set to 127)
+    kstep: 10
+    min_contig_len: 1500 # (make is short for complex, 500)
     memory_gb: 32
+  metabat:
+    min_contig_len: 1500 # (make is short for complex, 500)
+  maxbin:
+    min_contig_len: 1500 # (make is short for complex, 500)
   bowtie2-build:
     memory_gb: 16
   bowtie2:

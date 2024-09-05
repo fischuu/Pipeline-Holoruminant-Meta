@@ -18,6 +18,7 @@ rule _assemble__metabat2__run:
         depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
         workdir=METABAT2,
+        minLen=params["assemble"]["metabat"]["min_contig_len"],
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -51,6 +52,7 @@ rule _assemble__metabat2__run:
             --abdFile {params.depth} \
             --outFile {params.bins_prefix} \
             --numThreads {threads} \
+            --minContig {params.minLen} \
             --verbose \
         2> {log} 1>&2
 

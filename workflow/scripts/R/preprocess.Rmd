@@ -22,11 +22,6 @@ library("viridis")  # Needed for the colouring of the plots
 library("rjson")    # Needed for multiqc dgsb etail data
 library("DT")
 library("kableExtra")
-library("edgeR")
-library("ICS")
-library("tsne")
-library("lle")
-library("kernlab")
 options(scipen=999,
         stringsAsFactors=FALSE)
 knitr::opts_chunk$set(echo = FALSE,
@@ -36,6 +31,11 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = 'center', fig.height = 5, fig.width = 8.5)
 
 reportColours <- c("#FF8200", "#00B5E2", "#78BE20", "#7F3F98", "#E13C98", "#0033A0", "#54585A")
+
+if(!is.element("snakemake",ls())){
+  features_file <- "/scratch/project_2010176/metaG_analysis/config/features.yaml"
+  project_folder <- "/scratch/project_2010176/metaG_analysis"
+}
 ```
 
 ```{r, include=FALSE}
@@ -44,7 +44,97 @@ htmltools::tagList(datatable(cars))
 #htmltools::tagList(ggplotly(ggplot()))
 ```
 
+```{r help functions}
+# Define the function that extracts values from the list based on the given field path
+extract_values <- function(input_list, field_path) {
+  
+  # Initialize an empty named vector
+  result_vector <- c()
+  
+  # Loop over each item in the list
+  for (item_name in names(input_list)) {
+    
+    # Construct the full expression to access the desired field
+    field_expr <- paste0("input_list[['", item_name, "']]", field_path)
+    
+    # Evaluate the expression to get the field value
+    field_value <- eval(parse(text = field_expr))
+    
+    # Store the field value in the result vector with the item name
+    result_vector[item_name] <- field_value
+  }
+  
+  # Return the named vector
+  return(result_vector)
+}
+```
 
-```{r}
-cat("Hello report!")
+# Overview
+
+The preprocess module runs a couple of tools, mainly:
+
+* fastp	
+* bowtie2 
+* humann
+* kraken2
+* metaphlan 
+* nonpareil
+* phyloflash
+* singlem
+
+# FASTP
+
+The summary of the fastp results
+
+```{r import the fastp jason files}
+# Get a list of all JSON files in the directory
+  json_dir <- file.path(project_folder, "results", "preprocess", "fastp")
+  json_files <- list.files(path = json_dir, pattern = "*.json", full.names = TRUE)
+
+
+# Initialize a list to store the data frames
+  json_data_list <- list()
+
+# Loop over each file and read the JSON data
+  for (file in json_files) {
+  # Read the JSON file into R
+    json_data <- fromJSON(file = file)
+    
+  # Append the data frame to the list
+    json_data_list[[file]] <- json_data
+  }
+
+# Adjsut the names
+  names(json_data_list) <- sapply(strsplit(names(json_data_list), "/fastp/"),"[", 2)
+  names(json_data_list) <- gsub("_fastp.json", "", names(json_data_list))
+```
+
+## Input reads and filtered reads
+
+```{r fastp input reads}
+# Get the total input reads
+  field_path <- "$summary$before_filtering$total_reads"
+  result_vector <- extract_values(json_data_list, field_path)
+  
+  field_path <- "$summary$after_filtering$total_reads"
+  result_vector_2 <- extract_values(json_data_list, field_path)
+
+# Print the resulting named vector
+  barplot(rbind(result_vector, result_vector_2), las=2, col=c(reportColours[1], reportColours[2]), beside=TRUE)
+```
+
+```{r fastp input reads in table}
+tmp <- cbind(names(result_vector),result_vector)
+#tmp <- tmp[tmp[,2]>20,]
+if(nrow(tmp)>0){
+rownames(tmp) <- 1:nrow(tmp)
+colnames(tmp) <- c("Sample", "Total input reads")
+
+datatable(tmp, extensions = 'Buttons',
+            options = list(dom = 'Blfrtip',
+                           buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                           lengthMenu = list(c(10,25,50,-1),
+                                             c(10,25,50,"All"))))
+}
+```
 ```
