@@ -2,6 +2,7 @@ CHANGELOG
 
 Version 0.1.*:
 
+5: Updated gatk docker image to 0.3 (contains GATK 2.4.0), to work together with data release 220
 4: In megahit, maxbin2 and metabat, you can now adjust the minimum contig length to be kept, avoid tools bias
 3: HUMAnN runs no in multithreading mode
 2: protein/nucleotide database mixup in the HUMAnN rule fixed

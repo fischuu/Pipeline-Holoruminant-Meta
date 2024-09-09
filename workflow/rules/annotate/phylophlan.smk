@@ -29,6 +29,8 @@ rule _annotate__phylophlan_run:
         """
             echo Running Phylophlan on $(hostname) 2>> {log} 1>&2
 
+            mkdir -p {params.out_folder}
+
             phylophlan -i {input.contigs} \
                        -d {input.database} \
                        --diversity {params.diversity} \
