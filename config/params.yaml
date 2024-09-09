@@ -23,6 +23,7 @@ assemble:
     kstep: 10
     min_contig_len: 1500 # (make is short for complex, 500)
     memory_gb: 32
+    additional_options: ""  # For deep sequenced samples (e.g. > 30x, add --no-mercy for a less noisy graph)
   metabat:
     min_contig_len: 1500 # (make is short for complex, 500)
   maxbin:

@@ -24,6 +24,7 @@ KRAKEN2 = PRE / "kraken2/"
 # assemble
 ASSEMBLE = Path("results/assemble/")
 MEGAHIT = ASSEMBLE / "megahit/"
+METASPADES = ASSEMBLE / "metaspades/"
 ASSEMBLE_RENAME = ASSEMBLE / "renaming/"
 ASSEMBLE_INDEX = ASSEMBLE / "index/"
 ASSEMBLE_BOWTIE2 = ASSEMBLE / "bowtie2/"

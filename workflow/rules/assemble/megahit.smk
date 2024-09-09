@@ -28,6 +28,7 @@ rule _assemble__megahit:
         kmin=params["assemble"]["megahit"]["kmin"],
         kmax=params["assemble"]["megahit"]["kmax"],
         kstep=params["assemble"]["megahit"]["kstep"],
+        additional=params["assemble"]["megahit"]["addition_options"]
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
@@ -45,6 +46,7 @@ rule _assemble__megahit:
             --force \
             --out-dir {params.out_dir} \
             --continue \
+            {params.additional} \
             -1 {params.forwards} \
             -2 {params.reverses} \
         2> {log}.{resources.attempt} 1>&2
