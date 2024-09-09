@@ -11,7 +11,8 @@ rule _annotate__bakta:
         docker["annotate"]
     params:
         out_dir=BAKTA,
-        db=features["databases"]["bakta"]
+        db=features["databases"]["bakta"],
+        tmpdir=config["tmp_storage"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -19,6 +20,8 @@ rule _annotate__bakta:
         time =  config["resources"]["time"]["longrun"],
     shell:
         """
+        TMPDIR={params.tmpdir}
+        
         bakta --db {params.db} \
               --force \
               --output {params.out_dir} \
