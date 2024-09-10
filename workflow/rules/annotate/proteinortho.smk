@@ -11,7 +11,7 @@ rule _annotate__proteinortho_splitfaa:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
         time =  config["resources"]["time"]["longrun"],
     params:
-        script_folder=config["script_folder"],
+        script_folder=SCRIPT_FOLDER,
     shell:
         """
         {params.script_folder}/split_fasta.sh {input} {output}\

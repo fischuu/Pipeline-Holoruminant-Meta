@@ -69,9 +69,10 @@ rule _preprocess__nonpareil__aggregate:
         time =  config["resources"]["time"]["longrun"]
     params:
         input_dir=NONPAREIL,
+        script_folder=SCRIPT_FOLDER,
     shell:
         """
-        Rscript --no-init-file workflow/scripts/aggregate_nonpareil.R \
+        Rscript --no-init-file {params.script_folder}/aggregate_nonpareil.R \
             --input-folder {params.input_dir} \
             --output-file {output} \
         2> {log} 1>&2
