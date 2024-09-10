@@ -2,7 +2,7 @@
 ##
 ## File configuration configuration
 
-script_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/workflow/scripts"
+pipeline_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/"
 
 features-file: "config/features.yaml"
 params-file: "config/params.yaml"

@@ -1,3 +1,7 @@
+# Generate more configuration keys
+# Define the script_folder dynamically based on the pipeline_folder
+SCRIPT_FOLDER= config["pipeline_folder"] + "/workflow/scripts"
+
 READS = Path("results/reads/")
 WD = os.getcwd()
 
@@ -58,5 +62,6 @@ VIRIFY = Path("results/virify/")
 
 # reports
 REPORT = Path("reports/")
+PIPELINE_REPORT = Path("Rreports/")
 REPORT_STEP = REPORT / "step/"
 REPORT_SAMPLE = REPORT / "library/"

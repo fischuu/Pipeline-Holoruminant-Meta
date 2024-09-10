@@ -10,8 +10,8 @@ hosts:  # Add more in case of multi-host, remove entries in case of environmenta
   maize: resources/reference/Zea_mays.Zm-B73-REFERENCE-NAM-5.0.dna.toplevel.fa.gz
   
 magscot:
-  pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
-  tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
+  pfam_hmm: resources/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
+  tigr_hmm: resources/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
 
 databases:
   bakta: resources/databases/bakta/db
