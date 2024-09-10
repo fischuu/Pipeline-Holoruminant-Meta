@@ -1,6 +1,9 @@
 rule _assemble__concoct:
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
         crams=get_crams_from_assembly_id,
     output:
         directory(CONCOCT / "{assembly_id}"),

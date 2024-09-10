@@ -1,7 +1,10 @@
 rule _assemble__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
     output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
     log:
@@ -258,7 +261,10 @@ rule _assemble__magscot__reformat:
 rule _assemble__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa.gz",

@@ -1,7 +1,10 @@
 rule _assemble__maxbin2__run:
     """Run MaxBin2 over a single assembly"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
         crams=get_crams_from_assembly_id,
     output:
         workdir=directory(MAXBIN2 / "{assembly_id}"),

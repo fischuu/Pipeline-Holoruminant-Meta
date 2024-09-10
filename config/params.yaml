@@ -24,6 +24,9 @@ assemble:
     min_contig_len: 1500 # (make is short for complex, 500)
     memory_gb: 32
     additional_options: ""  # For deep sequenced samples (e.g. > 30x, add --no-mercy for a less noisy graph)
+  metaspades:
+    kmer_size: "21,33,55"
+    additional_options: "--only-assembler"
   metabat:
     min_contig_len: 1500 # (make is short for complex, 500)
   maxbin:
