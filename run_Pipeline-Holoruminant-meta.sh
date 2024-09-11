@@ -42,12 +42,14 @@ mkdir -p $APPTAINER_CACHEDIR
 # --jobs, how many parallel jobs do you allow on your system for this project
 # --singularity-args, are the important folders and paths bound to the containers? If you are unsure, go with the defaults and check for errors
 ################################################################################
+mkdir -p slurm_out
+
 snakemake -s $pipelineFolder/workflow/Snakefile \
           --jobs 150 \
           --use-singularity \
           --configfile $projectFolder/config/config.yaml \
           --profile $Profile \
-          --singularity-args "-B /scratch,/projappl,/users,/dev/shm:/tmp,/run" \
+          --singularity-args "-B /scratch,/projappl,/users,/dev/shm:/dev/shm,/run,/tmp" \
           --latency-wait 60 \
           --scheduler greedy \
           $@
