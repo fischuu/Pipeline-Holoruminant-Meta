@@ -60,4 +60,5 @@ rule all:
         rules.reads.input,
         rules.preprocess.input,
         rules.assemble.input,
+        rules.annotate.input,
         rules.report.input,

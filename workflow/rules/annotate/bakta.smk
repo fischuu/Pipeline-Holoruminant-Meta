@@ -20,13 +20,13 @@ rule _annotate__bakta:
         time =  config["resources"]["time"]["longrun"],
     shell:
         """
-        TMPDIR={params.tmpdir}
-        
         bakta --db {params.db} \
               --force \
+              --verbose \
               --output {params.out_dir} \
               --prefix bakta \
               --threads {threads} \
+              --tmp-dir {params.tmpdir} \
               {input.contigs} \
-              2>> {log} 1>&2
+              > {log} 2>&1
         """
