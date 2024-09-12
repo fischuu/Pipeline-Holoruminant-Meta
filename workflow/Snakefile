@@ -51,7 +51,6 @@ include: "rules/assemble/__main__.smk"
 include: "rules/quantify/__main__.smk"
 include: "rules/annotate/__main__.smk"
 include: "rules/report/__main__.smk"
-# include: "rules/virify/__main__.smk"
 
 
 rule all:
