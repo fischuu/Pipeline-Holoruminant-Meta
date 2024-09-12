@@ -46,12 +46,12 @@ rule _assemble__maxbin2__run:
             {output.workdir}/*.fasta \
         2>> {log}
 
-        find \
-            {output.workdir} \
-            -name "*.fa" \
-            -exec pigz --best --verbose {{}} \
-        2>> {log} 1>&2
 
+        fa_files=$(find {output.workdir} -name "*.fa")
+        for fa in $fa_files; do
+            pigz --best --verbose "$fa"
+        done 2>> {log} 1>&2
+        
         rm \
             --recursive \
             --force \

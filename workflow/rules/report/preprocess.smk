@@ -26,6 +26,6 @@ rule _report__preprocess:
     shell:"""
        R -e "features_file <- '{params.features}'; \
              project_folder <- '{params.project}' ; \
-             from_snakemake <- TRUE ; \
+             snakemake <- TRUE ; \
              rmarkdown::render('{params.script}',output_file=file.path('{params.project}','{output}'))" &> {log}
     """
