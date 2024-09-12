@@ -25,24 +25,24 @@ graph <- grViz("
     pre_singlem [label = 'SingleM, v0.18.0 \n S4.3.0.GTDB_r220.metapackage_20240523']
 
     # Define assembly nodes
-    ass_bowtie2 [label = 'Bowtie2']
-    ass_concoct [label = 'Concoct']
-    ass_drep [label = 'DRep']
-    ass_magscot [label = 'MAGScot']
-    ass_maxbin2 [label = 'MaxBin2']
+    ass_bowtie2 [label = 'Bowtie2, v2.5.1']
+    ass_concoct [label = 'Concoct, v1.1.0ß']
+    ass_drep [label = 'DRep, v3.4.3']
+    ass_magscot [label = 'MAGScot, v???']
+    ass_maxbin2 [label = 'MaxBin2, v2.2.7']
     ass_megahit [label = 'MEGAHIT, v1.2.9']
-    ass_metabat2 [label = 'MetaBAT2']
+    ass_metabat2 [label = 'MetaBAT2, v2.15']
     ass_metaspades [label = 'MetaSPAdes, v4.0.0']
 
     # Define annotation nodes
-    annotate_bakta [label = 'Bakta', fillcolor = 'red']
-    annotate_quast [label = 'QUAST']
-    annotate_gtdbtk [label = 'GTDB-Tk \n Release 220', fillcolor = 'red']
-    annotate_dram [label = 'DRAM \n 20240524', fillcolor = 'red']
-    annotate_eggnog [label = 'EggNOG']
-    annotate_checkm2 [label = 'CheckM2 \n uniref100.KO.1.dmnd']
-    annotate_proteinortho [label = 'Proteinortho', fillcolor = 'red']
-    annotate_phylophlan [label = 'PhyloPhlan', fillcolor = 'red']
+    annotate_bakta [label = 'Bakta, v1.9.3', fillcolor = 'red']
+    annotate_quast [label = 'QUAST, v5.2.0']
+    annotate_gtdbtk [label = 'GTDB-Tk, v2.4.0 \n Release 220']
+    annotate_dram [label = 'DRAM, v1.5.0 \n 20240524', fillcolor = 'red']
+    annotate_eggnog [label = 'EggNOG, v2.1.12']
+    annotate_checkm2 [label = 'CheckM2, v1.0.2 \n uniref100.KO.1.dmnd']
+    annotate_proteinortho [label = 'Proteinortho, v6.3.1', fillcolor = 'red']
+    annotate_phylophlan [label = 'PhyloPhlan, v3.1.1', fillcolor = 'red']
 
 #    dram_dbs [label = 'DRAM DBs \n
 #    kegg: null \n
@@ -61,9 +61,9 @@ graph <- grViz("
 #    ', shape = folder]
     
     # Define quantify nodes
-    quantify_bowtie2 [label = 'Bowtie2']
-    quantify_coverm [label = 'CoverM']
-    quantify_samtools [label = 'Samtools']
+    quantify_bowtie2 [label = 'Bowtie2, v2.5.1']
+    quantify_coverm [label = 'CoverM, v0.6.1']
+    quantify_samtools [label = 'Samtools, v1.18']
 
     # Define feature request nodes
     feature_phylophlan [label = 'Phylophlan', fillcolor = 'yellow']
