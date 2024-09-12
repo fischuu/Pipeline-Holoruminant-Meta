@@ -2,7 +2,7 @@
 ##
 ## File configuration configuration
 
-script_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/workflow/scripts"
+pipeline_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/"
 
 features-file: "config/features.yaml"
 params-file: "config/params.yaml"
@@ -12,9 +12,10 @@ dram-config: "config/dram_config.txt"
 proteinortho-config: "config/proteinortho_config.txt"
 phylophlan-config: "config/phylophlan/supertree_aa.cfg"
 
-
 kraken_tmp_storage: "$LOCAL_SCRATCH"
-tmp_storage: "$LOCAL_SCRATCH"
+tmp_storage: "$TMP"
+
+assembler: "metaspades"  # "metaspades" or "megahit". Megahit serves as fall-back in case metaspades cannot create the assemblies
 
 #################################
 ##

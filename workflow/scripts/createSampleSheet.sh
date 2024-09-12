@@ -15,31 +15,30 @@ echo -e "sample_id\tlibrary_id\tforward_filename\treverse_filename\tforward_adap
 
 echo "Looking for files in ${fastq_path}..."
 
-# Find all _1.fastq.gz files and process them
+# Find all _R1_ fastq.gz files and process them
 found_files=0
-for file in ${fastq_path}*_1.fastq.gz; do
+for file in ${fastq_path}*_R1_*.fastq.gz; do
     if [[ -f "$file" ]]; then
         found_files=1
-        sample_id=$(basename "$file" | sed -E 's/(.*)_1.fastq.gz/\1/')
+        # Extract sample ID (everything before the first underscore)
+        sample_id=$(basename "$file" | cut -d'_' -f1)
         forward_file="${fastq_path}$(basename "$file")"
-        reverse_file="${fastq_path}$(basename "${file/_1.fastq.gz/_2.fastq.gz}")"
+        reverse_file="${fastq_path}$(basename "${file/_R1_/_R2_}")"
         
         # Check if the reverse file exists
         if [[ -f "$reverse_file" ]]; then
             echo "Processing sample: $sample_id"
-            #echo "Forward file: $forward_file"
-            #echo "Reverse file: $reverse_file"
             echo -e "$sample_id\tlib1\t$forward_file\t$reverse_file\t$forward_adapter\t$reverse_adapter\t$sample_id" >> $output
         else
             echo "Reverse file not found for sample: $sample_id (Expected: $reverse_file)"
         fi
     else
-        echo "No forward files found matching pattern *_1.fastq.gz"
+        echo "No forward files found matching pattern *_R1_*.fastq.gz"
     fi
 done
 
 if [[ $found_files -eq 0 ]]; then
-    echo "No files found in ${fastq_path} matching the pattern *_1.fastq.gz"
+    echo "No files found in ${fastq_path} matching the pattern *_R1_*.fastq.gz"
 fi
 
 echo "Samplesheet created: $output"

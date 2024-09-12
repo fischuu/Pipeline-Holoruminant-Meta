@@ -3,7 +3,10 @@ rule _assemble__metabat2__run:
     input:
         crams=get_crams_from_assembly_id,
         crais=get_crais_from_assembly_id,
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
     output:
         bins=directory(METABAT2 / "{assembly_id}"),
     log:

@@ -4,6 +4,7 @@ rule _annotate__phylophlan_run:
     """
     input:
         contigs=DREP / "dereplicated_genomes",
+        maas=GTDBTK / "gtdbtk.summary.tsv",
         database=lambda w: features["databases"]["phylophlan"][w.phylophlan_db],
     output:
         out_folder=directory(PHYLOPHLAN / "{phylophlan_db}"),
@@ -33,11 +34,10 @@ rule _annotate__phylophlan_run:
 
             phylophlan -i {input.contigs} \
                        -d {input.database} \
+                       -e fa \
                        --diversity {params.diversity} \
-                       -f {params.config_folder} \
                        --nproc {threads} \
                        --output_folder {params.out_folder} \
-                       --genome_extension fa \
                        --verbose \
                        2>> {log} 1>&2
         """

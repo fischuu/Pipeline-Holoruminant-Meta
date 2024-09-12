@@ -6,6 +6,7 @@ include: "magscot.smk"
 include: "maxbin2.smk"
 include: "megahit.smk"
 include: "metabat2.smk"
+include: "metaspades.smk"
 
 
 rule assemble:

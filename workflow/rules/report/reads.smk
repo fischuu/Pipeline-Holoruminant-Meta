@@ -5,11 +5,11 @@ rule _report__reads:
     input:
         rules.reads.input,
     output:
-        html=REPORT_STEP / "reads.html",
+        html=PIPELINE_REPORT / "reads.html",
     log:
-        REPORT_STEP / "reads.log",
+        PIPELINE_REPORT / "reads.log",
     benchmark:
-        REPORT_STEP / "reads_benchmark.tsv",
+        PIPELINE_REPORT / "reads_benchmark.tsv",
     conda:
         "__environment__.yml"
     singularity:
@@ -26,5 +26,5 @@ rule _report__reads:
     shell:"""
        R -e "working_dir <- '{params.wd}'; \
              features_file <- '{params.features}'; \
-             rmarkdown::render('{params.wd}/{params.script}',output_file='{params.wd}/{output}')" &> {log}
+             rmarkdown::render('{params.script}',output_file='{params.wd}/{output}')" &> {log}
     """

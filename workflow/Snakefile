@@ -12,6 +12,7 @@ docker = yaml.load(open(config["docker-file"], "r"), Loader=yaml.SafeLoader)
 features = yaml.load(open(config["features-file"], "r"), Loader=yaml.SafeLoader)
 samples = pd.read_table(config["sample-file"], comment="#", dtype="str")
 
+
 # Generate useful variables
 samples = (
     samples.assign(assembly_id=samples.assembly_ids.str.replace(" ", "").str.split(","))
@@ -37,8 +38,8 @@ PHYLOFLASH_DBS = features["databases"]["phyloflash"]
 HOST_NAMES = [] if features["hosts"] is None else list(features["hosts"].keys())
 LAST_HOST = HOST_NAMES[-1] if len(HOST_NAMES) > 0 else None
 
-READS_R = "workflow/scripts/R/reads.Rmd"
-PREPROCESS_R = "workflow/scripts/R/preprocess.Rmd"
+READS_R = config["pipeline_folder"]+"workflow/scripts/R/reads.Rmd"
+PREPROCESS_R = config["pipeline_folder"]+"workflow/scripts/R/preprocess.Rmd"
 
 # Import subworkflows
 include: "rules/folders.smk"
@@ -59,4 +60,5 @@ rule all:
         rules.reads.input,
         rules.preprocess.input,
         rules.assemble.input,
+        rules.annotate.input,
         rules.report.input,
