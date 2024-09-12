@@ -26,7 +26,6 @@ rule _annotate__bakta:
               --output {params.out_dir} \
               --prefix bakta \
               --threads {threads} \
-              --tmp-dir {params.tmpdir} \
               {input.contigs} \
               > {log} 2>&1
         """
