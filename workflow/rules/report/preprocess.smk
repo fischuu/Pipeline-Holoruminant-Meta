@@ -5,11 +5,11 @@ rule _report__preprocess:
     input:
         rules.preprocess.input,
     output:
-        html=REPORT_STEP / "preprocess.html",
+        html=PIPELINE_REPORT / "preprocess.html",
     log:
-        REPORT_STEP / "preprocess.log",
+        PIPELINE_REPORT / "preprocess.log",
     benchmark:
-        REPORT_STEP / "preprocess_benchmark.tsv",
+        PIPELINE_REPORT / "preprocess_benchmark.tsv",
     conda:
         "__environment__.yml"
     singularity:

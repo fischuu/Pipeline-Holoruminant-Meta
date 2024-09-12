@@ -1,7 +1,10 @@
 rule _assemble__bowtie2__build:
     """Index a megahit assembly"""
     input:
-        contigs=MEGAHIT / "{assembly_id}.fa.gz",
+        contigs=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        )
     output:
         mock=touch(ASSEMBLE_INDEX / "{assembly_id}"),
     log:
@@ -40,8 +43,14 @@ rule _assemble__bowtie2__map:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        reference=MEGAHIT / "{assembly_id}.fa.gz",
-        fai=MEGAHIT / "{assembly_id}.fa.gz.fai",
+        reference=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
+        fai=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz.fai" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz.fai"
+        ),
     output:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
     log:

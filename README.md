@@ -172,6 +172,8 @@ bash $PIPELINEFOLDER/workflow/scripts/createSampleSheet.sh
 
 It should create the `samples.tsv` for the samples located in the `reads/` folder. You need to adjust the script maybe accoring to thenames of the reads or the adapter sequences you use.
 
+In case you have several lanes for samples, you can concatenate them prior to creating the samples.tsv script with the script `concatenateFiles.sh`which is in the pipeline folder `workflow/scripts`. Currently, you would need to run the script inside the same folder where the fastq files are located.
+
 # Usage
 The pipeline can run the entire workflow at once. However, normally it is recommended to run different modules from the pipeline separated to get better control over the results and also to be able to react quicker to possible errors.
 

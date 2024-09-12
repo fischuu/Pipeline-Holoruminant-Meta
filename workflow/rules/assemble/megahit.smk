@@ -28,7 +28,7 @@ rule _assemble__megahit:
         kmin=params["assemble"]["megahit"]["kmin"],
         kmax=params["assemble"]["megahit"]["kmax"],
         kstep=params["assemble"]["megahit"]["kstep"],
-        additional=params["assemble"]["megahit"]["addition_options"],
+        additional=params["assemble"]["megahit"]["additional_options"],
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,

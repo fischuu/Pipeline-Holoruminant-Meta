@@ -21,7 +21,7 @@ rule _assemble__metaspades:
     params:
         out_dir=lambda w: METASPADES / w.assembly_id,
         kmer_size=params["assemble"]["metaspades"]["kmer_size"],
-        min_contig_len=params["assemble"]["metaspades"]["min_contig_len"],
+        additional_options=params["assemble"]["metaspades"]["additional_options"],
         forwards=aggregate_forwards_for_metaspades,
         reverses=aggregate_reverses_for_metaspades,
         assembly_id=lambda w: w.assembly_id,
@@ -29,9 +29,8 @@ rule _assemble__metaspades:
         """
         metaspades.py \
             -t {threads} \
-            -m {resources.mem_per_cpu * threads} \
             -k {params.kmer_size} \
-            --only-assembler \
+            {params.additional_options} \
             -1 {params.forwards} \
             -2 {params.reverses} \
             -o {params.out_dir} \
@@ -60,3 +59,8 @@ rule _assemble__metaspades:
 
         mv {log}.{resources.attempt} {log}
         """
+
+rule assemble__metaspades:
+    """Rename all assemblies contigs to avoid future collisions"""
+    input:
+        [METASPADES / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],

@@ -1,7 +1,10 @@
 rule _assemble__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
     output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
     log:
@@ -205,6 +208,7 @@ rule _assemble__magscot__run:
         out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
         extra=params["assemble"]["magscot"]["extra"],
         th=params["assemble"]["magscot"]["threshold"],
+        script_folder=SCRIPT_FOLDER,
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
@@ -212,7 +216,7 @@ rule _assemble__magscot__run:
         """
         set -e
         
-        Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
+        Rscript --vanilla {params.script_folder}/MAGScoT/MAGScoT.R \
             --input {input.contigs_to_bin} \
             --hmm {input.hmm} \
             --out {params.out_prefix} \
@@ -244,11 +248,13 @@ rule _assemble__magscot__reformat:
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
         time =  config["resources"]["time"]["shortrun"],
+    params:
+        script_folder=SCRIPT_FOLDER,
     shell:
         """
         set -e
         
-        Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
+        Rscript --vanilla {params.script_folder}/clean_magscot_bin_to_contig.R \
             --input-file {input.refined_contig_to_bin} \
             --output-file {output.clean} \
         2> {log} 1>&2
@@ -258,7 +264,10 @@ rule _assemble__magscot__reformat:
 rule _assemble__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=lambda wildcards: (
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+        ),
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa.gz",
@@ -271,9 +280,11 @@ rule _assemble__magscot__rename:
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
         time =  config["resources"]["time"]["shortrun"],
+    params:
+        script_folder=SCRIPT_FOLDER,
     shell:
         """
-        ( python workflow/scripts/reformat_fasta_magscot.py \
+        ( python {params.script_folder}/reformat_fasta_magscot.py \
             <(gzip -dc {input.assembly}) \
             {input.clean} \
         | pigz \

@@ -53,12 +53,13 @@ rule _quantify__coverm__genome_aggregate:
         docker["quantify"]
     params:
         input_dir=lambda w: COVERM / "genome" / w.method,
+        script_folder=SCRIPT_FOLDER,
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
     shell:
         """
-        Rscript --vanilla workflow/scripts/aggregate_coverm.R \
+        Rscript --vanilla {params.script_folder}/aggregate_coverm.R \
             --input-folder {params.input_dir} \
             --output-file {output} \
         2> {log} 1>&2
@@ -122,12 +123,13 @@ rule _quantify__coverm__contig_aggregate:
         docker["quantify"]
     params:
         input_dir=lambda w: COVERM / "contig" / w.method,
+        script_folder=SCRIPT_FOLDER,
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
     shell:
         """
-        Rscript --vanilla workflow/scripts/aggregate_coverm.R \
+        Rscript --vanilla {params.script_folder}/aggregate_coverm.R \
             --input-folder {params.input_dir} \
             --output-file {output} \
         2> {log} 1>&2
