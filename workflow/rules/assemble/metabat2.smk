@@ -64,11 +64,10 @@ rule _assemble__metabat2__run:
             {params.paired} \
         2>> {log} 1>&2
 
-        find \
-            {output.bins} \
-            -name "*.fa" \
-            -exec pigz --best --verbose {{}} \
-        2>> {log} 1>&2
+        fa_files=$(find {output.bins} -name "*.fa")
+        for fa in $fa_files; do
+            pigz --best --verbose "$fa"
+        done 2>> {log} 1>&2
         """
 
 
