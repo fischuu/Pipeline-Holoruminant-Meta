@@ -34,10 +34,12 @@ rule _annotate__phylophlan_run:
 
             phylophlan -i {input.contigs} \
                        -d {input.database} \
-                       -e fa \
                        --diversity {params.diversity} \
+                       -f {params.config_folder} \
+                       --maas {input.maas} \
                        --nproc {threads} \
                        --output_folder {params.out_folder} \
+                       --genome_extension fa \
                        --verbose \
                        2>> {log} 1>&2
         """
