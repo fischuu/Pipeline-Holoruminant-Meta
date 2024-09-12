@@ -91,7 +91,10 @@ rule _assemble__drep__run:
             2>> {log} 1>&2
         done
 
-        find {output.dereplicated_genomes} -type f ! -name "*.gz" -exec gzip {{}} \\;
+        files=$(find {output.dereplicated_genomes} -type f ! -name "*.gz")
+        for file in $files; do
+            gzip "$file"
+        done
 
         mv {log}.{resources.attempt} {log}
         """
