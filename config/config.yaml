@@ -26,7 +26,7 @@ resources:
     time:
         shortrun: 300 
         longrun: 1800
-        verylongrun: 36000
+        verylongrun: 20000
 # Memory allocations in MB for different profiles
     mem_per_cpu:
         krakenmem: 140000  # We use /dev/shm, make sure there is enough RAM on node to host the database! between 100GB and 1.5TB!
@@ -45,6 +45,7 @@ resources:
         kraken: "small"
         highmem: "hugemem"
         longrun: "longrun"
+        highlong: "hugemem_longrun"
 # If your system supports fast nvme disc, set this values, otherwise set to 0 (not tested, as our system has nvme discs!)
     nvme:
         small: 10

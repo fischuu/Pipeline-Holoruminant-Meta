@@ -6,6 +6,8 @@ rule _assemble__metaspades:
     output:
         fasta=METASPADES / "{assembly_id}.fa.gz",
         tarball=METASPADES / "{assembly_id}.tar.gz",
+        concatenated_forwards=temp(METASPADES / "{assembly_id}_R1_concat.fastq.gz"),
+        concatenated_reverses=temp(METASPADES / "{assembly_id}_R2_concat.fastq.gz"),
     log:
         log=METASPADES / "{assembly_id}.log",
     conda:
@@ -15,8 +17,9 @@ rule _assemble__metaspades:
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time=config["resources"]["time"]["longrun"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["veryhighmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
+        time=config["resources"]["time"]["verylongrun"],
+        partition=config["resources"]["partition"]["highlong"],
         attempt=get_attempt,
     params:
         out_dir=lambda w: METASPADES / w.assembly_id,
@@ -27,12 +30,18 @@ rule _assemble__metaspades:
         assembly_id=lambda w: w.assembly_id,
     shell:
         """
+        # Concatenate forward reads into a single file
+        cat {params.forwards} > {output.concatenated_forwards}
+        
+        # Concatenate reverse reads into a single file
+        cat {params.reverses} > {output.concatenated_reverses}
+        
         metaspades.py \
             -t {threads} \
             -k {params.kmer_size} \
             {params.additional_options} \
-            -1 {params.forwards} \
-            -2 {params.reverses} \
+            -1 {output.concatenated_forwards} \
+            -2 {output.concatenated_reverses} \
             -o {params.out_dir} \
         2> {log}.{resources.attempt} 1>&2
 

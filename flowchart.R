@@ -44,6 +44,9 @@ graph <- grViz("
     annotate_proteinortho [label = 'Proteinortho, v6.3.1', fillcolor = 'red']
     annotate_phylophlan [label = 'PhyloPhlan, v3.1.1', fillcolor = 'red']
 
+    # Define the contig annotate nodes
+    contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
+
 #    dram_dbs [label = 'DRAM DBs \n
 #    kegg: null \n
 #    kofam_hmm: 20240524/kofam_profiles.hmm \n
@@ -130,6 +133,9 @@ graph <- grViz("
     ass_drep -> annotate_quast
 #    dram_dbs -> annotate_dram
 
+    # Define the edges for contig annotate
+    ass_assembly -> contig_annotate_prodigal
+
     # Define edges between nodes and the representative node
     ass_assembler_rep -> ass_megahit
     ass_assembler_rep -> ass_metaspades
@@ -208,6 +214,16 @@ graph <- grViz("
       link
       fastqc
     }
+
+    # Define a subgraph to group contig annotate nodes
+    subgraph cluster_contig_annotate {
+      label = 'Contig annotate'
+      style = dashed
+      color = lightgray
+
+      contig_annotate_prodigal
+    }
+
 
     # Define a subgraph to group feature request nodes
     subgraph cluster_featureRequest {

@@ -8,7 +8,7 @@ projectFolder="/scratch/project_2009831/Pipe_dev"
 # It is recommended to copy the Profile folder to a new folder with the name of
 # your cluster
 ################################################################################
-Profile=$pipelineFolder/config/profiles/Puhti
+Profile=$projectFolder/config/profiles/Puhti
 
 # Make Snakemake available. Here is an example, how it would be loaded with the
 # module system, but other systems might have it available per standard installation.
