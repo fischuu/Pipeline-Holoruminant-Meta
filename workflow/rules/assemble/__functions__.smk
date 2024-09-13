@@ -53,21 +53,21 @@ def aggregate_reverses_for_megahit(wildcards):
 
 # metaspades
 def aggregate_forwards_for_metaspades(wildcards):
-    """Put all the forwards together separated by a comma"""
+    """Put all the forwards together separated by a whitespace"""
     forwards = [
         str(forward_)
         for forward_ in _get_reads_from_assembly_id(wildcards, end="forward")
     ]
-    return ",".join(forwards)
+    return " ".join(forwards)
 
 
 def aggregate_reverses_for_metaspades(wildcards):
-    """Put all the reverses together separated by a comma"""
+    """Put all the reverses together separated by a whitespace"""
     reverses = [
         str(reverse_)
         for reverse_ in _get_reads_from_assembly_id(wildcards, end="reverse")
     ]
-    return ",".join(reverses)
+    return " ".join(reverses)
 
 
 # Concoct, metabat2 and maxbin2

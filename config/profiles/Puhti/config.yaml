@@ -5,6 +5,6 @@ default-resources:
     mem_per_cpu: 4000
     cpu_per_task: 1
     partition: "small"
-    slurm_account: "project_2009831"
+    slurm_account: "project_2010176"
     nvme: 0
 cluster-generic-submit-cmd: "sbatch --time {resources.time} --account={resources.slurm_account} --gres=nvme:{resources.nvme} --job-name='{jobid}-{rule}' --tasks-per-node=1 --cpus-per-task={resources.cpu_per_task} --mem-per-cpu={resources.mem_per_cpu} --partition={resources.partition}"

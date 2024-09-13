@@ -57,8 +57,9 @@ EGGNOG = ANN / "eggnog"
 PHYLOPHLAN = ANN / "phylophlan"
 PROTEINORTHO = ANN / "proteinortho"
 
-# Viral prediction
-VIRIFY = Path("results/virify/")
+# contig annotation
+CONTIG = Path("results/contig_annotate/")
+CONTIG_PRODIGAL = CONTIG / "prodigal"
 
 # reports
 REPORT = Path("reports/")
