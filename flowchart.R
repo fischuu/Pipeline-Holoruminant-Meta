@@ -35,17 +35,20 @@ graph <- grViz("
     ass_metaspades [label = 'MetaSPAdes, v4.0.0']
 
     # Define annotation nodes
-    annotate_bakta [label = 'Bakta, v1.9.3', fillcolor = 'red']
+    annotate_bakta [label = 'Bakta, v1.9.3']
     annotate_quast [label = 'QUAST, v5.2.0']
     annotate_gtdbtk [label = 'GTDB-Tk, v2.4.0 \n Release 220']
     annotate_dram [label = 'DRAM, v1.5.0 \n 20240524', fillcolor = 'red']
-    annotate_eggnog [label = 'EggNOG, v2.1.12']
+    annotate_eggnog [label = 'EggNOG, v2.1.12 \n emapperdb-5.0.2']
     annotate_checkm2 [label = 'CheckM2, v1.0.2 \n uniref100.KO.1.dmnd']
     annotate_proteinortho [label = 'Proteinortho, v6.3.1', fillcolor = 'red']
     annotate_phylophlan [label = 'PhyloPhlan, v3.1.1', fillcolor = 'red']
 
     # Define the contig annotate nodes
     contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
+    contig_annotate_eggnog [label = 'Eggnog, v2.1.12 \n emapperdb-5.0.2']
+    contig_annotate_bowtie [label = 'Bowtie, v2.5.1', fillcolor = 'yellow']
+    contig_annotate_coverm [label = 'CoverM, v0.6.1', fillcolor = 'yellow']
 
 #    dram_dbs [label = 'DRAM DBs \n
 #    kegg: null \n
@@ -71,6 +74,8 @@ graph <- grViz("
     # Define feature request nodes
     feature_phylophlan [label = 'Phylophlan', fillcolor = 'yellow']
     feature_dram2 [label = 'DRAM2', fillcolor = 'yellow']
+    feature_aggregate [label = 'Output aggregation', fillcolor = 'yellow']
+    
 
     # Define a representative node for the user input boxes
     pre_host [label = 'Host genomes', style=dotted, color=gray]
@@ -135,7 +140,11 @@ graph <- grViz("
 
     # Define the edges for contig annotate
     ass_assembly -> contig_annotate_prodigal
-
+    contig_annotate_prodigal -> contig_annotate_eggnog
+    contig_annotate_prodigal -> contig_annotate_bowtie
+    ass_assembly -> contig_annotate_bowtie
+    contig_annotate_bowtie -> contig_annotate_coverm
+    
     # Define edges between nodes and the representative node
     ass_assembler_rep -> ass_megahit
     ass_assembler_rep -> ass_metaspades
@@ -222,6 +231,9 @@ graph <- grViz("
       color = lightgray
 
       contig_annotate_prodigal
+      contig_annotate_eggnog
+      contig_annotate_bowtie
+      contig_annotate_coverm
     }
 
 
@@ -233,6 +245,7 @@ graph <- grViz("
 
       feature_dram2
       feature_phylophlan
+      feature_aggregate
     }
 
     # Define a subgraph to group annotation nodes

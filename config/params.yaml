@@ -65,3 +65,7 @@ quantify:
 annotate:
   phylophlan:
     diversity: "high"
+    
+contig_annotate:
+  prodigal:
+    split: 1000000   # For quicker data processing is the prodigal output processed in chunks of this size
