@@ -93,7 +93,6 @@ rule _preprocess__kraken2__assign:
         rm --force --recursive --verbose {params.kraken_db_shm} 2>>{log} 1>&2
         """
 
-
 rule preprocess__kraken2:
     """Run kraken2 over all samples at once using the /dev/shm/ trick."""
     input:

@@ -14,6 +14,7 @@ phylophlan-config: "config/phylophlan/supertree_aa.cfg"
 
 kraken_tmp_storage: "$LOCAL_SCRATCH"
 tmp_storage: "$TMP"
+nvme_storage: "$LOCAL_SCRATCH"
 
 assembler: "metaspades"  # "metaspades" or "megahit". Megahit serves as fall-back in case metaspades cannot create the assemblies
 
