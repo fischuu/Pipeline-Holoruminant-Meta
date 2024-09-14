@@ -253,6 +253,16 @@ Usage:
 bash run_Pipeline-Holoruminant-meta.sh annotate
 ```
 
+## contig_annotate-module
+
+This module is running the contig based analysis from beginning to end, meaning it first predicts genes on the metagenome assembly, annotates the predicted genes with eggnog, aligns the quality filtered reads to the assembly with bowtie and then quantifies it with coverm.
+
+Usage:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate
+```
+
 ## report-module
 Different modules create reports, here all reports at once can be generated. Otherwise, individual reports can also be reported after each module.
 
