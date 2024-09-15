@@ -24,6 +24,7 @@ PHYLOFLASH = PRE / "phyloflash/"
 SINGLEM = PRE / "singlem/"
 PRE_COVERM = PRE / "coverm/"
 KRAKEN2 = PRE / "kraken2/"
+DIAMOND = PRE / "diamond/"
 
 # assemble
 ASSEMBLE = Path("results/assemble/")

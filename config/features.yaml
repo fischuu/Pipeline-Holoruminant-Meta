@@ -16,6 +16,8 @@ magscot:
 databases:
   bakta: resources/databases/bakta/db
   checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
+  diamond:
+    cazy: resources/databases/diamond/cazy/cazy.dmnd
   dram: resources/databases/dram/20240524/
   eggnog: resources/databases/eggnog/
   gtdbtk: resources/databases/gtdbtk/release220
