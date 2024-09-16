@@ -47,8 +47,8 @@ graph <- grViz("
     # Define the contig annotate nodes
     contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
     contig_annotate_eggnog [label = 'Eggnog, v2.1.12 \n emapperdb-5.0.2']
-    contig_annotate_bowtie [label = 'Bowtie, v2.5.1', fillcolor = 'yellow']
-    contig_annotate_coverm [label = 'CoverM, v0.6.1', fillcolor = 'yellow']
+    contig_annotate_bowtie [label = 'Bowtie, v2.5.1']
+    contig_annotate_feature [label = 'FeatureCounts, v2.0.1']
 
 #    dram_dbs [label = 'DRAM DBs \n
 #    kegg: null \n
@@ -70,11 +70,6 @@ graph <- grViz("
     quantify_bowtie2 [label = 'Bowtie2, v2.5.1']
     quantify_coverm [label = 'CoverM, v0.6.1']
     quantify_samtools [label = 'Samtools, v1.18']
-
-    # Define feature request nodes
-    feature_phylophlan [label = 'Phylophlan', fillcolor = 'yellow']
-    feature_dram2 [label = 'DRAM2', fillcolor = 'yellow']
-    feature_aggregate [label = 'Output aggregation', fillcolor = 'yellow']
     
 
     # Define a representative node for the user input boxes
@@ -143,7 +138,7 @@ graph <- grViz("
     contig_annotate_prodigal -> contig_annotate_eggnog
     contig_annotate_prodigal -> contig_annotate_bowtie
     ass_assembly -> contig_annotate_bowtie
-    contig_annotate_bowtie -> contig_annotate_coverm
+    contig_annotate_bowtie -> contig_annotate_feature
     
     # Define edges between nodes and the representative node
     ass_assembler_rep -> ass_megahit
@@ -233,19 +228,7 @@ graph <- grViz("
       contig_annotate_prodigal
       contig_annotate_eggnog
       contig_annotate_bowtie
-      contig_annotate_coverm
-    }
-
-
-    # Define a subgraph to group feature request nodes
-    subgraph cluster_featureRequest {
-      label = 'Feature Requests'
-      style = dashed
-      color = lightgray
-
-      feature_dram2
-      feature_phylophlan
-      feature_aggregate
+      contig_annotate_feature
     }
 
     # Define a subgraph to group annotation nodes

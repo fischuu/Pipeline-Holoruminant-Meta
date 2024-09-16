@@ -62,6 +62,7 @@ PROTEINORTHO = ANN / "proteinortho"
 CONTIG = Path("results/contig_annotate/")
 CONTIG_PRODIGAL = CONTIG / "prodigal"
 CONTIG_EGGNOG = CONTIG / "eggnog"
+CONTIG_FEATURECOUNTS = CONTIG / "featurecounts"
 
 # reports
 REPORT = Path("reports/")
