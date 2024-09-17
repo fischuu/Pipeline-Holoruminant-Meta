@@ -19,9 +19,9 @@ It is assumed that host genomes, that are used for decontamination, are gzipped.
 You can install the pipeline by cloning this repository
 
 The recommended setup is to have a separated pipeline folder (the cloned repository), that
-carries the functionality and that must not changed by the user.
+carries the functionality. 
 
-Then the project should have somewhere an own folder and a few configuration files are copied
+Then the project should have somewhere an own folder and the required configuration files are copied
 to it. These are mainly
 
 ```
