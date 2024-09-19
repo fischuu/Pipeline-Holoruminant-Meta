@@ -32,6 +32,7 @@ ASSEMBLIES = [
     if not pd.isna(assembly_id)
 ]
 KRAKEN2SHM = config["kraken_tmp_storage"]
+DIAMONDSHM = config["nvme_storage"]
 KRAKEN2_DBS = features["databases"]["kraken2"]
 METAPHLAN_DBS = features["databases"]["metaphlan4"]
 PHYLOFLASH_DBS = features["databases"]["phyloflash"]
