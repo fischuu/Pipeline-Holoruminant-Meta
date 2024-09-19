@@ -16,8 +16,8 @@ magscot:
 databases:
   bakta: resources/databases/bakta/db
   checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
-  diamond:
-    cazy: resources/databases/diamond/cazy/cazy.dmnd
+  diamond: # add entries as necessary, intended by two spaces
+    cazy: resources/databases/diamond/CAZyDB.07262023.dmnd
   dram: resources/databases/dram/20240524/
   eggnog: resources/databases/eggnog/
   gtdbtk: resources/databases/gtdbtk/release220
@@ -31,5 +31,5 @@ databases:
   phylophlan: # add entries as necessary, intended by two spaces
     amphora2: resources/databases/phylophlan/amphora2
     phylophlan: resources/databases/phylophlan/phylophlan
-  singlem: resources/databases/S4.3.0.GTDB_r220.metapackage_20240523.smpkg.zb
+  singlem: resources/databases/singlem/S4.3.0.GTDB_r220.metapackage_20240523.smpkg.zb
   virify: resources/databases/virify

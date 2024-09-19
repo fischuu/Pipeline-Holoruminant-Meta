@@ -1,22 +1,16 @@
 rule _preprocess__diamond__assign:
     """
-    Run Diamond over all samples at once using the /dev/shm/ trick.
-
-    NOTE: /dev/shm may be not empty after the job is done.
+    Run Diamond
     """
     input:
         forwards=get_final_forward_from_pre,
         reverses=get_final_reverse_from_pre,
         database=lambda w: features["databases"]["diamond"][w.diamond_db],
     output:
-        out_gzs=[
-            DIAMOND / "{diamond_db}" / f"{sample_id}.{library_id}.out.gz"
-            for sample_id, library_id in SAMPLE_LIBRARY
-        ],
+        out_R1= DIAMOND / "{diamond_db}" / f"{sample_id}.{library_id}_R1.out",
+        out_R2= DIAMOND / "{diamond_db}" / f"{sample_id}.{library_id}_R2.out",
     log:
         DIAMOND / "{diamond_db}.log",
-    benchmark:
-        DIAMOND / "benchmark/{diamond_db}.tsv",
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -26,15 +20,14 @@ rule _preprocess__diamond__assign:
         nvme = config["resources"]["nvme"]["large"]
     params:
         in_folder=FASTP,
-        out_folder=lambda w: DIAMON / w.diamond_db,
-        diamond_db_shm=lambda w:  os.path.join(DIAMONDSHM, w.kraken_db),
+        out_folder=lambda w: DIAMOND / w.diamond_db,
+        diamond_db_shm=lambda w:  os.path.join(DIAMONDSHM, w.diamond_db),
     conda:
         "__environment__.yml"
     singularity:
         docker["annotate"]
     shell:
         """
-        {{
             echo Running Diamond in $(hostname) 2>> {log} 1>&2
 
             echo Using quick disc space: {params.diamond_db_shm} 2>> {log} 1>&2
@@ -48,46 +41,26 @@ rule _preprocess__diamond__assign:
                 --recursive \
                 --times \
                 --verbose \
-                {input.database}/*.dmnd \
+                {input.database} \
                 {params.diamond_db_shm} \
             2>> {log} 1>&2
 
-            for file in {input.forwards} ; do \
+            diamond blastx -d {params.diamond_db_shm} \
+                           -q {input.forwards} \
+                           -o {output.out_R1} \
+            2> $log 1>&2
 
-                sample_id=$(basename $file _1.fq.gz)
-                forward={params.in_folder}/${{sample_id}}_1.fq.gz
-                reverse={params.in_folder}/${{sample_id}}_2.fq.gz
-                output={params.out_folder}/${{sample_id}}.out.gz
-                report={params.out_folder}/${{sample_id}}.report
-                log={params.out_folder}/${{sample_id}}.log
-
-                echo $(date) Processing $sample_id 2>> {log} 1>&2
-
-                kraken2 \
-                    --db {params.kraken_db_shm} \
-                    --threads {threads} \
-                    --gzip-compressed \
-                    --paired \
-                    --output >(pigz --processes {threads} > $output) \
-                    --report $report \
-                    --memory-mapping \
-                    $forward \
-                    $reverse \
-                2> $log 1>&2
-
-            done
-        }} || {{
-            echo "Failed job" 2>> {log} 1>&2
-        }}
-
-        rm --force --recursive --verbose {params.kraken_db_shm} 2>>{log} 1>&2
+            diamond blastx -d {params.diamond_db_shm} \
+                           -q {input.reverses} \
+                           -o {output.out_R2} \
+           2> $log 1>&2
         """
 
 rule preprocess__diamond:
     """Run diamond over all samples at once using the /dev/shm/ trick."""
     input:
         [
-            DIAMOND / diamond_db / f"{sample_id}.{library_id}.report"
+            DIAMOND / "{diamond_db}" / f"{sample_id}.{library_id}_R1.out"
             for sample_id, library_id in SAMPLE_LIBRARY
             for diamond_db in features["databases"]["diamond"]
         ],

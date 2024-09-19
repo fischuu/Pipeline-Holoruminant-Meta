@@ -102,7 +102,14 @@ Then we need to download the precompiled databases and reference genomes
   cd $PROJECTFOLDER
   wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reads.tar.gz
   tar -xvf reads.tar.gz
-  
+```
+
+If you have downloaded the resources already into another project, you can share the resources also to a new project, e.g. by creating a symbolic link
+
+```
+cd /some/other/project
+ln -s $PROJECTFOLDER/resources resources
+
 ```
 
 Now we copy the configuration files from the pipeline folder to the project folder, to adjust the configurations to the project specifics
@@ -110,7 +117,6 @@ Now we copy the configuration files from the pipeline folder to the project fold
 ```
 cd $PIPELINEFOLDER
 cp -r config $PROJECTFOLDER
-cp -r workflow $PROJECTFOLDER
 cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 ```
 
@@ -122,7 +128,7 @@ This is the pipeline starting wrapper script. It takes care of enabling Snakemak
 Enter the required values and paths according to the comments in the file.
 
 ## config/config.yaml
-Here are the paths to the different configuration files stored, which do not need any adjustments from the user. However, currently, also the path to the script folder needs to be given (you need to fill this here).
+Here are the paths to the different configuration files stored, which do not need any adjustments from the user. 
 
 In addition, the specs for the resource allocations are provided here. The defaults are currently not calibrated and need still some closer evaluation. Adjust the values to your needs and names from your hpc (like queue names)
 
