@@ -5,7 +5,7 @@ graph <- grViz("
   digraph snakemake_pipeline {
     graph [layout = dot, rankdir = LR]
 
-    node [shape = box, style = filled, fillcolor = lightblue]
+    node [shape = box, style = filled, fillcßolor = lightblue]
     edge [arrowhead = vee]
 
     # Define new reads nodes
@@ -23,10 +23,11 @@ graph <- grViz("
     pre_phyloflash [label = 'PhyloFlash, v3.4.2 \n SILVA_SSU.noLSU 138.1']
     pre_nonpareil [label = 'Nonpareil, v.3.4.1']
     pre_singlem [label = 'SingleM, v0.18.0 \n S4.3.0.GTDB_r220.metapackage_20240523']
+    pre_diamond [label = 'Diamond, v.2.1.8 \n Cazy 07142024']
 
     # Define assembly nodes
     ass_bowtie2 [label = 'Bowtie2, v2.5.1']
-    ass_concoct [label = 'Concoct, v1.1.0ß']
+    ass_concoct [label = 'Concoct, v1.1.0']
     ass_drep [label = 'DRep, v3.4.3']
     ass_magscot [label = 'MAGScot, v???']
     ass_maxbin2 [label = 'MaxBin2, v2.2.7']
@@ -96,6 +97,7 @@ graph <- grViz("
     pre_bowtie2 -> pre_nonpareil
     pre_bowtie2 -> pre_singlem
     pre_bowtie2 -> ass_assembler_rep
+    pre_bowtie2 -> pre_diamond
     
     # Define edges for assembly
     ass_assembly -> ass_bowtie2
@@ -112,7 +114,6 @@ graph <- grViz("
     ass_metaspades -> ass_assembly
     ass_assembly -> ass_metabat2
     ass_bowtie2 -> ass_metabat2
-    pre_bowtie2 -> ass_bowtie2
 
     # Define edges for quantify
     ass_drep -> quantify_bowtie2
@@ -160,6 +161,7 @@ graph <- grViz("
       pre_nonpareil
       pre_singlem
       pre_host
+      pre_diamond
     }
 
     # Define a subgraph to group assembly nodes
@@ -251,3 +253,5 @@ graph <- grViz("
 
 # Render the graph
 graph
+
+export_graph(graph, file_name = "flowchart.pdf")

@@ -49,7 +49,7 @@ rule _preprocess__bowtie2__map:
         reference=HOSTS / "{genome}.fa.gz",
         faidx=HOSTS / "{genome}.fa.gz.fai",
     output:
-        cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
+        cram=temp(PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram"),
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -125,7 +125,7 @@ rule _preprocess__bowtie2__extract_nonhost:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time = config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"]
+        nvme = config["resources"]["nvme"]["large"]
     shell:
         """
         ( samtools view \
