@@ -2,7 +2,7 @@ executor: cluster-generic
 jobs: 5
 default-resources:
     time: 30
-    mem_per_cpu: 4000
+    mem_per_cpu: 16000
     cpu_per_task: 1
     partition: "small"
     slurm_account: "project_2010176"
