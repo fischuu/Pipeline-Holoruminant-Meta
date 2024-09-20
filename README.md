@@ -1,28 +1,18 @@
-This pipeline is a fork from the Snakemake workflow
-
-https://github.com/3d-omics/mg_assembly/
-
-and tailored and extended to the needs of the Holoruminant project.
-
-Requirements:
-Snakemake > 8.x
+# Requirements
+This Snakemake pipeline requires version 8 or later (Snakemake > 8.x)
 
 Supports:
 SLURM executor / local execution
 conda environment (not tested)
 docker/singularity/apptainer support
 
-Fileformats:
-It is assumed that host genomes, that are used for decontamination, are gzipped.
-
 # Installation
+
 You can install the pipeline by cloning this repository
 
-The recommended setup is to have a separated pipeline folder (the cloned repository), that
-carries the functionality. 
+The recommended setup is to have a dedicated pipeline folder (the cloned repository), that carries the functionality and which should not require any changes. 
 
-Then the project should have somewhere an own folder and the required configuration files are copied
-to it. These are mainly
+Then the project should have somewhere an own folder and the required configuration files are copied to it. The steps to perform are
 
 ```
 # Go to the folder, to where you would like to clone the pipeline, e.g. 
@@ -31,7 +21,7 @@ to it. These are mainly
 # First, clone the pipeline into that folder
   git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
   
-# Setting ENV variable to get downstream code more generic (so, this is the path to where you cloned the pipeline)
+# Setting ENV variable to get downstream code more generic (so, this is the directory to where you cloned the pipeline)
   cd Pipeline-Holoruminant-Meta
   PIPELINEFOLDER=$(pwd)
   
@@ -39,17 +29,17 @@ to it. These are mainly
   PIPELINEFOLDER="/users/fischerd/git/Pipeline-Holoruminant-Meta"
 ```
 
-We setup a project folder in our scratch space of the HPC, here we will run the pipeline
+Next, we setup a project folder in our scratch space of the HPC, here we will run the pipeline
 
 ```
-# Go to the project space
+# Go to the project space of your HPC, e.g. 
   cd /scratch/project_2009831
 
 # Create a folder for the new project
   mkdir My_holor_project
   cd My_holor_project   
   
-# For convenience, I set again a ENV variable, so that the code later will be generic
+# For convenience, we set again a ENV variable, so that the code will be more generic
   PROJECTFOLDER=$(pwd)
   
 # Or manually the same thing:  
@@ -65,50 +55,52 @@ Then we need to download the precompiled databases and reference genomes
   mkdir -p resources/databases
   mkdir -p resources/reference
 
-# Get the various reference databases (this might take a while, maybe even a few days?!)
+# Download the various pre-prepared reference databases
   cd $PROJECTFOLDER/resources/databases
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/bakta.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/checkm2.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/dram.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/eggnog.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/gtdbtk.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/humann.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/kraken2.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/metaphlan4.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/phyloflash.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/phylophlan.tar.gz
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/singlem.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.bakta.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.diamond.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.eggnog.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.humann.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.metaphlan4.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.phylophlan.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.checkm2.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.dram.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.gtdbtk.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.kraken2.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.phyloflash.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.singlem.tar.gz
 
 # Unpack all the databases
-  tar -xvf bakta.tar.gz
-  tar -xvf checkm2.tar.gz
-  tar -xvf dram.tar.gz
-  tar -xvf eggnog.tar.gz
-  tar -xvf gtdbtk.tar.gz
-  tar -xvf humann.tar.gz
-  tar -xvf kraken2.tar.gz
-  tar -xvf metaphlan4.tar.gz
-  tar -xvf phyloflash.tar.gz
-  tar -xvf phylophlan.tar.gz
-  tar -xvf singlem.tar.gz
+  tar -xvf 2024.09.18.bakta.tar.gz
+  tar -xvf 2024.09.18.diamond.tar.gz
+  tar -xvf 2024.09.18.eggnog.tar.gz
+  tar -xvf 2024.09.18.humann.tar.gz
+  tar -xvf 2024.09.18.metaphlan4.tar.gz
+  tar -xvf 2024.09.18.phylophlan.tar.gz
+  tar -xvf 2024.09.18.checkm2.tar.gz
+  tar -xvf 2024.09.18.dram.tar.gz
+  tar -xvf 2024.09.18.gtdbtk.tar.gz
+  tar -xvf 2024.09.18.kraken2.tar.gz
+  tar -xvf 2024.09.18.phyloflash.tar.gz
+  tar -xvf 2024.09.18.singlem.tar.gz
 
 # Get the reference genomes relevant for Holorumiant for host contamination removal
 # Obviously, you can also use your own set of reference genomes here instead
   cd $PROJECTFOLDER
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reference.tar.gz
-  tar -xvf reference.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.reference.tar.gz
+  tar -xvf 2024.09.18.reference.tar.gz
 
 # Get the example read data
   cd $PROJECTFOLDER
-  wget https://a3s.fi/Holoruminant_KJDFHJKhkew4ikyhsfkdjvnkUDYFj/reads.tar.gz
-  tar -xvf reads.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.reads.tar.gz
+  tar -xvf 2024.09.18.reads.tar.gz
 ```
 
 If you have downloaded the resources already into another project, you can share the resources also to a new project, e.g. by creating a symbolic link
 
 ```
-cd /some/other/project
-ln -s $PROJECTFOLDER/resources resources
+cd $PROJECTFOLDER
+ln -s /some/other/project/resources resources
 
 ```
 
@@ -128,7 +120,7 @@ This is the pipeline starting wrapper script. It takes care of enabling Snakemak
 Enter the required values and paths according to the comments in the file.
 
 ## config/config.yaml
-Here are the paths to the different configuration files stored, which do not need any adjustments from the user. 
+Here are the paths to the different configuration files stored, which might not need any adjustments from the user (e.g. for Holoruminant users). 
 
 In addition, the specs for the resource allocations are provided here. The defaults are currently not calibrated and need still some closer evaluation. Adjust the values to your needs and names from your hpc (like queue names)
 
@@ -176,7 +168,7 @@ cd $PROJECTFOLDER
 bash $PIPELINEFOLDER/workflow/scripts/createSampleSheet.sh
 ```
 
-It should create the `samples.tsv` for the samples located in the `reads/` folder. You need to adjust the script maybe accoring to thenames of the reads or the adapter sequences you use.
+It should create the `samples.tsv` for the samples located in the `reads/` folder. You might need to adjust the script maybe accoring to the names of the reads or the adapter sequences you use.
 
 In case you have several lanes for samples, you can concatenate them prior to creating the samples.tsv script with the script `concatenateFiles.sh`which is in the pipeline folder `workflow/scripts`. Currently, you would need to run the script inside the same folder where the fastq files are located.
 
@@ -187,7 +179,7 @@ In the following it is assumed that the pipeline runs on a server that utilizes 
 
 For testing and developing, you can add to every command e.g. the option `-np` for a dry-run that prints the used commands.
 
-The different module have also individual reports that can be generated by adding `report_` in front of the module name, when a module is called. 
+The different module have also individual reports that can be generated by adding `report_` in front of the module name, when a module is called. However, the reports are currently under developments and do not produce any reasonable output and might crash even.
 
 ## 'reads-module'
 Here some basic steps for the reads are performed.
@@ -587,3 +579,10 @@ https://zenodo.org/records/10522951
 - [`CoverM`](https://github.com/wwood/CoverM)
 - [`FastQC`](https://github.com/s-andrews/FastQC)
 - [`multiqc`](https://github.com/ewels/MultiQC)
+
+# Acknowledgements
+This pipeline is a fork from the Snakemake workflow
+
+https://github.com/3d-omics/mg_assembly/
+
+and tailored and extended to the needs of the Holoruminant project.
