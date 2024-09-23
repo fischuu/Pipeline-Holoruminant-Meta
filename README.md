@@ -86,9 +86,14 @@ Then we need to download the precompiled databases and reference genomes
 
 # Get the reference genomes relevant for Holorumiant for host contamination removal
 # Obviously, you can also use your own set of reference genomes here instead
-  cd $PROJECTFOLDER
+  cd $PROJECTFOLDER/resources
   wget https://a3s.fi/Holoruminant-data/2024.09.18.reference.tar.gz
   tar -xvf 2024.09.18.reference.tar.gz
+
+# For MAGScot are also dedicated files needed, which can be pulled in a similar way
+  cd $PROJECTFOLDER/resources
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.MAGScot.tar.gz
+  tar -xvf 2024.09.18.MAGScot.tar.gz
 
 # Get the example read data
   cd $PROJECTFOLDER
