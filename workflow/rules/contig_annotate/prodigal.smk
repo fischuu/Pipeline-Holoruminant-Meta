@@ -26,7 +26,7 @@ rule _contigAnnotate__prodigal:
                   -a {output.fa} \
                   -p meta -f gff    
                   
-         sed '/^#/d' {output.gtf} > {output.gtfplain}
+         grep -v '^#' {output.gtf} > {output.gtfplain}
     """
     
 checkpoint _contigAnnotate__cut_prodigal:
