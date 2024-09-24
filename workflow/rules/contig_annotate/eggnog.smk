@@ -20,7 +20,7 @@ rule _contig_annotate__eggnog_find_homology:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["large"]
-    singularity:
+    container:
         docker["annotate"]
     shell:""" 
          cp {params.fa}/eggnog* {params.tmp}  &> {log};
@@ -42,6 +42,8 @@ rule _contig_annotate__aggregate_assemblies_eggnog:
         CONTIG_EGGNOG / "{assembly_id}/prodigal.emapper.seed_orthologs"
     log:
         CONTIG_EGGNOG / "{assembly_id}/prodigal.emapper.seed_orthologs.log"
+    container:
+        docker["annotate"]
     shell:"""
        cat {input} > {output} 2> {log}
     """
@@ -66,7 +68,7 @@ rule _contig_annotate__eggnog_orthology:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["large"]
-    singularity:
+    container:
         docker["annotate"]
     shell:"""
     # Actually, not sure if that makes any sense, I think the files should not be concatenated here, but treated still here concatenated and then rather be merged afterwards
