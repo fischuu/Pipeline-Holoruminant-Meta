@@ -12,7 +12,7 @@ rule _report__preprocess:
         PIPELINE_REPORT / "preprocess_benchmark.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["r_report"]
     params:
        script=PREPROCESS_R,

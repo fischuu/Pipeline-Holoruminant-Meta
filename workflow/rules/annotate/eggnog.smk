@@ -6,7 +6,7 @@ rule _annotate__eggnog:
         directory(EGGNOG) ,
     log:
         EGGNOG / "eggnog.log",
-    singularity:
+    container:
         docker["eggnog"]
     params:
         out_dir=EGGNOG,

@@ -24,7 +24,7 @@ rule _annotate__phylophlan_run:
         out_folder=lambda w: PHYLOPHLAN / w.phylophlan_db,
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["annotate"]
     shell:
         """
