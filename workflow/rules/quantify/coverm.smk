@@ -9,7 +9,7 @@ rule _quantify__coverm__genome:
         tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["quantify"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
@@ -49,7 +49,7 @@ rule _quantify__coverm__genome_aggregate:
         COVERM / "genome.{method}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["quantify"]
     params:
         input_dir=lambda w: COVERM / "genome" / w.method,
@@ -87,7 +87,7 @@ rule _quantify__coverm__contig:
         tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["quantify"]
     log:
         COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
@@ -119,7 +119,7 @@ rule _quantify__coverm__contig_aggregate:
         COVERM / "contig.{method}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["quantify"]
     params:
         input_dir=lambda w: COVERM / "contig" / w.method,

@@ -8,7 +8,7 @@ rule _quantify__bowtie2__build:
         QUANT_INDEX / "dereplicated_genomes.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["quantify"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
@@ -39,7 +39,7 @@ rule _quantify__bowtie2__map:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["quantify"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

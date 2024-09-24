@@ -7,7 +7,7 @@ rule _assemble__drep__separate_bins:
         DREP / "separate_bins.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
@@ -41,7 +41,7 @@ rule _assemble__drep__run:
         DREP / "drep.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
@@ -110,7 +110,7 @@ rule _assemble__drep__join_genomes:
         DREP / "dereplicated_genomes.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

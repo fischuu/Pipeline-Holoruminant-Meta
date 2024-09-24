@@ -19,7 +19,7 @@ rule _preprocess__nonpareil__run:
         NONPAREIL / "benchmark/{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     params:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
@@ -62,7 +62,7 @@ rule _preprocess__nonpareil__aggregate:
         NONPAREIL / "benchmark/nonpareil.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
