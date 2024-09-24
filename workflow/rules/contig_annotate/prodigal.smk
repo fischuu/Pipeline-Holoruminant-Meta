@@ -13,7 +13,7 @@ rule _contigAnnotate__prodigal:
         gtfplain=CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.prodigal_plain.gtf",
     log:
         CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.log"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
@@ -26,7 +26,7 @@ rule _contigAnnotate__prodigal:
                   -a {output.fa} \
                   -p meta -f gff    
                   
-         sed '/^#/d' {output.gtf} > {output.gtfplain}
+         grep -v '^#' {output.gtf} > {output.gtfplain}
     """
     
 checkpoint _contigAnnotate__cut_prodigal:
@@ -48,6 +48,8 @@ checkpoint _contigAnnotate__cut_prodigal:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
         time =  config["resources"]["time"]["shortrun"],
     threads: config["resources"]["cpu_per_task"]["single_thread"]
+    container:
+        docker["annotate"]
     shell:"""
        mkdir -p {output}
        {params.folder}/workflow/scripts/cutProdigal.sh {params.split} {params.out} {input} 2>> {log} 1>&2

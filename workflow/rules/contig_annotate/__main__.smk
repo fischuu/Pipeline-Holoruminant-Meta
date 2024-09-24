@@ -1,3 +1,4 @@
+include: "__functions__.smk"
 include: "featurecounts.smk"
 include: "eggnog.smk"
 include: "prodigal.smk"

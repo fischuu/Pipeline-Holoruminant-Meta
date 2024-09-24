@@ -11,7 +11,7 @@ rule _assemble__concoct:
         CONCOCT / "{assembly_id}.log",
     conda:
         "concoct.yml"
-    singularity:
+    container:
         docker["concoct"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

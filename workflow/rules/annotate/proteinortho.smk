@@ -12,6 +12,8 @@ rule _annotate__proteinortho_splitfaa:
         time =  config["resources"]["time"]["longrun"],
     params:
         script_folder=SCRIPT_FOLDER,
+    container:
+        docker["annotate"]
     shell:
         """
         {params.script_folder}/split_fasta.sh {input} {output}\
@@ -27,13 +29,15 @@ rule _annotate__proteinortho:
         project=PROTEINORTHO / "proteinortho",
     log:
         PROTEINORTHO / "proteinortho.log",
-    singularity:
+    container:
         docker["annotate"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
+    container:
+        docker["annotate"]
     shell:
         """
         proteinortho {input}/*.fasta \

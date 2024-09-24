@@ -12,7 +12,7 @@ rule _report__reads:
         PIPELINE_REPORT / "reads_benchmark.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["r_report"]
     params:
        script=READS_R,

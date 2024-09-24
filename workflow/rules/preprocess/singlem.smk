@@ -18,17 +18,19 @@ rule _preprocess__singlem__pipe:
         SINGLEM / "benchmark/pipe" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     threads: config["resources"]["cpu_per_task"]["single_thread"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"]
+        time =  config["resources"]["time"]["longrun"],
+        nvme = config["resources"]["nvme"]["small"]
     shell:
         """
-        # Command to download the latest DB, uncomment, run, download and move to new place, ugly at the moment!!!
-        #singlem data --output-directory {input.data} 2> {log} 1>&2
-        
+        echo "Checking disk space for TMPDIR: ${{TMPDIR:-/tmp}}" >> {log}
+        df -h ${{TMPDIR:-/tmp}} >> {log}
+        echo "Disk space check completed." >> {log}
+
         singlem pipe \
             --forward {input.forward_} \
             --reverse {input.reverse_} \
@@ -38,7 +40,7 @@ rule _preprocess__singlem__pipe:
             --metapackage {input.data} \
             --threads {threads} \
             --assignment-threads {threads} \
-        2> {log} 1>&2 || true
+        2>> {log} 1>&2 || true
         """
 
 
@@ -58,7 +60,7 @@ rule _preprocess__singlem__condense:
         SINGLEM / "benchmark/singlem.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     params:
         input_dir=SINGLEM,
@@ -92,7 +94,7 @@ rule _preprocess__singlem__microbial_fraction:
         SINGLEM / "benchmark/microbial_fraction" / "{sample_id}.{library_id}.tsv"
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
@@ -124,7 +126,7 @@ rule _preprocess__singlem__aggregate_microbial_fraction:
         SINGLEM / "benchmark/microbial_fraction.tsv"
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],

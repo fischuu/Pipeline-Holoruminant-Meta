@@ -15,7 +15,7 @@ rule _preprocess__bowtie2__build:
         PRE_INDEX / "benchmark/{genome}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
@@ -61,7 +61,7 @@ rule _preprocess__bowtie2__map:
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -116,7 +116,7 @@ rule _preprocess__bowtie2__extract_nonhost:
         PRE_BOWTIE2 / "benchmark/non{genome}" / "{sample_id}.{library_id}.tsv"
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],

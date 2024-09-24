@@ -14,7 +14,7 @@ rule _preprocess__phyloflash__run:
         PHYLOFLASH / "benchmark" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["phyloflash"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
@@ -53,7 +53,7 @@ rule _preprocess__phyloflash__condense:
         PHYLOFLASH / "benchmark/phyloflash.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["phyloflash"]
     params:
         input_dir=PHYLOFLASH,
