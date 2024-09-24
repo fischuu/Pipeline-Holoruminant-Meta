@@ -6,7 +6,7 @@ rule _helpers__samtools__index_bam:
         "{prefix}.bam.bai",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["helpers"]
     resources:
         time =  config["resources"]["time"]["longrun"]
@@ -26,7 +26,7 @@ rule _helpers__samtools__index_cram:
         "{prefix}.cram.crai",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["helpers"]
     resources:
         time =  config["resources"]["time"]["longrun"]
@@ -46,7 +46,7 @@ rule _helpers__samtools__faidx_fa:
         "{prefix}.fa.fai",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["helpers"]
     resources:
         time =  config["resources"]["time"]["longrun"]
@@ -67,7 +67,7 @@ rule _helpers__samtools__faidx_fagz:
         gzi="{prefix}.fa.gz.gzi",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["helpers"]
     resources:
         time =  config["resources"]["time"]["longrun"]
@@ -92,7 +92,7 @@ rule _helpers__samtools__idxstats_cram:
         "benchmark/{prefix}.idxstats.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["helpers"]
     resources:
         time =  config["resources"]["time"]["longrun"]
@@ -111,7 +111,7 @@ rule _helpers__samtools__flagstats_cram:
         "{prefix}.flagstats.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["helpers"]
     resources:
         time =  config["resources"]["time"]["shortrun"]

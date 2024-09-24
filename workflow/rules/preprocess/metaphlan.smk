@@ -14,7 +14,7 @@ rule _preprocess__metaphlan__run:
         METAPHLAN / "benchmark" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     threads: config["resources"]["cpu_per_task"]["single_thread"]
     resources:
@@ -47,7 +47,7 @@ rule _preprocess__metaphlan__condense:
         METAPHLAN / "benchmark/metaphlan.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     params:
         input_dir=METAPHLAN,

@@ -14,7 +14,7 @@ rule _assemble__megahit:
         log=MEGAHIT / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

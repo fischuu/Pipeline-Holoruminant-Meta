@@ -29,7 +29,7 @@ rule _annotate__proteinortho:
         project=PROTEINORTHO / "proteinortho",
     log:
         PROTEINORTHO / "proteinortho.log",
-    singularity:
+    container:
         docker["annotate"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

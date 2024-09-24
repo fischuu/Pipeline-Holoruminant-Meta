@@ -40,7 +40,7 @@ rule _preprocess__kraken2__assign:
         kraken_db_shm=lambda w:  os.path.join(KRAKEN2SHM, w.kraken_db),
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     shell:
         """

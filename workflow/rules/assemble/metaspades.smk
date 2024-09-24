@@ -12,7 +12,7 @@ rule _assemble__metaspades:
         log=METASPADES / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

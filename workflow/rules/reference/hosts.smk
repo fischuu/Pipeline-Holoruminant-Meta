@@ -9,7 +9,7 @@ rule _reference__hosts__recompress:
     threads: 24
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["reference"]
     resources:
         time =  config["resources"]["time"]["shortrun"]

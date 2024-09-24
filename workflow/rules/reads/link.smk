@@ -12,7 +12,7 @@ rule _reads__link:
         READS / "benchmark/{sample}.{library}.tsv"
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["reads"]
     shell:
         """
