@@ -20,6 +20,11 @@ Then the project should have somewhere an own folder and the required configurat
 
 # First, clone the pipeline into that folder
   git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
+
+# In case the previous steps fails with an error that contains
+# git@github.com: Permission denied (publickey)
+# it indicates that you do not have a ssh key exchanged with GitHub and you could clone the repository then instead like this
+  git clone https://github.com/fischuu/Pipeline-Holoruminant-Meta.git
   
 # Setting ENV variable to get downstream code more generic (so, this is the directory to where you cloned the pipeline)
   cd Pipeline-Holoruminant-Meta
