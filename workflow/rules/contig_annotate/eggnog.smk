@@ -20,20 +20,13 @@ rule _contig_annotate__eggnog_find_homology:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["large"]
-    singularity:
+    container:
         docker["annotate"]
     shell:""" 
          cp {params.fa}/eggnog* {params.tmp}  &> {log};
          emapper.py -m diamond --data_dir {params.tmp} --no_annot --no_file_comments --cpu {threads} -i {input.files} --output_dir {params.folder} -o {params.out}  2>> {log} 1>&2;
     """
     
-def _contig_annotate_aggregate_assembly_eggnog_search(wildcards):
-    checkpoint_outputEGG = checkpoints._contigAnnotate__cut_prodigal.get(**wildcards).output[0]
-    files = glob_wildcards(os.path.join(checkpoint_outputEGG, "prodigal.chunk.{i}")).i
-    return expand(CONTIG_EGGNOG / "{assembly_id}/Chunks/prodigal.chunk.{i}.emapper.seed_orthologs",
-                  i=files,
-                  assembly_id=wildcards.assembly_id)
-
                   
 rule _contig_annotate__aggregate_assemblies_eggnog:
     input:
@@ -42,6 +35,8 @@ rule _contig_annotate__aggregate_assemblies_eggnog:
         CONTIG_EGGNOG / "{assembly_id}/prodigal.emapper.seed_orthologs"
     log:
         CONTIG_EGGNOG / "{assembly_id}/prodigal.emapper.seed_orthologs.log"
+    container:
+        docker["annotate"]
     shell:"""
        cat {input} > {output} 2> {log}
     """
@@ -66,7 +61,7 @@ rule _contig_annotate__eggnog_orthology:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["large"]
-    singularity:
+    container:
         docker["annotate"]
     shell:"""
     # Actually, not sure if that makes any sense, I think the files should not be concatenated here, but treated still here concatenated and then rather be merged afterwards

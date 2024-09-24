@@ -16,7 +16,7 @@ rule _preprocess__humann__run:
         HUMANN / "benchmark" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     params:
         out_folder=HUMANN,
@@ -56,7 +56,7 @@ rule _preprocess__humann__condense:
         HUMANN / "benchmark/humann.tsv",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     params:
         input_dir=HUMANN,

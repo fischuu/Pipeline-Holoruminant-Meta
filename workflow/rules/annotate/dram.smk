@@ -13,7 +13,7 @@ rule _annotate__dram__annotate:
         DRAM / "annotate.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["dram"]
     params:
         config=config["dram-config"],
@@ -77,7 +77,7 @@ rule _annotate__dram__distill:
         DRAM / "distill.log2",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["dram"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],

@@ -8,7 +8,7 @@ rule annotate__quast:
         QUAST / "quast.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["annotate"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

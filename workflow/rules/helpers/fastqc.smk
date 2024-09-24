@@ -7,7 +7,7 @@ rule _helpers__fastqc:
         zip="{prefix}_fastqc.zip",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["helpers"]
     resources:
         time =  config["resources"]["time"]["shortrun"]

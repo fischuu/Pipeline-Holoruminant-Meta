@@ -7,7 +7,7 @@ rule _annotate__bakta:
         faa=BAKTA / "bakta.faa",
     log:
         BAKTA / "bakta.log",
-    singularity:
+    container:
         docker["annotate"]
     params:
         out_dir=BAKTA,

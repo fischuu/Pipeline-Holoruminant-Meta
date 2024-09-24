@@ -9,7 +9,7 @@ rule _annotate__checkm2__predict:
         CHECKM / "quality_report.log",
     conda:
         "checkm2.yml"
-    singularity:
+    container:
         docker["checkm2"]
     params:
         out_dir=CHECKM / "predict",

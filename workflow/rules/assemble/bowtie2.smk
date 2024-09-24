@@ -11,7 +11,7 @@ rule _assemble__bowtie2__build:
         ASSEMBLE_INDEX / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
@@ -57,7 +57,7 @@ rule _assemble__bowtie2__map:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:

@@ -12,13 +12,14 @@ rule _assemble__maxbin2__run:
         MAXBIN2 / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["assemble"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        time =  config["resources"]["time"]["verylongrun"],
+        partition = config["resources"]["partition"]["longrun"],
     params:
         seed=1,
         coverage=lambda w: MAXBIN2 / f"{w.assembly_id}/maxbin2.coverage",

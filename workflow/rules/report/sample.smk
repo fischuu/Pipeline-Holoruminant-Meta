@@ -7,7 +7,7 @@ rule _report__sample__multiqc:
         REPORT_SAMPLE / "{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["report"]
     params:
         dir=REPORT_SAMPLE,

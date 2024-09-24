@@ -8,7 +8,7 @@ rule _report__step__reads:
         REPORT_STEP / "reads.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["report"]
     params:
         dir=REPORT_STEP,
@@ -40,7 +40,7 @@ rule _report__step__preprocess:
         REPORT_STEP / "preprocess.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["report"]
     params:
         dir=REPORT_STEP,
@@ -75,7 +75,7 @@ rule _report__step__assemble:
         REPORT_STEP / "assemble.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["report"]
     params:
         dir=REPORT_STEP,
@@ -103,7 +103,7 @@ rule _report__step__quantify:
         REPORT_STEP / "quantify.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["report"]
     params:
         dir=REPORT_STEP,

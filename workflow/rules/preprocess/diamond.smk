@@ -25,7 +25,7 @@ rule _preprocess__diamond__assign:
         diamond_db_path=lambda w: os.path.join(DIAMONDSHM, w.diamond_db, os.path.basename(features["databases"]["diamond"][w.diamond_db])),
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["annotate"]
     shell:
         """

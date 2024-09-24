@@ -12,7 +12,7 @@ rule _annotate__gtdbtk__classify:
         GTDBTK / "gtdbtk_classify.log",
     conda:
         "gtdbtk.yml"
-    singularity:
+    container:
         docker["gtdbtk"]
     params:
         out_dir=GTDBTK,

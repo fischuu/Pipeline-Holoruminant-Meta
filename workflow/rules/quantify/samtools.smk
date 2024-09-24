@@ -11,7 +11,7 @@ rule _quantify__samtools__stats_cram:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["quantify"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],

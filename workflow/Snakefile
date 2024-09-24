@@ -5,8 +5,9 @@
 
 import pandas as pd
 import yaml
+import os
 
-version = "0.2"
+version = "0.3.3"
 
 # Import configuration files (as defined in the main configuration)
 params = yaml.load(open(config["params-file"], "r"), Loader=yaml.SafeLoader)

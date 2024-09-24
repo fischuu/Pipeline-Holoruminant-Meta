@@ -16,7 +16,7 @@ rule _preprocess__fastp__run:
         FASTP / "benchmark/{sample_id}.{library_id}.tsv"
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     params:
         adapter_forward=get_forward_adapter,

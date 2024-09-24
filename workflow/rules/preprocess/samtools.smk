@@ -13,7 +13,7 @@ rule _preprocess__samtools__stats_cram:
         PRE_BOWTIE2 / "benchmark/{genome}" / "{sample_id}.{library_id}.stats.tsv"
     conda:
         "__environment__.yml"
-    singularity:
+    container:
         docker["preprocess"]
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
