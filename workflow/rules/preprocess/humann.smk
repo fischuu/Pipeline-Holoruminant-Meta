@@ -21,6 +21,7 @@ rule _preprocess__humann__run:
     params:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
+        tmp = config["tmp_storage"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -28,6 +29,8 @@ rule _preprocess__humann__run:
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
+        TMPDIR={params.tmp}
+
         cat {input.forward_} {input.reverse_} > {output.cat}
         
         humann --input {output.cat} --output {params.out_folder} \

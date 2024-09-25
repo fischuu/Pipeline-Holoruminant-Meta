@@ -25,8 +25,12 @@ rule _preprocess__singlem__pipe:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["small"]
+    params:
+        tmp = config["tmp_storage"]
     shell:
         """
+        TMPDIR={params.tmp}
+        
         echo "Checking disk space for TMPDIR: ${{TMPDIR:-/tmp}}" >> {log}
         df -h ${{TMPDIR:-/tmp}} >> {log}
         echo "Disk space check completed." >> {log}
