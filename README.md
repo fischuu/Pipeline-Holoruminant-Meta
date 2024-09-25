@@ -6,6 +6,21 @@ SLURM executor / local execution
 conda environment (not tested)
 docker/singularity/apptainer support
 
+## Python dependencies
+Since Snakemake 8, it is required to install a cluster-generic plugin to submit jobs to a queueing system of a HPP system. Please ensure you have installed the corresponding Snakemake plugin
+
+```
+pip install snakemake-executor-plugin-cluster-generic
+```
+
+Of course you can also install specific plugins like the slurm plugin, but this might need more adjustments to the existing files.
+
+Depending on your Python version, you need to install a Pandas version > 2.1, there were errors when newer Python versions met older Pandas version. In case you run into obscure Pandas error, please make sure to install a newer pandas, e.g.
+
+```
+pip install pandas==2.2.3
+```
+
 # Installation
 
 You can install the pipeline by cloning this repository
