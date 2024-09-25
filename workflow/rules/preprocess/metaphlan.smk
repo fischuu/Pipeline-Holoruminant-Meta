@@ -20,8 +20,12 @@ rule _preprocess__metaphlan__run:
     resources:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"]
+    params:
+        tmp = config["tmp_storage"]
     shell:
         """
+        TMPDIR={params.tmp}
+
         metaphlan {input.forward_},{input.reverse_} \
                   --bowtie2out {output.bt2_out} \
                   --nproc {threads} \
