@@ -6,7 +6,7 @@ This Snakemake pipeline dedicated to Metagenomic data analysis consists out of s
 (Red marked rules have currently still unsolved issues)
 
 # Requirements
-This Snakemake pipeline requires version 8 or later (Snakemake > 8.x)
+The pipeline requires version 8 or later (Snakemake > 8.x)
 
 Supports:
 SLURM executor / local execution
