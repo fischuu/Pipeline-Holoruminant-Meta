@@ -5,7 +5,7 @@ graph <- grViz("
   digraph snakemake_pipeline {
     graph [layout = dot, rankdir = LR]
 
-    node [shape = box, style = filled, fillcßolor = lightblue]
+    node [shape = box, style = filled, fillcolor = lightblue]
     edge [arrowhead = vee]
 
     # Define new reads nodes
@@ -254,4 +254,4 @@ graph <- grViz("
 # Render the graph
 graph
 
-export_graph(graph, file_name = "flowchart.pdf")
+#export_graph(graph, file_name = "flowchart.pdf")
