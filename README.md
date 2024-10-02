@@ -1,7 +1,7 @@
 # Overview
 This Snakemake pipeline dedicated to Metagenomic data analysis consists out of several modules that cover a) read-based b) contig-based and c) MAG-based analyses as well as quantification, quality checks and a reporting module. Naturally, it runs seamlessly on HPC systems and all required software tools are bundled in docker container and/or conda environments. Further, all required databases are pre-configured and ready to be downloaded from a central place.
 
-![Pipeline overview]([ImageAddressOnGitHub.svg](https://raw.githubusercontent.com/fischuu/Pipeline-Holoruminant-Meta/refs/heads/main/flowchart/flowchart.png))
+![alt text](https://github.com/fischuu/fischuu/Pipeline-Holoruminant-Meta/blob/main/flowchart/flowchart.png?raw=true)
 
 For an enlarged version of the image, please click here.
 
