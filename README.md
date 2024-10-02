@@ -73,7 +73,10 @@ Next, we setup a project folder in our scratch space of the HPC, here we will ru
   PROJECTFOLDER="/scratch/project_2009831/My_holor_project"
 ```
 
-Then we need to download the precompiled databases and reference genomes
+Then we need to download the precompiled databases and reference genomes.
+Be prepared that this step will take some time (3 days) and disc space (3TB).
+In case you have quick, local nvme discs, it is advisable to use them for
+unpacking the files, as this will significantly increase the speed.
 
 ```
 # Change to the project folder and prepare folders
