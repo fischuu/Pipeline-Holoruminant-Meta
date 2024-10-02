@@ -3,7 +3,7 @@ This Snakemake pipeline dedicated to Metagenomic data analysis consists out of s
 
 ![alt text](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/flowchart/flowchart.png?raw=true)
 
-For an enlarged version of the image, please click here.
+(Red marked rules have currently still unsolved issues)
 
 # Requirements
 This Snakemake pipeline requires version 8 or later (Snakemake > 8.x)
