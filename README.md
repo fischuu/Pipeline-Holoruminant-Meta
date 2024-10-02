@@ -14,7 +14,7 @@ conda environment (not tested)
 docker/singularity/apptainer support
 
 ## Python dependencies
-Since Snakemake 8, it is required to install a cluster-generic plugin to submit jobs to a queueing system of a HPP system. Please ensure you have installed the corresponding Snakemake plugin
+Since Snakemake 8, it is required to install a cluster-generic plugin to submit jobs to a queueing system of a HPC system. Please ensure you have installed the corresponding Snakemake plugin installed in case you want to submit your jobs to a queueing system
 
 ```
 pip install snakemake-executor-plugin-cluster-generic
