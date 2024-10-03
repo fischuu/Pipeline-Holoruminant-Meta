@@ -1,5 +1,12 @@
+# Overview
+This Snakemake pipeline dedicated to Metagenomic data analysis consists out of several modules that cover a) read-based b) contig-based and c) MAG-based analyses as well as quantification, quality checks and a reporting module. Naturally, it runs seamlessly on HPC systems and all required software tools are bundled in docker container and/or conda environments. Further, all required databases are pre-configured and ready to be downloaded from a central place.
+
+![alt text](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/flowchart/flowchart.png?raw=true)
+
+(Red marked rules have currently still unsolved issues)
+
 # Requirements
-This Snakemake pipeline requires version 8 or later (Snakemake > 8.x)
+The pipeline requires version 8 or later (Snakemake > 8.x)
 
 Supports:
 SLURM executor / local execution
@@ -7,7 +14,7 @@ conda environment (not tested)
 docker/singularity/apptainer support
 
 ## Python dependencies
-Since Snakemake 8, it is required to install a cluster-generic plugin to submit jobs to a queueing system of a HPP system. Please ensure you have installed the corresponding Snakemake plugin
+Since Snakemake 8, it is required to install a cluster-generic plugin to submit jobs to a queueing system of a HPC system. Please ensure you have installed the corresponding Snakemake plugin installed in case you want to submit your jobs to a queueing system
 
 ```
 pip install snakemake-executor-plugin-cluster-generic
@@ -66,7 +73,10 @@ Next, we setup a project folder in our scratch space of the HPC, here we will ru
   PROJECTFOLDER="/scratch/project_2009831/My_holor_project"
 ```
 
-Then we need to download the precompiled databases and reference genomes
+Then we need to download the precompiled databases and reference genomes.
+Be prepared that this step will take some time (3 days) and disc space (3TB).
+In case you have quick, local nvme discs, it is advisable to use them for
+unpacking the files, as this will significantly increase the speed.
 
 ```
 # Change to the project folder and prepare folders
