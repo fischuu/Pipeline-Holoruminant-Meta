@@ -7,7 +7,7 @@ rule _preprocess__nonpareil__run:
     empty files
     """
     input:
-        forward_=get_final_forward_from_pre,
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
     output:
         npa=touch(NONPAREIL / "{sample_id}.{library_id}.npa"),
         npc=touch(NONPAREIL / "{sample_id}.{library_id}.npc"),

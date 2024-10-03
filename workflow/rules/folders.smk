@@ -16,6 +16,7 @@ FASTP = PRE / "fastp/"
 PRE_INDEX = PRE / "index/"
 PRE_BOWTIE2 = PRE / "bowtie2"
 NONHOST = PRE / "nonhost/"
+PRE_QUANT = PRE / "quantification/"
 
 # preprocess evaluation
 NONPAREIL = PRE / "nonpareil/"

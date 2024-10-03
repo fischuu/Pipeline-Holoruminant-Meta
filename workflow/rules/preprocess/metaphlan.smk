@@ -2,8 +2,8 @@ rule _preprocess__metaphlan__run:
     """Run metaphlan over one sample
     """
     input:
-        forward_=get_final_forward_from_pre,
-        reverse_=get_final_reverse_from_pre,
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
         data=features["databases"]["metaphlan4"],
     output:
         bt2_out=METAPHLAN / "bowtie2_out" / "{sample_id}.{library_id}.bz2",
