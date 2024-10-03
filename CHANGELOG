@@ -3,6 +3,9 @@
 
 Version 0.3.*:
 --------------
+8: Decontaminated reads are now stored in a dedicated locations and other host/non-host reads are removed
+7: Chromosome-wise quantification for host genomes added
+6: Temporary output is now by default removed from HumanN 
 5: Software requirements adjusted for installations
 4: Added dedicated TMPDIR definitions to rules preprocess/ humann, metaphlan, nonpareil and singlem
 3: Changed in _contigAnnotate__prodiga  sed to grep, to satisfy linter

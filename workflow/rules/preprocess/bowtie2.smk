@@ -50,6 +50,7 @@ rule _preprocess__bowtie2__map:
         faidx=HOSTS / "{genome}.fa.gz.fai",
     output:
         cram=temp(PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram"),
+        counts= PRE_QUANT / "{genome}" / "{sample_id}.{library_id}.chr_alignment_counts.tsv"
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -92,6 +93,8 @@ rule _preprocess__bowtie2__map:
             --threads {threads} \
         ) 2>> {log}.{resources.attempt} 1>&2
 
+        samtools idxstats {output.cram} | awk '{{print $1, $3}}' > {output.counts}
+
         mv \
             {log}.{resources.attempt} \
             {log}
@@ -108,8 +111,8 @@ rule _preprocess__bowtie2__extract_nonhost:
         reference=HOSTS / "{genome}.fa.gz",
         fai=HOSTS / "{genome}.fa.gz.fai",
     output:
-        forward_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz",
+        forward_=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_1.fq.gz"),
+        reverse_=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz"),
     log:
         PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -151,9 +154,36 @@ rule _preprocess__bowtie2__extract_nonhost:
         ) 2> {log} 1>&2
         """
 
+rule _preprocess__store_final_fastq:
+    """Copy final process
+    """
+    input:
+        forward_=get_final_forward_from_pre,
+        reverse_=get_final_reverse_from_pre,
+    output:
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
+    log:
+        PRE_BOWTIE2 / "decontaminated_reads" / "log" / "{sample_id}.{library_id}.log",
+    benchmark:
+        PRE_BOWTIE2 / "decontaminated_reads" / "benchmark" / "{sample_id}.{library_id}.tsv",
+    conda:
+        "__environment__.yml"
+    container:
+        docker["preprocess"]
+    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    resources:
+        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
+        time =  config["resources"]["time"]["shortrun"],
+    shell:
+        """
+        cp {input.forward_} {output.forward_}
+        cp {input.reverse_} {output.reverse_}
+        """
 
 rule preprocess__bowtie2__extract_nonhost:
-    """Run bowtie2_extract_nonchicken_one for all PE libraries"""
+    """Run bowtie2_extract_nonhost for all PE libraries"""
     input:
         [
             PRE_BOWTIE2 / f"non{genome}" / f"{sample_id}.{library_id}_{end}.fq.gz"
@@ -161,6 +191,11 @@ rule preprocess__bowtie2__extract_nonhost:
             if LAST_HOST
             for sample_id, library_id in SAMPLE_LIBRARY
             for end in ["1", "2"]
+        ],
+        [
+        PRE_BOWTIE2 / "decontaminated_reads" / f"{sample_id}.{library_id}_{end}.fq.gz"
+        for sample_id, library_id in SAMPLE_LIBRARY
+        for end in ["1", "2"]
         ],
 
 

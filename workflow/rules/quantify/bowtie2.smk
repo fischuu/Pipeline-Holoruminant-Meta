@@ -29,8 +29,8 @@ rule _quantify__bowtie2__map:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=QUANT_INDEX / "dereplicated_genomes",
-        forward_=get_final_forward_from_pre,
-        reverse_=get_final_reverse_from_pre,
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
         reference=DREP / "dereplicated_genomes.fa.gz",
         fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
