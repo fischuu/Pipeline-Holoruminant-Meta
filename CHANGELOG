@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+9: Preprocess rule output adjusted, to account for temp files
 8: Decontaminated reads are now stored in a dedicated locations and other host/non-host reads are removed
 7: Chromosome-wise quantification for host genomes added
 6: Temporary output is now by default removed from HumanN 

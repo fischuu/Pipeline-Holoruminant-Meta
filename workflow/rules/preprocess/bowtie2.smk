@@ -186,13 +186,6 @@ rule preprocess__bowtie2__extract_nonhost:
     """Run bowtie2_extract_nonhost for all PE libraries"""
     input:
         [
-            PRE_BOWTIE2 / f"non{genome}" / f"{sample_id}.{library_id}_{end}.fq.gz"
-            for genome in [LAST_HOST]
-            if LAST_HOST
-            for sample_id, library_id in SAMPLE_LIBRARY
-            for end in ["1", "2"]
-        ],
-        [
         PRE_BOWTIE2 / "decontaminated_reads" / f"{sample_id}.{library_id}_{end}.fq.gz"
         for sample_id, library_id in SAMPLE_LIBRARY
         for end in ["1", "2"]
