@@ -1,7 +1,7 @@
 # Paths and parameters relative to references
 ---
 hosts:  # Add more in case of multi-host, remove entries in case of environmental sample
-  cilliates: resources/reference/Cilliates_20240528.fa.gz
+  ciliates: resources/reference/Ciliates_20240528.fa.gz
   bovine: resources/reference/Bos_taurus.ARS-UCD1.3.dna.toplevel.fa.gz
   human: resources/reference/Homo_sapiens.GRCh38.dna.toplevel.fa.gz
   ryegrass: resources/reference/Lolium_perenne.MPB_Lper_Kyuss_1697.dna.toplevel.fa.gz
