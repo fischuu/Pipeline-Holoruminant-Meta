@@ -19,7 +19,8 @@ def _get_reads_from_assembly_id(wildcards, end):
             for sample_id, library_id in samples_in_assembly
         ]
     return [
-        PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_{end}.fq.gz"
+        PRE_BOWTIE2 / "decontaminated_reads" / f"{sample_id}.{library_id}_{end}.fq.gz"
+        #PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_{end}.fq.gz"
         for sample_id, library_id in samples_in_assembly
     ]
 

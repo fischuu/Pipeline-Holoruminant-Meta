@@ -1,7 +1,7 @@
 rule _contig_annotate__cramToBam_:
     """Create temporary bam-files for quantification"""
     input:
-        ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        rules.assemble__bowtie2.input,
     output:
         temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
