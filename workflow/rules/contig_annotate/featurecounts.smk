@@ -1,7 +1,7 @@
 rule _contig_annotate__cramToBam_:
     """Create temporary bam-files for quantification"""
     input:
-        rules.assemble__bowtie2.input,
+        ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram"
     output:
         temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
@@ -17,6 +17,7 @@ rule _contig_annotate__cramToBam_:
         time =  config["resources"]["time"]["longrun"],
     shell:
         """
+        samtools index {input} 2> {log} 1>&2
         samtools view -b -o {output} {input} 2> {log} 1>&2
         """
 
