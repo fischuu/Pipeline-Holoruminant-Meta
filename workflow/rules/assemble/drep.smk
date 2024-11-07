@@ -55,6 +55,7 @@ rule _assemble__drep__run:
         contamination=params["assemble"]["drep"]["contamination"],
         P_ani=params["assemble"]["drep"]["P_ani"],
         S_ani=params["assemble"]["drep"]["S_ani"],
+        nc=params["assemble"]["drep"]["nc"],
         extra=params["assemble"]["drep"]["extra"]
     shell:
         """
@@ -75,6 +76,7 @@ rule _assemble__drep__run:
             --contamination {params.contamination} \
             --P_ani {params.P_ani} \
             --S_ani {params.S_ani} \
+            -nc {params.nc} \
             {params.extra} \
             --genomes {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
