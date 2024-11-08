@@ -49,6 +49,7 @@ rule _assemble__drep__run:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
         attempt=get_attempt,
+        nvme = config["resources"]["nvme"]["small"]
     params:
         out_dir=DREP,
         completeness=params["assemble"]["drep"]["completeness"],
@@ -117,6 +118,7 @@ rule _assemble__drep__join_genomes:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["shortrun"],
+        nvme = config["resources"]["nvme"]["small"]
     shell:
         """
         ( zcat \
