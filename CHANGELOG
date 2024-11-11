@@ -3,6 +3,8 @@
 
 Version 0.3.*:
 --------------
+13: Changed bug in rule phylophlan -e was changed to --genome_extension
+12: bakta uses now per default the option "--skip-crispr", as there was some unsolveable error with it (error code -6)
 11: Time resource allocation for assemble_drep adjusted
 10: Removed redundant rule calls from contig_assemble and avoid rerunning rules for already existing files
 9: Preprocess rule output adjusted, to account for temp files
