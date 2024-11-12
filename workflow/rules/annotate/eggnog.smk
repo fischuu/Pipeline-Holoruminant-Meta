@@ -5,7 +5,7 @@ rule _annotate__eggnog:
     output:
         directory(EGGNOG) ,
     log:
-        EGGNOG / "eggnog.log",
+        protected(EGGNOG / "eggnog.log"),
     container:
         docker["eggnog"]
     params:

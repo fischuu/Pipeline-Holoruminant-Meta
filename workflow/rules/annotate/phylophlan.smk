@@ -34,6 +34,7 @@ rule _annotate__phylophlan_run:
 
             phylophlan -i {input.contigs} \
                        -d {input.database} \
+                       -f {params.config_folder} \
                        --genome_extension fa \
                        --diversity {params.diversity} \
                        --nproc {threads} \
