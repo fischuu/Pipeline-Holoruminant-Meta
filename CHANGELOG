@@ -3,6 +3,8 @@
 
 Version 0.3.*:
 --------------
+15: Protect the eggnog logs that they are not deleted in case of an error (could be removed after trouble shooting)
+14: Added a config path to phylophlan
 13: Changed bug in rule phylophlan -e was changed to --genome_extension
 12: bakta uses now per default the option "--skip-crispr", as there was some unsolveable error with it (error code -6)
 11: Time resource allocation for assemble_drep adjusted
