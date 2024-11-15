@@ -3,6 +3,8 @@
 
 Version 0.3.*:
 --------------
+17: More nvme memory to eggnog assigned
+16: Added the --skip-plot option as default to Bakta to prevent error for large MAGs (needs to be re-added later as separate step)
 15: Protect the eggnog logs that they are not deleted in case of an error (could be removed after trouble shooting)
 14: Added a config path to phylophlan
 13: Changed bug in rule phylophlan -e was changed to --genome_extension

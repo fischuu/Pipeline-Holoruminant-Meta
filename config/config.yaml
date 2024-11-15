@@ -51,4 +51,5 @@ resources:
     nvme:
         small: 10
         large: 50
+        verylarge: 250
         kraken: 250
