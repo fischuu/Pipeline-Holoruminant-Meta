@@ -67,7 +67,7 @@ quantify:
 
 annotate:
   bakta:
-    additional_options: " --skip-crispr "
+    additional_options: " --skip-crispr --skip-plot "
   phylophlan:
     diversity: "high"
     
