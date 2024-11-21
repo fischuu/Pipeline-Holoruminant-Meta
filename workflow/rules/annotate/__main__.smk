@@ -17,4 +17,5 @@ rule annotate:
         rules._annotate__gtdbtk__classify.output,
         rules.annotate__dram.input,
         rules._annotate__proteinortho.output,
+        rules._annotate__proteinortho_new.output,
         rules._annotate__phylophlan.input,
