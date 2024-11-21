@@ -59,6 +59,7 @@ BAKTA = ANN / "bakta"
 EGGNOG = ANN / "eggnog"
 PHYLOPHLAN = ANN / "phylophlan"
 PROTEINORTHO = ANN / "proteinortho"
+PROTEINORTHO_NEW = ANN / "proteinortho_new"
 
 # contig annotation
 CONTIG = Path("results/contig_annotate/")
