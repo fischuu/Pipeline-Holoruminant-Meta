@@ -68,7 +68,6 @@ rule _annotate__gtdbtk__classify:
                 --create \
                 --directory {params.out_dir} \
                 --file {params.out_dir}/${{folder}}.tar.gz \
-                --remove-files \
                 --use-compress-program="pigz --processes {threads}" \
                 --verbose \
                 ${{folder}} \

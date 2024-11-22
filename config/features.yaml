@@ -32,4 +32,5 @@ databases:
     amphora2: resources/databases/phylophlan/amphora2
     phylophlan: resources/databases/phylophlan/phylophlan
   singlem: resources/databases/singlem/S4.3.0.GTDB_r220.metapackage_20240523.smpkg.zb
+  sylph: resources/databases/sylph/gtdb-r220-c200-dbv1.syldb
   virify: resources/databases/virify

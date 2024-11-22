@@ -44,6 +44,7 @@ graph <- grViz("
     annotate_checkm2 [label = 'CheckM2, v1.0.2 \n uniref100.KO.1.dmnd']
     annotate_proteinortho [label = 'Proteinortho, v6.3.1', fillcolor = 'red']
     annotate_phylophlan [label = 'PhyloPhlan, v3.1.1', fillcolor = 'red']
+    annotate_sylph [label = 'Sylph, v0.7.0 \n gtdb-r220-c200-dbv1']
 
     # Define the contig annotate nodes
     contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
@@ -132,6 +133,7 @@ graph <- grViz("
     ass_drep -> annotate_phylophlan
     annotate_bakta -> annotate_proteinortho
     ass_drep -> annotate_quast
+    ass_drep -> annotate_sylph
 #    dram_dbs -> annotate_dram
 
     # Define the edges for contig annotate
@@ -247,6 +249,7 @@ graph <- grViz("
       annotate_checkm2
       annotate_proteinortho
       annotate_phylophlan
+      annotate_sylph
     }
   }
 ")
