@@ -3,6 +3,8 @@
 
 Version 0.3.*:
 --------------
+20: In annotate/GTDB-TK the annot and classify folders won't be deleted anymore
+19: Sylph added
 18: Added a new proteinortho rule that takes entire bakta output as input, not splitted
 17: More nvme memory to eggnog assigned
 16: Added the --skip-plot option as default to Bakta to prevent error for large MAGs (needs to be re-added later as separate step)
