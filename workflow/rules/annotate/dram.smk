@@ -20,13 +20,15 @@ rule _annotate__dram__annotate:
         min_contig_size=1500,
         out_dir=DRAM,
         tmp_dir=DRAM / "annotate",
+        tmp2_dir=DRAM / "annotate" / "working_dir" / "dereplicated_genomes" / "tmp",
         parallel_retries=5,
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        time =  config["resources"]["time"]["verylongrun"],
         nvme = config["resources"]["nvme"]["small"]
+        partition = config["resources"]["partition"]["longrun"]
     shell:
         """
         rm -rf {params.tmp_dir}
@@ -59,7 +61,6 @@ rule _annotate__dram__annotate:
             annotate \
         2>> {log} 1>&2
         """
-
 
 rule _annotate__dram__distill:
     """Distill DRAM annotations."""
