@@ -53,6 +53,7 @@ COVERM = QUANT / "coverm/"
 ANN = Path("results/annotate/")
 GTDBTK = ANN / "gtdbtk/"
 QUAST = ANN / "quast/"
+CAMPER = ANN / "camper/"
 DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
 BAKTA = ANN / "bakta"

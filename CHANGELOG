@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+21: Added the camper module to annotate
 20: In annotate/GTDB-TK the annot and classify folders won't be deleted anymore
 19: Sylph added
 18: Added a new proteinortho rule that takes entire bakta output as input, not splitted
