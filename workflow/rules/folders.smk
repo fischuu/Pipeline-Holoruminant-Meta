@@ -16,6 +16,7 @@ FASTP = PRE / "fastp/"
 PRE_INDEX = PRE / "index/"
 PRE_BOWTIE2 = PRE / "bowtie2"
 NONHOST = PRE / "nonhost/"
+PRE_QUANT = PRE / "quantification/"
 
 # preprocess evaluation
 NONPAREIL = PRE / "nonpareil/"
@@ -52,12 +53,15 @@ COVERM = QUANT / "coverm/"
 ANN = Path("results/annotate/")
 GTDBTK = ANN / "gtdbtk/"
 QUAST = ANN / "quast/"
+CAMPER = ANN / "camper/"
 DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
 BAKTA = ANN / "bakta"
 EGGNOG = ANN / "eggnog"
 PHYLOPHLAN = ANN / "phylophlan"
 PROTEINORTHO = ANN / "proteinortho"
+PROTEINORTHO_NEW = ANN / "proteinortho_new"
+SYLPH = ANN / "sylph"
 
 # contig annotation
 CONTIG = Path("results/contig_annotate/")

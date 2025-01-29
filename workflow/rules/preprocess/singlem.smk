@@ -5,8 +5,8 @@ rule _preprocess__singlem__pipe:
     passing it the non-host and trimmed ones.
     """
     input:
-        forward_=get_final_forward_from_pre,
-        reverse_=get_final_reverse_from_pre,
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
         data=features["databases"]["singlem"], 
     output:
         archive_otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.archive.json",
@@ -25,8 +25,12 @@ rule _preprocess__singlem__pipe:
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["small"]
+    params:
+        tmp = config["tmp_storage"]
     shell:
         """
+        TMPDIR={params.tmp}
+        
         echo "Checking disk space for TMPDIR: ${{TMPDIR:-/tmp}}" >> {log}
         df -h ${{TMPDIR:-/tmp}} >> {log}
         echo "Disk space check completed." >> {log}
@@ -80,8 +84,8 @@ rule _preprocess__singlem__condense:
 rule _preprocess__singlem__microbial_fraction:
     """Run singlem microbial_fraction over one sample"""
     input:
-        forward_=get_final_forward_from_pre,
-        reverse_=get_final_reverse_from_pre,
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
         data=features["databases"]["singlem"],
         condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv",
     output:

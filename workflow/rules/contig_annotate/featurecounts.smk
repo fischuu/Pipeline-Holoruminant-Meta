@@ -1,7 +1,7 @@
 rule _contig_annotate__cramToBam_:
     """Create temporary bam-files for quantification"""
     input:
-        ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram"
     output:
         temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
@@ -17,6 +17,7 @@ rule _contig_annotate__cramToBam_:
         time =  config["resources"]["time"]["longrun"],
     shell:
         """
+        samtools index {input} 2> {log} 1>&2
         samtools view -b -o {output} {input} 2> {log} 1>&2
         """
 
@@ -37,7 +38,7 @@ rule _contigAnnotate__featureCounts:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
-    container: docker["quantify"]
+    container: docker["subread"]
     shell:"""
         featureCounts -p \
                       -T {threads} \
