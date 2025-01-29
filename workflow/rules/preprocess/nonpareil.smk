@@ -7,7 +7,7 @@ rule _preprocess__nonpareil__run:
     empty files
     """
     input:
-        forward_=get_final_forward_from_pre,
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
     output:
         npa=touch(NONPAREIL / "{sample_id}.{library_id}.npa"),
         npc=touch(NONPAREIL / "{sample_id}.{library_id}.npc"),
@@ -25,6 +25,7 @@ rule _preprocess__nonpareil__run:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
         reads=lambda w: NONPAREIL /  f"{w.sample_id}.{w.library_id}_1.fq",
         X=params["preprocess"]["nonpareil"]["X"],
+        tmp = config["tmp_storage"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -32,6 +33,8 @@ rule _preprocess__nonpareil__run:
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
+        TMPDIR={params.tmp}
+        
         gunzip -f -c {input.forward_} > {params.reads} 2> {log}
 
         nonpareil \

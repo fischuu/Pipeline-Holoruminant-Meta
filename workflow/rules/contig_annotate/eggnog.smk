@@ -86,6 +86,7 @@ rule _contig_annotate__eggnog_orthology:
         
        emapper.py --data_dir $DATA_DIR --annotate_hits_table {input} --no_file_comments -o {params.out} --cpu {threads} &> {log}
     """
+   
     
 rule contig_assemble__eggnog:
     """Run eggnog on all assemblies"""

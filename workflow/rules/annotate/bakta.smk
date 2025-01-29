@@ -12,12 +12,14 @@ rule _annotate__bakta:
     params:
         out_dir=BAKTA,
         db=features["databases"]["bakta"],
+        options=params["annotate"]["bakta"]["additional_options"],
         tmpdir=config["tmp_storage"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
+        nvme = config["resources"]["nvme"]["small"],
     shell:
         """
         bakta --db {params.db} \
@@ -26,6 +28,7 @@ rule _annotate__bakta:
               --output {params.out_dir} \
               --prefix bakta \
               --threads {threads} \
+              {params.options} \
               {input.contigs} \
               > {log} 2>&1
         """

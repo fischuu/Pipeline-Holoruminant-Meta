@@ -2,8 +2,8 @@ rule _preprocess__humann__run:
     """Run HumanN3 over one sample
     """
     input:
-        forward_=get_final_forward_from_pre,
-        reverse_=get_final_reverse_from_pre,
+        forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
         prot_dbs=features["databases"]["humann_prot_dbs"],
         nt_dbs=features["databases"]["humann_nt_dbs"],
         mp_out=METAPHLAN / "profiled" / "{sample_id}.{library_id}.txt",
@@ -21,6 +21,8 @@ rule _preprocess__humann__run:
     params:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
+        additional_options=params["preprocess"]["humann"]["additional_options"],
+        tmp = config["tmp_storage"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -28,6 +30,8 @@ rule _preprocess__humann__run:
         time =  config["resources"]["time"]["longrun"]
     shell:
         """
+        TMPDIR={params.tmp}
+
         cat {input.forward_} {input.reverse_} > {output.cat}
         
         humann --input {output.cat} --output {params.out_folder} \
@@ -36,6 +40,7 @@ rule _preprocess__humann__run:
         --nucleotide-database {input.nt_dbs} \
         --output-basename {params.out_name} \
         --taxonomic-profile {input.mp_out} \
+        {params.additional_options} \
         2>> {log} 1>&2
 
         """

@@ -1,0 +1,16 @@
+# Version 0.3.8
+################################################################################
+
+The file structure for the non-host reads has changed in this version, so that, upon rerun, the pipeline 
+will most likely regenerate the entire workflow, when you ran it prior to this release on your data. To 
+avoid that behavior, you would first need to run the preprocess__bowtie2 rules like this
+
+bash run_Pipeline-Holoruminant-meta.sh preprocess__bowtie2
+
+to generate a the new files from the structe (and also get the quantification for the chromosomes) followed by 
+
+bash run_Pipeline-Holoruminant-meta.sh --touch 
+
+to adjust the files to the new structe. After that, the pipeline should be again aware of the files.
+
+And as always, newer start the pipline without a dry-run after an update on an existing project!!!

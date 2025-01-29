@@ -3,8 +3,8 @@ rule _preprocess__diamond__assign:
     Run Diamond
     """
     input:
-        forwards=get_final_forward_from_pre,
-        reverses=get_final_reverse_from_pre,
+        forwards=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
+        reverses=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
         database=lambda w: features["databases"]["diamond"][w.diamond_db],
     output:
         out_R1= DIAMOND / "{diamond_db}" / "{sample_id}.{library_id}_R1.out",

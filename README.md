@@ -1,10 +1,32 @@
+# Overview
+This Snakemake pipeline dedicated to Metagenomic data analysis consists out of several modules that cover a) read-based b) contig-based and c) MAG-based analyses as well as quantification, quality checks and a reporting module. Naturally, it runs seamlessly on HPC systems and all required software tools are bundled in docker container and/or conda environments. Further, all required databases are pre-configured and ready to be downloaded from a central place.
+
+![alt text](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/flowchart/flowchart.png?raw=true)
+
+(Red marked rules have currently still unsolved issues)
+
 # Requirements
-This Snakemake pipeline requires version 8 or later (Snakemake > 8.x)
+The pipeline requires version 8 or later (Snakemake > 8.x)
 
 Supports:
 SLURM executor / local execution
 conda environment (not tested)
 docker/singularity/apptainer support
+
+## Python dependencies
+Since Snakemake 8, it is required to install a cluster-generic plugin to submit jobs to a queueing system of a HPC system. Please ensure you have installed the corresponding Snakemake plugin installed in case you want to submit your jobs to a queueing system
+
+```
+pip install snakemake-executor-plugin-cluster-generic
+```
+
+Of course you can also install specific plugins like the slurm plugin, but this might need more adjustments to the existing files.
+
+Depending on your Python version, you need to install a Pandas version > 2.1, there were errors when newer Python versions met older Pandas version. In case you run into obscure Pandas error, please make sure to install a newer pandas, e.g.
+
+```
+pip install pandas==2.2.3
+```
 
 # Installation
 
@@ -20,6 +42,11 @@ Then the project should have somewhere an own folder and the required configurat
 
 # First, clone the pipeline into that folder
   git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
+
+# In case the previous steps fails with an error that contains
+# git@github.com: Permission denied (publickey)
+# it indicates that you do not have a ssh key exchanged with GitHub and you could clone the repository then instead like this
+# git clone https://github.com/fischuu/Pipeline-Holoruminant-Meta.git
   
 # Setting ENV variable to get downstream code more generic (so, this is the directory to where you cloned the pipeline)
   cd Pipeline-Holoruminant-Meta
@@ -46,7 +73,10 @@ Next, we setup a project folder in our scratch space of the HPC, here we will ru
   PROJECTFOLDER="/scratch/project_2009831/My_holor_project"
 ```
 
-Then we need to download the precompiled databases and reference genomes
+Then we need to download the precompiled databases and reference genomes.
+Be prepared that this step will take some time (3 days) and disc space (3TB).
+In case you have quick, local nvme discs, it is advisable to use them for
+unpacking the files, as this will significantly increase the speed.
 
 ```
 # Change to the project folder and prepare folders
@@ -86,9 +116,14 @@ Then we need to download the precompiled databases and reference genomes
 
 # Get the reference genomes relevant for Holorumiant for host contamination removal
 # Obviously, you can also use your own set of reference genomes here instead
-  cd $PROJECTFOLDER
+  cd $PROJECTFOLDER/resources
   wget https://a3s.fi/Holoruminant-data/2024.09.18.reference.tar.gz
   tar -xvf 2024.09.18.reference.tar.gz
+
+# For MAGScot are also dedicated files needed, which can be pulled in a similar way
+  cd $PROJECTFOLDER/resources
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.MAGScot.tar.gz
+  tar -xvf 2024.09.18.MAGScot.tar.gz
 
 # Get the example read data
   cd $PROJECTFOLDER

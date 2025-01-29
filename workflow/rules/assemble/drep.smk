@@ -47,15 +47,17 @@ rule _assemble__drep__run:
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["shortrun"],
+        time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["small"],
         attempt=get_attempt,
+        nvme = config["resources"]["nvme"]["small"]
     params:
         out_dir=DREP,
         completeness=params["assemble"]["drep"]["completeness"],
         contamination=params["assemble"]["drep"]["contamination"],
         P_ani=params["assemble"]["drep"]["P_ani"],
         S_ani=params["assemble"]["drep"]["S_ani"],
+        nc=params["assemble"]["drep"]["nc"],
         extra=params["assemble"]["drep"]["extra"]
     shell:
         """
@@ -87,6 +89,7 @@ rule _assemble__drep__run:
             --contamination {params.contamination} \
             --P_ani {params.P_ani} \
             --S_ani {params.S_ani} \
+            -nc {params.nc} \
             {params.extra} \
             --genomes {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
@@ -129,6 +132,7 @@ rule _assemble__drep__join_genomes:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["shortrun"],
+        nvme = config["resources"]["nvme"]["small"]
     shell:
         """
         ( zcat \
