@@ -23,8 +23,16 @@ rule _contig_annotate__eggnog_find_homology:
     container:
         docker["annotate"]
     shell:""" 
-         cp {params.fa}/eggnog* {params.tmp}  &> {log};
-         emapper.py -m diamond --data_dir {params.tmp} --no_annot --no_file_comments --cpu {threads} -i {input.files} --output_dir {params.folder} -o {params.out}  2>> {log} 1>&2;
+        DATA_DIR="{params.tmp}"
+
+        if [ -z "$DATA_DIR" ]; then
+            DATA_DIR="{params.fa}"
+        else
+            cp {params.fa}/eggnog* {params.tmp} &> {log};
+        fi;
+
+
+         emapper.py -m diamond --data_dir $DATA_DIR --no_annot --no_file_comments --cpu {threads} -i {input.files} --output_dir {params.folder} -o {params.out}  2>> {log} 1>&2;
     """
     
                   
@@ -67,8 +75,16 @@ rule _contig_annotate__eggnog_orthology:
     # Actually, not sure if that makes any sense, I think the files should not be concatenated here, but treated still here concatenated and then rather be merged afterwards
     # For now it is alright, as we annotated approx 650 per seconds (=run takes around a day), but if you ever rerun this step again, change it that it will be processed on the chunks
     # and then merge the chunks!
-       cp {params.fa}/eggnog* {params.tmp}  &>> {log};
-       emapper.py --data_dir {params.tmp} --annotate_hits_table {input} --no_file_comments -o {params.out} --cpu {threads} &> {log}
+
+        DATA_DIR="{params.tmp}"
+
+        if [ -z "$DATA_DIR" ]; then
+            DATA_DIR="{params.fa}"
+        else
+            cp {params.fa}/eggnog* {params.tmp} &> {log};
+        fi;
+        
+       emapper.py --data_dir $DATA_DIR --annotate_hits_table {input} --no_file_comments -o {params.out} --cpu {threads} &> {log}
     """
    
     

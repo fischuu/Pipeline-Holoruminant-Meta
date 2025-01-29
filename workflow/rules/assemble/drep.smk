@@ -48,6 +48,7 @@ rule _assemble__drep__run:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
+        nvme = config["resources"]["nvme"]["small"],
         attempt=get_attempt,
         nvme = config["resources"]["nvme"]["small"]
     params:
@@ -60,6 +61,7 @@ rule _assemble__drep__run:
         extra=params["assemble"]["drep"]["extra"]
     shell:
         """
+        
         rm \
             --recursive \
             --force \
@@ -70,6 +72,16 @@ rule _assemble__drep__run:
             {params.out_dir}/log \
         2> {log}.{resources.attempt} 1>&2
 
+        echo "This is the current TMPDIR: " 2>> {log}.{resources.attempt} 1>&2
+        echo $TMPDIR 2>> {log}.{resources.attempt} 1>&2
+        
+        echo "Value of LOCAL_SCRATCH before export: $LOCAL_SCRATCH" 2>> {log}.{resources.attempt} 1>&2
+
+        export TMPDIR=$LOCAL_SCRATCH 2>> {log}.{resources.attempt} 1>&2
+        
+        echo "This is the current TMPDIR: " 2>> {log}.{resources.attempt} 1>&2
+        echo $TMPDIR 2>> {log}.{resources.attempt} 1>&2
+        
         dRep dereplicate \
             {params.out_dir} \
             --processors {threads} \
