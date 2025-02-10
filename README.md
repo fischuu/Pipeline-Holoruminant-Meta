@@ -135,7 +135,7 @@ If you have downloaded the resources already into another project, you can share
 
 ```
 cd $PROJECTFOLDER
-ln -s /some/other/project/resources resources
+ln -s /project/with/existing/resources resources
 
 ```
 
