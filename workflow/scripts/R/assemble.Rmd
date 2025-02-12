@@ -1,0 +1,335 @@
+---
+title: "Holoruminant MetaG pipeline"
+subtitle: "Assemble module"
+author: "t.b.a."
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    number_sections: true
+    theme: cosmo
+    df_print: paged
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+library("GenomicTools")
+library("xtable")   # Needed for LaTeX output of the tables
+library("viridis")  # Needed for the colouring of the plots
+library("rjson")    # Needed for multiqc dgsb etail data
+library("DT")
+library("kableExtra")
+options(scipen=999,
+        stringsAsFactors=FALSE)
+
+knitr::opts_chunk$set(echo = FALSE,
+                      cache = FALSE,
+                      cache.lazy = FALSE,
+                      dev = c('png', 'pdf'),
+                      fig.align = 'center', fig.height = 5, fig.width = 8.5)
+
+reportColours <- c("#FF8200", "#00B5E2", "#78BE20", "#7F3F98", "#E13C98", "#0033A0", "#54585A")
+
+if(!is.element("snakemake",ls())){
+  features_file <- "/scratch/project_2010176/metaG_groupAssembly/config/features.yaml"
+  project_folder <- "/scratch/project_2010176/metaG_groupAssembly"
+}
+```
+
+```{r, include=FALSE}
+# Init Step to make sure that the dependencies are loaded
+htmltools::tagList(datatable(cars))
+#htmltools::tagList(ggplotly(ggplot()))
+```
+
+```{r}
+sample_sheet <- read.table(file.path(project_folder, "config", "samples.tsv"), header=TRUE) 
+
+nSamples <- nrow(sample_sheet)
+assemblies_list <- unique(sample_sheet$assembly_ids)
+nAssemblies <- length(assemblies_list)
+```
+
+```{r help functions}
+# Define the function that extracts values from the list based on the given field path
+extract_values <- function(input_list, field_path) {
+  
+  # Initialize an empty named vector
+  result_vector <- c()
+  
+  # Loop over each item in the list
+  for (item_name in names(input_list)) {
+    
+    # Construct the full expression to access the desired field
+    field_expr <- paste0("input_list[['", item_name, "']]", field_path)
+    
+    # Evaluate the expression to get the field value
+    field_value <- eval(parse(text = field_expr))
+    
+    # Store the field value in the result vector with the item name
+    result_vector[item_name] <- field_value
+  }
+  
+  # Return the named vector
+  return(result_vector)
+}
+
+number_from_field <- function(vec, x){
+  as.numeric(regmatches(vec[grep(x, vec)], regexpr("\\d+", vec[grep(x, vec)])))
+}
+```
+
+# Overview
+
+The preprocess module runs a couple of tools, mainly:
+
+* megahit/metaspades
+* bowtie2
+* concoct
+* maxbin2
+* metabat2
+* maxscot
+* drep
+
+
+
+
+# Megahit/metaspades
+
+```{r}
+result_matrix_megahit <- matrix(nrow=nAssemblies, ncol=6)
+colnames(result_matrix_megahit) <- 1:6
+rownames(result_matrix_megahit) <- assemblies_list
+
+assembly_run <- 1
+
+
+for(assembly_run in 1:nAssemblies){
+    
+  tmp <- readLines(file.path(file.path(project_folder, "results", "assemble", "megahit", paste0(assemblies_list[assembly_run], ".log" ))))
+    
+  tmp_stats <- tmp[grep("ALL DONE", tmp)-1]
+  
+  tmp_stats <- strsplit(tmp_stats, " - ")[[1]][2]
+  tmp_stats <- strsplit(tmp_stats, ",")[[1]]
+  
+
+  for(i in 1:6) result_matrix_megahit[assembly_run, i ] <- number_from_field(tmp_stats[i], "")
+  
+}
+  
+  colnames(result_matrix_megahit) <- c("Contigs",
+                                      "Total bp",
+                                      "min length",
+                                      "max length",
+                                      "avg length",
+                                      "N50")
+
+
+  tmp <- result_matrix_megahit
+
+  datatable(tmp, extensions = 'Buttons',
+              options = list(dom = 'Blfrtip',
+                             buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                             lengthMenu = list(c(10,25,50,-1),
+                                               c(10,25,50,"All"))))
+
+```
+
+
+# bowtie2
+
+```{r}
+result_matrix_bowtie <- matrix(nrow=nSamples, ncol=8)
+colnames(result_matrix_bowtie) <- 1:8
+rownames(result_matrix_bowtie) <- paste(sample_sheet$sample_id, sample_sheet$library_id, sep="_")
+
+sample_run <- 1
+
+for(sample_run in 1:nSamples){
+  
+  tmp <- readLines(file.path(file.path(project_folder, "results", "assemble", "bowtie2", 
+                                       paste0(sample_sheet$assembly_ids[sample_run], ".", sample_sheet$sample_id[sample_run], ".", sample_sheet$library_id[sample_run], ".log" ))))
+
+  total_reads <- number_from_field(tmp, "reads; of these:")
+  unaligned <- number_from_field(tmp, "aligned concordantly 0 times")[1]
+  multimapped <- number_from_field(tmp, "aligned concordantly >1 times")
+  unique_mapped <- number_from_field(tmp, "aligned concordantly exactly 1 time")
+  
+  result_matrix_bowtie[sample_run, 1] <- sample_sheet$assembly_ids[sample_run]
+  result_matrix_bowtie[sample_run, 2] <- total_reads 
+  result_matrix_bowtie[sample_run, 3] <- unaligned
+  result_matrix_bowtie[sample_run, 4] <- round(unaligned / total_reads,2)
+  result_matrix_bowtie[sample_run, 5] <- multimapped
+  result_matrix_bowtie[sample_run, 6] <- round(multimapped / total_reads,2) 
+  result_matrix_bowtie[sample_run, 7] <- unique_mapped
+  result_matrix_bowtie[sample_run, 8] <- round(unique_mapped / total_reads,2) 
+}
+  
+  colnames(result_matrix_bowtie) <- c("Used assembly",
+                                      "Total reads",
+                                      "Unaligned reads",
+                                      "Unaligned reads (%)",
+                                      "Multimapped reads",
+                                      "Multimapped reads (%)",
+                                      "Uniquely mapped",
+                                      "Uniquely mapped (%)")
+
+
+  tmp <- result_matrix_bowtie
+
+  datatable(tmp, extensions = 'Buttons',
+              options = list(dom = 'Blfrtip',
+                             buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                             lengthMenu = list(c(10,25,50,-1),
+                                               c(10,25,50,"All"))))
+  
+```
+
+# concoct
+
+
+```{r}
+
+get_binning_info <- function(binner="concoct"){
+  result_matrix_binner <- matrix(0, ncol=6, nrow=nAssemblies)
+  colnames(result_matrix_binner) <- 1:6
+  rownames(result_matrix_binner) <- assemblies_list
+  
+  for(assembly_run in 1:nAssemblies){
+
+  fa_files <- list.files(file.path(file.path(project_folder, "results", "assemble", binner, assemblies_list[assembly_run])), pattern="*.fa.gz")
+  
+  bin_stats <- matrix(0, ncol=8, nrow=length(fa_files))
+
+  for(fa_run in 1:length(fa_files)){
+    tmp <- importFA(file.path(file.path(project_folder, "results", "assemble", binner, assemblies_list[assembly_run]), fa_files[fa_run]), verbose = FALSE)
+    summary_tmp <- summary(tmp)
+    bin_stats[fa_run, ] <- as.vector(summary_tmp[2])[[1]]
+  }
+  
+  barplot(bin_stats[,1], main=paste0(binner, " - ", assemblies_list[assembly_run], ", number of contigs in bin"))
+  barplot(bin_stats[,2], main=paste0(binner, " - ", assemblies_list[assembly_run], ", minimum contig length in bin"))
+  barplot(bin_stats[,5], main=paste0(binner, " - ", assemblies_list[assembly_run], ", average contig length in bin"))
+  barplot(bin_stats[,7], main=paste0(binner, " - ", assemblies_list[assembly_run], ", maximum contig length in bin"))
+  barplot(bin_stats[,8], main=paste0(binner, " - ", assemblies_list[assembly_run], ", total contig length in bin"))
+  
+  result_matrix_binner[assembly_run,1] <- length(fa_files)
+  result_matrix_binner[assembly_run,2] <- mean(bin_stats[,1])
+  result_matrix_binner[assembly_run,3] <- mean(bin_stats[,2])
+  result_matrix_binner[assembly_run,4] <- mean(bin_stats[,5])
+  result_matrix_binner[assembly_run,5] <- mean(bin_stats[,7])
+  result_matrix_binner[assembly_run,6] <- mean(bin_stats[,8])
+}
+
+  colnames(result_matrix_binner) <- c("Number of bins",
+                                      "Mean number of contigs in bin",
+                                      "Mean minimum contig lengths",
+                                      "Mean average contig lengths",
+                                      "Mean max contig lengths",
+                                      "Mean total contig length")
+
+  
+  result_matrix_binner
+}
+
+```
+
+
+```{r}
+result_matrix_concoct <- get_binning_info(binner="concoct")
+
+tmp <- result_matrix_concoct
+
+datatable(tmp, extensions = 'Buttons',
+                options = list(dom = 'Blfrtip',
+                               buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                               lengthMenu = list(c(10,25,50,-1),
+                                                 c(10,25,50,"All"))))
+```
+
+
+# maxbin2
+
+```{r}
+result_matrix_maxbin2 <- get_binning_info(binner="maxbin2")
+
+tmp <- result_matrix_maxbin2
+
+datatable(tmp, extensions = 'Buttons',
+                options = list(dom = 'Blfrtip',
+                               buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                               lengthMenu = list(c(10,25,50,-1),
+                                                 c(10,25,50,"All"))))
+```
+
+# metabat2
+
+```{r}
+result_matrix_metabat2 <- get_binning_info(binner="metabat2")
+
+tmp <- result_matrix_metabat2
+
+datatable(tmp, extensions = 'Buttons',
+                options = list(dom = 'Blfrtip',
+                               buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                               lengthMenu = list(c(10,25,50,-1),
+                                                 c(10,25,50,"All"))))
+```
+
+# maxscot
+
+```{r}
+
+result_matrix_magscot <- matrix(0, ncol=5, nrow=nAssemblies)
+colnames(result_matrix_magscot) <- 1:5
+rownames(result_matrix_magscot) <- assemblies_list
+
+assembly_run <- 1
+
+for(assembly_run in 1:nAssemblies){
+  fa_file <- file.path(file.path(project_folder, "results", "assemble", "magscot", paste0(assemblies_list[assembly_run], ".fa.gz")))
+    
+  tmp <- importFA(fa_file, verbose = FALSE)
+  summary_tmp <- summary(tmp)
+  bin_stats <- as.vector(summary_tmp[2])[[1]]
+  
+  result_matrix_magscot[assembly_run,1] <- bin_stats[1]
+  result_matrix_magscot[assembly_run,2] <- bin_stats[2]
+  result_matrix_magscot[assembly_run,3] <- bin_stats[5]
+  result_matrix_magscot[assembly_run,4] <- bin_stats[7]
+  result_matrix_magscot[assembly_run,5] <- bin_stats[8]
+  
+  
+    colnames(result_matrix_magscot) <- c("Mean number of contigs in bin",
+                                        "Mean minimum contig lengths",
+                                        "Mean average contig lengths",
+                                        "Mean max contig lengths",
+                                        "Mean total contig length")
+}
+  
+tmp <- result_matrix_magscot
+
+datatable(tmp, extensions = 'Buttons',
+                options = list(dom = 'Blfrtip',
+                               buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                               lengthMenu = list(c(10,25,50,-1),
+                                                 c(10,25,50,"All"))))
+```
+
+
+And now still the scores
+
+```{r}
+assembly_run <- 1
+
+for(assembly_run in 1:nAssemblies){
+  
+tmp <- read.table(file.path(file.path(project_folder, "results", "assemble", "magscot", assemblies_list[assembly_run],"magscot.scores.out")), header=TRUE)
+
+```
+# drep
+
+

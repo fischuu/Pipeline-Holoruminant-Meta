@@ -4,6 +4,7 @@ include: "diamond.smk"
 include: "fastp.smk"
 include: "fastqc.smk"
 include: "kraken2.smk"
+include: "krona.smk"
 include: "humann.smk"
 include: "metaphlan.smk"
 include: "phyloflash.smk"
@@ -18,6 +19,7 @@ rule preprocess:
         rules.preprocess__diamond.input,
         rules.preprocess__fastp.input,
         rules.preprocess__kraken2.input,
+        rules.preprocess__krona.input,
         rules.preprocess__humann.input,
         rules.preprocess__metaphlan.input,
         rules.preprocess__nonpareil.input,

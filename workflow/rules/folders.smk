@@ -26,6 +26,7 @@ PHYLOFLASH = PRE / "phyloflash/"
 SINGLEM = PRE / "singlem/"
 PRE_COVERM = PRE / "coverm/"
 KRAKEN2 = PRE / "kraken2/"
+KRONA = PRE / "krona"
 DIAMOND = PRE / "diamond/"
 
 # assemble
@@ -60,7 +61,7 @@ BAKTA = ANN / "bakta"
 EGGNOG = ANN / "eggnog"
 PHYLOPHLAN = ANN / "phylophlan"
 PROTEINORTHO = ANN / "proteinortho"
-PROTEINORTHO_NEW = ANN / "proteinortho_new"
+#PROTEINORTHO_NEW = ANN / "proteinortho_new"
 SYLPH = ANN / "sylph"
 
 # contig annotation

@@ -50,7 +50,6 @@ rule _assemble__drep__run:
         time =  config["resources"]["time"]["longrun"],
         nvme = config["resources"]["nvme"]["small"],
         attempt=get_attempt,
-        nvme = config["resources"]["nvme"]["small"]
     params:
         out_dir=DREP,
         completeness=params["assemble"]["drep"]["completeness"],

@@ -184,7 +184,6 @@ rule _assemble__magscot__merge_contig_to_bin:
         done >> {output} 2>> {log}
         """
 
-# The refined are commented out for testing runs, when there are too few contigs, the refinement
 rule _assemble__magscot__run:
     """Run MAGSCOT over one assembly"""
     input:
@@ -224,8 +223,6 @@ rule _assemble__magscot__run:
             --threshold {params.th} \
          2> {log} 1>&2 
          
-#        touch {output.ar53} {output.bac120} {output.refined_contig_to_bin} {output.refined_out} {output.scores};
-        
         echo $? >> {log}
         
         """
