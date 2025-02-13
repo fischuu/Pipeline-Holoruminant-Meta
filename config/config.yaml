@@ -32,6 +32,7 @@ resources:
     mem_per_cpu:
         krakenmem: 140000  # We use /dev/shm, make sure there is enough RAM on node to host the database! between 100GB and 1.5TB!
         veryhighmem: 1400000
+        quitehighmem: 320000
         highmem: 160000
         lowmem: 16000
 # CPU settings for single thread and multi thread jobs

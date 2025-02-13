@@ -26,7 +26,7 @@ PHYLOFLASH = PRE / "phyloflash/"
 SINGLEM = PRE / "singlem/"
 PRE_COVERM = PRE / "coverm/"
 KRAKEN2 = PRE / "kraken2/"
-KRONA = PRE / "krona"
+KRONA = PRE / "krona/"
 DIAMOND = PRE / "diamond/"
 
 # assemble

@@ -31,7 +31,7 @@ rule _preprocess__phyloflash__run:
                       -lib {params.lib} -CPUs {threads} \
                       -read1 {input.forward_} \
                       -read2 {input.reverse_} \
-                      -almosteverything
+                      -almosteverything 2> {log} 1>&2
 
         mkdir -p {params.outdir}
         mv {params.lib}.* {params.outdir}
