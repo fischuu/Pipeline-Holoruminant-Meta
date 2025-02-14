@@ -20,7 +20,7 @@ rule _preprocess__krona__visualize:
         docker["preprocess"]
     shell:
         """
-         ImportTaxonomy.pl -q 2 -t 3 {input} -o {output} 2> {log} 1>&2
+         ktImportTaxonomy.pl -q 2 -t 3 {input} -o {output} 2> {log} 1>&2
         """
 
 rule preprocess__krona:
