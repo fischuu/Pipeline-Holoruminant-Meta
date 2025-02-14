@@ -26,6 +26,7 @@ databases:
   kraken2:  # add entries as necessary, intended by two spaces
     # refseq500: resources/databases/kraken2/kraken2_RefSeqV205_Complete_500GB # This db requires about 1.4TB of RAM
     standard: resources/databases/kraken2/kraken2_Standard_20240112  # This db requires about 140GB of RAM
+  krona: resources/databases/krona
   metaphlan4: resources/databases/metaphlan4/
   phyloflash: resources/databases/phyloflash/138.1
   phylophlan: # add entries as necessary, intended by two spaces

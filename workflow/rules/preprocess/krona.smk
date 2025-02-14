@@ -18,9 +18,11 @@ rule _preprocess__krona__visualize:
         "__environment__.yml"
     container:
         docker["preprocess"]
+    params:
+        krona_db = features["databases"]["krona"],
     shell:
         """
-         ktImportTaxonomy.pl -q 2 -t 3 {input} -o {output} 2> {log} 1>&2
+         ktImportTaxonomy -q 2 -t 3 {input} -o {output} --tax {params.krona_db} 2> {log} 1>&2
         """
 
 rule preprocess__krona:

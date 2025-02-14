@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+23: Krona plots added for kraken2
 22: Eggnog does not throw an error anymore in case that no fast nvme tmp folder is provided
 21: Added the camper module to annotate
 20: In annotate/GTDB-TK the annot and classify folders won't be deleted anymore
