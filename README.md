@@ -94,9 +94,10 @@ unpacking the files, as this will significantly increase the speed.
   wget https://a3s.fi/Holoruminant-data/2024.09.18.metaphlan4.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.phylophlan.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.checkm2.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.dram.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.01.28.dram.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.gtdbtk.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.kraken2.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.02.14.krona.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.phyloflash.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.singlem.tar.gz
 
@@ -108,9 +109,10 @@ unpacking the files, as this will significantly increase the speed.
   tar -xvf 2024.09.18.metaphlan4.tar.gz
   tar -xvf 2024.09.18.phylophlan.tar.gz
   tar -xvf 2024.09.18.checkm2.tar.gz
-  tar -xvf 2024.09.18.dram.tar.gz
+  tar -xvf 2025.01.28.dram.tar.gz
   tar -xvf 2024.09.18.gtdbtk.tar.gz
   tar -xvf 2024.09.18.kraken2.tar.gz
+  tar -xvf 2025.02.14.krona.tar.gz
   tar -xvf 2024.09.18.phyloflash.tar.gz
   tar -xvf 2024.09.18.singlem.tar.gz
 
