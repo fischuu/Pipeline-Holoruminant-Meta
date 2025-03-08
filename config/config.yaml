@@ -26,7 +26,7 @@ resources:
 # Time allocations in minutes, for rules that run only short, long or very long 
     time:
         shortrun: 300 
-        longrun: 1800
+        longrun: 4000
         verylongrun: 20000
 # Memory allocations in MB for different profiles
     mem_per_cpu:
