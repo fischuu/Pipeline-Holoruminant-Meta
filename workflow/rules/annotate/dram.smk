@@ -33,6 +33,10 @@ rule _annotate__dram__annotate:
         """
         rm -rf {params.tmp_dir}
         
+        echo "Hostname: $(hostname)" 2>> {log} 1>&2
+        echo "Temporary directory: $TMPDIR" 2>> {log} 1>&2
+        df -h 2>> {log} 1>&2
+        
         DRAM.py annotate \
                 --config_loc {params.config} \
                 --input_fasta {input.dereplicated_genomes} \

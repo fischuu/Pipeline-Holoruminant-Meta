@@ -27,11 +27,16 @@ rule _preprocess__phyloflash__run:
         outdir=PHYLOFLASH
     shell:
         """
+        echo "Using temporary directory: $TMPDIR" 2> {log} 1>&2
+        df -h $TMPDIR 2>> {log} 1>&2
+        ls -lah $TMPDIR 2>> {log} 1>&2
+
+        
         phyloFlash.pl -dbhome {input.phyloflash_dbs} \
                       -lib {params.lib} -CPUs {threads} \
                       -read1 {input.forward_} \
                       -read2 {input.reverse_} \
-                      -almosteverything 2> {log} 1>&2
+                      -almosteverything 2>> {log} 1>&2
 
         mkdir -p {params.outdir}
         mv {params.lib}.* {params.outdir}

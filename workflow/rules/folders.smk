@@ -61,7 +61,6 @@ BAKTA = ANN / "bakta"
 EGGNOG = ANN / "eggnog"
 PHYLOPHLAN = ANN / "phylophlan"
 PROTEINORTHO = ANN / "proteinortho"
-#PROTEINORTHO_NEW = ANN / "proteinortho_new"
 SYLPH = ANN / "sylph"
 
 # contig annotation

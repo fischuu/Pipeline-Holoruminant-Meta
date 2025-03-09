@@ -26,11 +26,11 @@ rule _annotate__phylophlan_run:
 
             mkdir -p {output}
 
-            phylophlan_assign_sgbs -i -i {input} \
+            phylophlan_assign_sgbs -i {input} \
                                    -e fa \
                                    -d SGB.Jun23 
                                    --database_folder resources/databases/phylophlan/ 
-                                   --output_folder {output} \
+                                   -o {output} \
                                    --nproc {threads} \
                                    --verbose \
                                    --overwrite \
