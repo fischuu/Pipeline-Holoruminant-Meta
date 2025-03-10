@@ -3,7 +3,7 @@ rule _annotate__proteinortho_splitfaa:
     input:
         BAKTA / "bakta.faa",
     output:
-        directory(BAKTA / "faa"),
+        temp(directory(BAKTA / "faa")),
     log:
         PROTEINORTHO / "proteinortho_splitfaa.log",
     resources:
