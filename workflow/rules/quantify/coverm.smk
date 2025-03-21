@@ -1,4 +1,4 @@
-rule _quantify__coverm__genome:
+rule quantify__coverm__genome_run:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -39,7 +39,7 @@ rule _quantify__coverm__genome:
         """
 
 
-rule _quantify__coverm__genome_aggregate:
+rule quantify__coverm__genome_aggregate:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_genome,
@@ -76,7 +76,7 @@ rule quantify__coverm__genome:
 
 
 # coverm contig ----
-rule _quantify__coverm__contig:
+rule quantify__coverm__contig_one:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -109,7 +109,7 @@ rule _quantify__coverm__contig:
         """
 
 
-rule _quantify__coverm__contig_aggregate:
+rule quantify__coverm__contig_aggregate:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_contig,

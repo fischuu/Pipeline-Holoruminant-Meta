@@ -1,4 +1,4 @@
-rule _report__sample__multiqc:
+rule report__sample__multiqc:
     input:
         get_stats_files_from_sample_and_library_ids,
     output:

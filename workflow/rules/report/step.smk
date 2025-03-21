@@ -1,4 +1,4 @@
-rule _report__step__reads:
+rule report__step__reads:
     """Collect all reports for the reads step"""
     input:
         rules.reads__fastqc.input,
@@ -27,7 +27,7 @@ rule _report__step__reads:
         """
 
 
-rule _report__step__preprocess:
+rule report__step__preprocess:
     """Collect all reports for the preprocessing step"""
     input:
         rules.preprocess__fastp.input.json,
@@ -65,7 +65,7 @@ rule _report__step__preprocess:
         """
 
 
-rule _report__step__assemble:
+rule report__step__assemble:
     """Collect all reports from the assemble step"""
     input:
         QUAST,
@@ -93,7 +93,7 @@ rule _report__step__assemble:
         """
 
 
-rule _report__step__quantify:
+rule report__step__quantify:
     """Collect all reports from the quantify step"""
     input:
         rules.quantify__samtools.input,

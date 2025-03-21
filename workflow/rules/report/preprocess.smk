@@ -1,4 +1,4 @@
-rule _report__preprocess:
+rule report__preprocess:
     """
     Create the pipeline report for the preproces module (R).
     """

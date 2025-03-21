@@ -1,4 +1,4 @@
-rule _reference__hosts__recompress:
+rule reference__hosts__recompress:
     """Recompress the reference with bgzip"""
     input:
         fa_gz=lambda wildcards: features["hosts"][wildcards.genome],

@@ -1,4 +1,4 @@
-rule _quantify__bowtie2__build:
+rule quantify__bowtie2__build:
     """Index dereplicader"""
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",
@@ -25,7 +25,7 @@ rule _quantify__bowtie2__build:
         """
 
 
-rule _quantify__bowtie2__map:
+rule quantify__bowtie2__map:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=QUANT_INDEX / "dereplicated_genomes",

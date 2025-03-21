@@ -1,4 +1,4 @@
-rule _quantify__samtools__stats_cram:
+rule quantify__samtools__stats_cram:
     """Get stats from CRAM files using samtools stats."""
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",

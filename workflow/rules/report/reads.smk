@@ -1,4 +1,4 @@
-rule _report__reads:
+rule report__reads:
     """
     Create the pipeline report for the reads module (R).
     """
