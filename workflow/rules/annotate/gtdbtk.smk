@@ -1,4 +1,4 @@
-rule _annotate__gtdbtk__classify:
+rule annotate__gtdbtk__classify:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:
         fasta_folder=DREP / "dereplicated_genomes",
@@ -81,4 +81,4 @@ rule _annotate__gtdbtk__classify:
 rule annotate__gtdbtk:
     """Run the gtdbtk subworkflow"""
     input:
-        rules._annotate__gtdbtk__classify.output,
+        rules.annotate__gtdbtk__classify.output,

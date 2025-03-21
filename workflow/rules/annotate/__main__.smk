@@ -10,11 +10,11 @@ include: "phylophlan.smk"
 rule annotate:
     """Evaluate the dereplication steps"""
     input:
-        rules._annotate__bakta.output,
-        rules._annotate__eggnog.output,
+        rules.annotate__bakta.output,
+        rules.annotate__eggnog.output,
         rules.annotate__quast.output,
-        rules._annotate__checkm2__predict.output,
-        rules._annotate__gtdbtk__classify.output,
+        rules.annotate__checkm2__predict.output,
+        rules.annotate__gtdbtk__classify.output,
         rules.annotate__dram.input,
-        rules._annotate__proteinortho.output,
-        rules._annotate__phylophlan_run.output,
+        rules.annotate__proteinortho.output,
+        rules.annotate__phylophlan.output,

@@ -1,4 +1,4 @@
-rule _annotate__phylophlan_run:
+rule annotate__phylophlan:
     """
     Run phylophlan for the dereplicated genomes
     """
@@ -37,11 +37,6 @@ rule _annotate__phylophlan_run:
                                    2>> {log} 1>&2
 
       """
-
-rule _annotate__phylophlan:
-    """Run phylophlan over all databases."""
-    input:
-        
         
 # THIS RULE IS BUGGY AND NEEDS REFINEMENT TO BUILD THE PHYLOGENY
 #

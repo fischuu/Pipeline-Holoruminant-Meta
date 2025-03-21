@@ -1,4 +1,4 @@
-rule _annotate__proteinortho_splitfaa:
+rule annotate__proteinortho_splitfaa:
     """Split bakta output to individual files"""
     input:
         BAKTA / "bakta.faa",
@@ -21,7 +21,7 @@ rule _annotate__proteinortho_splitfaa:
         """
 
 
-rule _annotate__proteinortho:
+rule annotate__proteinortho:
     """Run Proteinortho over the bakta output"""
     input:
         BAKTA / "faa",

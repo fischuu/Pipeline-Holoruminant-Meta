@@ -1,4 +1,4 @@
-rule _annotate__bakta:
+rule annotate__bakta:
     """Run Bakta over the dereplicated mags"""
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",

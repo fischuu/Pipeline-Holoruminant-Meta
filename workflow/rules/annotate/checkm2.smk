@@ -1,4 +1,4 @@
-rule _annotate__checkm2__predict:
+rule annotate__checkm2__predict:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=DREP / "dereplicated_genomes",
@@ -40,4 +40,4 @@ rule _annotate__checkm2__predict:
 rule annotate__checkm2:
     """Run CheckM2"""
     input:
-        rules._annotate__checkm2__predict.output,
+        rules.annotate__checkm2__predict.output,

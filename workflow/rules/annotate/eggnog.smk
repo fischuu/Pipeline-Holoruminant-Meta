@@ -1,4 +1,4 @@
-rule _annotate__eggnog:
+rule annotate__eggnog:
     """Run eggnog over the dereplicated mags"""
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",
