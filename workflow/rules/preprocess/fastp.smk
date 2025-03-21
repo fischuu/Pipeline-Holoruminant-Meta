@@ -1,4 +1,4 @@
-rule _preprocess__fastp__run:
+rule preprocess__fastp__run:
     """Run fastp on one library"""
     input:
         forward_=READS / "{sample_id}.{library_id}_1.fq.gz",

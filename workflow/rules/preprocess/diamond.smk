@@ -1,4 +1,4 @@
-rule _preprocess__diamond__assign:
+rule preprocess__diamond__assign:
     """
     Run Diamond
     """

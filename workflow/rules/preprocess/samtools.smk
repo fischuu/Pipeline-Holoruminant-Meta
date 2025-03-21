@@ -1,4 +1,4 @@
-rule _preprocess__samtools__stats_cram:
+rule preprocess__samtools__stats_cram:
     """Compute the stats of a cram file using samtools stats"""
     input:
         cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",

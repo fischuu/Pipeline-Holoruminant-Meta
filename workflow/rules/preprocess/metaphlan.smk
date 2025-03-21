@@ -1,4 +1,4 @@
-rule _preprocess__metaphlan__run:
+rule preprocess__metaphlan__run:
     """Run metaphlan over one sample
     """
     input:
@@ -36,7 +36,7 @@ rule _preprocess__metaphlan__run:
         """
 
 
-rule _preprocess__metaphlan__condense:
+rule preprocess__metaphlan__condense:
     """Aggregate all the metaphlan results into a single table"""
     input:
         profiled_data=[
@@ -66,4 +66,4 @@ rule _preprocess__metaphlan__condense:
 
 rule preprocess__metaphlan:
     input:
-        rules._preprocess__metaphlan__condense.output
+        rules.preprocess__metaphlan__condense.output

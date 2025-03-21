@@ -1,4 +1,4 @@
-rule _preprocess__krona__visualize:
+rule preprocess__krona__visualize:
     """
     Create Krona plots for Kraken2 output.
     """

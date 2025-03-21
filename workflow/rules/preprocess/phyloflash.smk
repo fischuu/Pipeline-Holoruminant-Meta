@@ -1,4 +1,4 @@
-rule _preprocess__phyloflash__run:
+rule preprocess__phyloflash__run:
     """Run PhyloFlash over one sample
     """
     input:
@@ -43,7 +43,7 @@ rule _preprocess__phyloflash__run:
         """
 
 
-rule _preprocess__phyloflash__condense:
+rule preprocess__phyloflash__condense:
     """Aggregate all the PhyloFlash results into a single table"""
     input:
         genefamily_data=[
@@ -72,4 +72,4 @@ rule _preprocess__phyloflash__condense:
 
 rule preprocess__phyloflash:
     input:
-        rules._preprocess__phyloflash__condense.output
+        rules.preprocess__phyloflash__condense.output

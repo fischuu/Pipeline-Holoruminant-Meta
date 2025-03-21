@@ -1,4 +1,4 @@
-rule _preprocess__kraken2__assign:
+rule preprocess__kraken2__assign:
     """
     Run kraken2 over all samples at once using the /dev/shm/ trick.
 

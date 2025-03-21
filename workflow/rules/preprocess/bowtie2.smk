@@ -1,4 +1,4 @@
-rule _preprocess__bowtie2__build:
+rule preprocess__bowtie2__build:
     """Build PRE_BOWTIE2 index for the host reference
 
     Let the script decide to use a small or a large index based on the size of

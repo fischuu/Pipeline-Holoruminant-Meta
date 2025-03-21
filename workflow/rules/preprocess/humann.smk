@@ -1,4 +1,4 @@
-rule _preprocess__humann__run:
+rule preprocess__humann__run:
     """Run HumanN3 over one sample
     """
     input:
@@ -46,7 +46,7 @@ rule _preprocess__humann__run:
         """
 
 
-rule _preprocess__humann__condense:
+rule preprocess__humann__condense:
     """Aggregate all the HumanN results into a single table"""
     input:
         genefamily_data=[
@@ -75,4 +75,4 @@ rule _preprocess__humann__condense:
 
 rule preprocess__humann:
     input:
-        rules._preprocess__humann__condense.output
+        rules.preprocess__humann__condense.output

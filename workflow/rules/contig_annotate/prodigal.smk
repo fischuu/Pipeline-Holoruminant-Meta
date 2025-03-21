@@ -1,4 +1,4 @@
-rule contig_annotate__prodigal:
+rule contig_annotate__prodigal_run:
     """
     Predict genes from assemblies (PRODIGAL).
     """
