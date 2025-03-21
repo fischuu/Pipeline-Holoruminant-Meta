@@ -17,7 +17,7 @@ rule preprocess__krona__visualize:
     conda:
         "__environment__.yml"
     container:
-        docker["preprocess"]
+        docker["krona"]
     params:
         krona_db = features["databases"]["krona"],
     shell:
