@@ -1,4 +1,4 @@
-rule _contig_annotate__cramToBam_:
+rule contig_annotate__cramToBam:
     """Create temporary bam-files for quantification"""
     input:
         ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram"
@@ -22,7 +22,7 @@ rule _contig_annotate__cramToBam_:
         """
 
 
-rule _contigAnnotate__featureCounts:
+rule contig_annotate__featureCounts:
     """
     Quantify the mapped assembly reads in predicted genes (featureCounts).
     """

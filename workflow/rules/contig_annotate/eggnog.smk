@@ -1,4 +1,4 @@
-rule _contig_annotate__eggnog_find_homology:
+rule contig_annotate__eggnog_find_homology:
     """
     Find homolog genes in data (EGGNOG).
     """
@@ -36,7 +36,7 @@ rule _contig_annotate__eggnog_find_homology:
     """
     
                   
-rule _contig_annotate__aggregate_assemblies_eggnog:
+rule contig_annotate__aggregate_assemblies_eggnog:
     input:
         _contig_annotate_aggregate_assembly_eggnog_search,
     output:
@@ -49,7 +49,7 @@ rule _contig_annotate__aggregate_assemblies_eggnog:
        cat {input} > {output} 2> {log}
     """
     
-rule _contig_annotate__eggnog_orthology:
+rule contig_annotate__eggnog_orthology:
     """
     Find orthology and annotate (EGGNOG).
     """
@@ -88,7 +88,7 @@ rule _contig_annotate__eggnog_orthology:
     """
    
     
-rule contig_assemble__eggnog:
+rule contig_annotate__eggnog:
     """Run eggnog on all assemblies"""
     input:
         [CONTIG_EGGNOG / "{assembly_id}/eggnog_output.emapper.annotations" for assembly_id in ASSEMBLIES],

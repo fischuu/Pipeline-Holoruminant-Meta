@@ -1,4 +1,4 @@
-rule _contigAnnotate__prodigal:
+rule contig_annotate__prodigal:
     """
     Predict genes from assemblies (PRODIGAL).
     """
@@ -29,7 +29,7 @@ rule _contigAnnotate__prodigal:
          grep -v '^#' {output.gtf} > {output.gtfplain}
     """
     
-checkpoint _contigAnnotate__cut_prodigal:
+checkpoint contig_annotate__cut_prodigal:
     """
     Cut prodigal output into smaller contigs (BASH).
     """
@@ -55,7 +55,7 @@ checkpoint _contigAnnotate__cut_prodigal:
        {params.folder}/workflow/scripts/cutProdigal.sh {params.split} {params.out} {input} 2>> {log} 1>&2
     """    
     
-rule contig_assemble__prodigal:
+rule contig_annotate__prodigal:
     """Run prodigal on all assemblies"""
     input:
         [CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.prodigal.fa" for assembly_id in ASSEMBLIES],
