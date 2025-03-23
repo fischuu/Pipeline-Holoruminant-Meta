@@ -16,7 +16,7 @@ rule preprocess__bowtie2__build:
     conda:
         "__environment__.yml"
     container:
-        docker["preprocess"]
+        docker["bowtie2"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
@@ -63,7 +63,7 @@ rule _preprocess__bowtie2__map:
     conda:
         "__environment__.yml"
     container:
-        docker["preprocess"]
+        docker["bowtie2"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
@@ -120,7 +120,7 @@ rule _preprocess__bowtie2__extract_nonhost:
     conda:
         "__environment__.yml"
     container:
-        docker["preprocess"]
+        docker["bowtie2"]
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
@@ -170,7 +170,7 @@ rule _preprocess__store_final_fastq:
     conda:
         "__environment__.yml"
     container:
-        docker["preprocess"]
+        docker["bowtie2"]
     threads: config["resources"]["cpu_per_task"]["single_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],

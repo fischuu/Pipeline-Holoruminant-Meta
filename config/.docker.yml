@@ -3,6 +3,7 @@
 ---
 annotate: "docker://fischuu/hrp_annotate:0.4"
 assemble: "docker://fischuu/hrp_assemble:0.2"
+bowtie2: "docker://fischuu/hrp_bowtie2:0.1"
 checkm2: "docker://fischuu/hrp_checkm2:0.1"
 camper: "docker://fischuu/hrp_camper:0.1"
 concoct: "docker://fischuu/hrp_concoct:0.1"
