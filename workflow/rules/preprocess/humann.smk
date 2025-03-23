@@ -17,7 +17,7 @@ rule preprocess__humann__run:
     conda:
         "__environment__.yml"
     container:
-        docker["preprocess"]
+        docker["humann"]
     params:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
@@ -62,7 +62,7 @@ rule preprocess__humann__condense:
     conda:
         "__environment__.yml"
     container:
-        docker["preprocess"]
+        docker["humann"]
     params:
         input_dir=HUMANN,
     resources:
