@@ -3,7 +3,9 @@
 
 Version 0.3.*:
 --------------
-26: Names of many rules were adjusted to follow a similaru naming scheme
+28: Bowtie2 and Humann2 were moved to own docker container 
+27: Added camper to contig_annotate
+26: Names of many rules were adjusted to follow a similary naming scheme
 25: Krona got an own singularity image, as it downversion bowtie2 in the same image for some reason
 24: Re-enabled the splif-fasta for proteinortho input
 23: Krona plots added for kraken2
