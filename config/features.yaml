@@ -15,6 +15,7 @@ magscot:
 
 databases:
   bakta: resources/databases/bakta/db
+  camper: resources/databases/camper
   checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
   diamond: # add entries as necessary, intended by two spaces
     cazy: resources/databases/diamond/CAZyDB.07142024.dmnd
