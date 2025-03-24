@@ -27,8 +27,6 @@ rule contig_annotate__camper__annotate:
 	                      --camper_fa_db_cutoffs_loc {params.camper_db}/CAMPER_blast_scores.tsv \
 	                      --camper_hmm_loc {params.camper_db}/CAMPER.hmm  \
                         --camper_hmm_cutoffs_loc {params.camper_db}/CAMPER_hmm_scores.tsv \
-                        camper_annotate -i my_genes.faa -o my_output \
-	
         2>> {log} 1>&2
 
         #camper_distill  -a <path to annotations.tsv> -o <name of output.tsv>
