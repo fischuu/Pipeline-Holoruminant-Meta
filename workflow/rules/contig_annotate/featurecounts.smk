@@ -22,7 +22,7 @@ rule contig_annotate__cramToBam:
         """
 
 
-rule contig_annotate__featureCounts:
+rule contig_annotate__featurecounts_run:
     """
     Quantify the mapped assembly reads in predicted genes (featureCounts).
     """
@@ -50,7 +50,7 @@ rule contig_annotate__featureCounts:
     """
     
     
-rule contig_annotate__featurecount:
+rule contig_annotate__featurecounts:
     """Quantify all samples for all the assemblies that they belong to"""
     input:
         [

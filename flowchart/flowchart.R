@@ -1,4 +1,6 @@
-library(DiagrammeR)
+library("DiagrammeR")
+library("DiagrammeRsvg")
+library("rsvg")
 
 # Create a DiagrammeR graph
 graph <- grViz("
@@ -24,6 +26,7 @@ graph <- grViz("
     pre_nonpareil [label = 'Nonpareil, v.3.4.1']
     pre_singlem [label = 'SingleM, v0.18.0 \n S4.3.0.GTDB_r220.metapackage_20240523']
     pre_diamond [label = 'Diamond, v.2.1.8 \n Cazy 07142024']
+    pre_krona [label = 'Krona, v.x.x.x']
 
     # Define assembly nodes
     ass_bowtie2 [label = 'Bowtie2, v2.5.1']
@@ -37,6 +40,7 @@ graph <- grViz("
 
     # Define annotation nodes
     annotate_bakta [label = 'Bakta, v1.9.3']
+    annotate_camper [label = 'Camper, v1.0.0']
     annotate_quast [label = 'QUAST, v5.2.0']
     annotate_gtdbtk [label = 'GTDB-Tk, v2.4.0 \n Release 220']
     annotate_dram [label = 'DRAM, v1.5.0 \n 20240524', fillcolor = 'red']
@@ -50,6 +54,7 @@ graph <- grViz("
     contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
     contig_annotate_eggnog [label = 'Eggnog, v2.1.12 \n emapperdb-5.0.2']
     contig_annotate_bowtie [label = 'Bowtie, v2.5.1']
+    contig_annotate_camper [label = 'Camper, v1.0.0']
     contig_annotate_feature [label = 'FeatureCounts, v2.0.1']
 
 #    dram_dbs [label = 'DRAM DBs \n
@@ -99,6 +104,7 @@ graph <- grViz("
     pre_bowtie2 -> pre_singlem
     pre_bowtie2 -> ass_assembler_rep
     pre_bowtie2 -> pre_diamond
+    pre_kraken2 -> pre_krona
     
     # Define edges for assembly
     ass_assembly -> ass_bowtie2
@@ -135,11 +141,13 @@ graph <- grViz("
     ass_drep -> annotate_quast
     ass_drep -> annotate_sylph
 #    dram_dbs -> annotate_dram
+    annotate_dram -> annotate_camper
 
     # Define the edges for contig annotate
     ass_assembly -> contig_annotate_prodigal
     contig_annotate_prodigal -> contig_annotate_eggnog
     contig_annotate_prodigal -> contig_annotate_bowtie
+    contig_annotate_prodigal -> contig_annotate_camper
     ass_assembly -> contig_annotate_bowtie
     contig_annotate_bowtie -> contig_annotate_feature
     
@@ -157,6 +165,7 @@ graph <- grViz("
       pre_fastp
       pre_fastqc
       pre_kraken2
+      pre_krona
       pre_humann
       pre_metaphlan
       pre_phyloflash
@@ -230,6 +239,7 @@ graph <- grViz("
       color = lightgray
 
       contig_annotate_prodigal
+      contig_annotate_camper
       contig_annotate_eggnog
       contig_annotate_bowtie
       contig_annotate_feature
@@ -242,6 +252,7 @@ graph <- grViz("
       color = lightgray
 
       annotate_bakta
+      annotate_camper
       annotate_quast
       annotate_gtdbtk
       annotate_dram
@@ -254,12 +265,17 @@ graph <- grViz("
   }
 ")
 
+# Convert to SVG and save as PNG
+graph_svg <- export_svg(graph)
+rsvg_png(charToRaw(graph_svg), "flowchart/flowchart.png", width = 2876, height = 872)
+
+
 # Render the graph
 graph
 
 # Export to SVG
-#svg_code <- export_svg(graph)
+svg_code <- export_svg(graph)
 
 # Save as an HTML file
-#html_code <- paste0('<html><body>', svg_code, '</body></html>')
-#write(html_code, file = "pipeline_diagram.html")
+html_code <- paste0('<html><body>', svg_code, '</body></html>')
+write(html_code, file = "pipeline_diagram.html")

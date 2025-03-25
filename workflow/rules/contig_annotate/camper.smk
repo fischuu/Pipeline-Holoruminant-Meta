@@ -13,20 +13,26 @@ rule contig_annotate__camper__annotate:
     params:
         out_dir=CAMPER,
         camper_db=features["databases"]["camper"],
+        nvme=config["nvme_storage"],
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
+        nvme = config["resources"]["nvme"]["small"]
     shell:
         """
+        
+        cp {params.camper_db}/* {params.nvme} \
+        2>> {log} 1>&2
+        
         camper_annotate -i {input} \
                         -o {output} \
                         --threads {threads} \
-                        --camper_fa_db_loc {params.camper_db}/CAMPER_blast.faa \
-	                      --camper_fa_db_cutoffs_loc {params.camper_db}/CAMPER_blast_scores.tsv \
-	                      --camper_hmm_loc {params.camper_db}/CAMPER.hmm  \
-                        --camper_hmm_cutoffs_loc {params.camper_db}/CAMPER_hmm_scores.tsv \
+                        --camper_fa_db_loc {params.nvme}/CAMPER_blast.faa \
+	                      --camper_fa_db_cutoffs_loc {params.nvme}/CAMPER_blast_scores.tsv \
+	                      --camper_hmm_loc {params.nvme}/CAMPER.hmm  \
+                        --camper_hmm_cutoffs_loc {params.nvme}/CAMPER_hmm_scores.tsv \
         2>> {log} 1>&2
 
         #camper_distill  -a <path to annotations.tsv> -o <name of output.tsv>
