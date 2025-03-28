@@ -260,6 +260,17 @@ bash run_Pipeline-Holoruminant-meta.sh preprocess
 bash run_Pipeline-Holoruminant-meta.sh report_preprocess
 ```
 
+The command `preprocess` triggers the analysis of the entire preprocess submodule. However, individual tools can be called instead by running
+
+```
+bash run_Pipeline-Holoruminant-meta.sh preprocess__diamond
+bash run_Pipeline-Holoruminant-meta.sh preprocess__krona
+...
+```
+
+The underlying syntax is that an individual tool is always called by module name, followed by two underscores and the tool name. Please bear in mind that the pipeline automatically runs the required pre-steps. This syntax hold through-out the entire pipeline and can be used to run only subparts of the pipeline.
+
+
 ## assemble-module
 This module runs all the assembly related tasks, like creating the metagenome and then the binning and combination of different binners.
 
