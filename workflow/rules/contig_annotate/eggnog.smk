@@ -38,7 +38,7 @@ rule contig_annotate__eggnog_find_homology:
                   
 rule contig_annotate__aggregate_assemblies_eggnog:
     input:
-        _contig_annotate_aggregate_assembly_eggnog_search,
+        contig_annotate_aggregate_assembly_eggnog_search,
     output:
         CONTIG_EGGNOG / "{assembly_id}/prodigal.emapper.seed_orthologs"
     log:

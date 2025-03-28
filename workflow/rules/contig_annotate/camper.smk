@@ -3,7 +3,7 @@ rule contig_annotate__camper__annotate:
     input:
         fa=CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.prodigal.fa",
     output:
-        annotation = CONTIG_CAMPER / "{assembly_id}"
+        annotation = directory(CONTIG_CAMPER / "{assembly_id}")
     log:
         CONTIG_CAMPER / "{assembly_id}.log",
     conda:
@@ -30,15 +30,18 @@ rule contig_annotate__camper__annotate:
                         -o {output} \
                         --threads {threads} \
                         --camper_fa_db_loc {params.nvme}/CAMPER_blast.faa \
-	                      --camper_fa_db_cutoffs_loc {params.nvme}/CAMPER_blast_scores.tsv \
-	                      --camper_hmm_loc {params.nvme}/CAMPER.hmm  \
+	                --camper_fa_db_cutoffs_loc {params.nvme}/CAMPER_blast_scores.tsv \
+	                --camper_hmm_loc {params.nvme}/CAMPER.hmm  \
                         --camper_hmm_cutoffs_loc {params.nvme}/CAMPER_hmm_scores.tsv \
         2>> {log} 1>&2
 
-        #camper_distill  -a <path to annotations.tsv> -o <name of output.tsv>
-        #camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv \
-	      #--camper_distillate CAMPER_distillate.tsv
+        camper_distill  -a {output}/annotations.tsv \
+                        -o {output}/distillate.tsv \
+	                --camper_distillate {params.nvme}/CAMPER_distillate.tsv \
+	      2>> {log} 1>&2
+	      
         """
+
 
 rule contig_annotate__camper:
     """Run CAMPER on contig gene sequences."""
