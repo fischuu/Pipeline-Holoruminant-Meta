@@ -60,10 +60,10 @@ rule preprocess__diamond__summarise:
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
     output:
-        DIAMOND / "{diamond_db}" / "final_summary_a.tsv",
-        DIAMOND / "{diamond_db}" / "final_summary_b.tsv"
+        DIAMOND / "{diamond_db}" / "summary_a.tsv",
+        DIAMOND / "{diamond_db}" / "summary_b.tsv"
     log:
-        DIAMOND / "{diamond_db}" / "run_r_script.log"
+        DIAMOND / "{diamond_db}" / "preprocess__diamond__summarise.log"
     threads: config["resources"]["cpu_per_task"]["single_thread"]
     resources:
         cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
@@ -83,8 +83,6 @@ rule preprocess__diamond__summarise:
         R -e "project_folder <- '{params.project_folder}';\
               result_folder <- 'results/preprocess/diamond/{params.database}';\
               source('{params.script}')" &> {log}
-             
-        Rscript {params.script} {wildcards.diamond_db} > {log} 2>&1
         """
 
 
@@ -97,11 +95,11 @@ rule preprocess__diamond:
             for diamond_db in features["databases"]["diamond"]
         ],
         ([
-            DIAMOND / diamond_db / "final_summary_a.tsv"
+            DIAMOND / diamond_db / "summary_a.tsv"
             for diamond_db in features["databases"]["diamond"]
         ]),
         ([
-            DIAMOND / diamond_db / "final_summary_b.tsv"
+            DIAMOND / diamond_db / "summary_b.tsv"
             for diamond_db in features["databases"]["diamond"]
         ])
 

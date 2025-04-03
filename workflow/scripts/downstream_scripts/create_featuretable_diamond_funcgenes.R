@@ -13,9 +13,7 @@ all_counts_a <- list()
 all_counts_b <- list()
 
 # Now loop through all files
-#for (sample_run in 1:length(result_files)) {
-  
-for (sample_run in 1:6) {
+for (sample_run in 1:length(result_files)) {
   
   # Feedback for function
   cat("Started to summarize result file", result_files[sample_run], "at", date(), "...")
