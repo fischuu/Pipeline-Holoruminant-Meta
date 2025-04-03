@@ -49,6 +49,44 @@ rule preprocess__diamond__assign:
            2> {log} 1>&2
         """
 
+rule preprocess__diamond__summarise:
+    """Run the appropriate R script after all Diamond processing is complete for a given database."""
+    input:
+        lambda w: [
+            DIAMOND / w.diamond_db / f"{sample_id}.{library_id}_R1.out"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ] + [
+            DIAMOND / w.diamond_db / f"{sample_id}.{library_id}_R2.out"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ]
+    output:
+        DIAMOND / "{diamond_db}" / "final_summary_a.tsv",
+        DIAMOND / "{diamond_db}" / "final_summary_b.tsv"
+    log:
+        DIAMOND / "{diamond_db}" / "run_r_script.log"
+    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    resources:
+        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
+        time =  config["resources"]["time"]["longrun"],
+        partition = config["resources"]["partition"]["small"]
+    params:
+        script=lambda w: config["pipeline_folder"] + "workflow/scripts/downstream_scripts/create_featuretable_diamond_" + w.diamond_db + ".R",
+        project_folder=WD,
+        database=lambda w: w.diamond_db,
+    conda:
+        "__environment_r__.yml"
+    container:
+        docker["r_report"]
+    shell:
+        """
+        R -e "project_folder <- '{params.project_folder}';\
+              result_folder <- 'results/preprocess/diamond/{params.database}';\
+              source('{params.script}')" &> {log}
+             
+        Rscript {params.script} {wildcards.diamond_db} > {log} 2>&1
+        """
+
 
 rule preprocess__diamond:
     """Run diamond."""
@@ -58,3 +96,12 @@ rule preprocess__diamond:
             for sample_id, library_id in SAMPLE_LIBRARY
             for diamond_db in features["databases"]["diamond"]
         ],
+        ([
+            DIAMOND / diamond_db / "final_summary_a.tsv"
+            for diamond_db in features["databases"]["diamond"]
+        ]),
+        ([
+            DIAMOND / diamond_db / "final_summary_b.tsv"
+            for diamond_db in features["databases"]["diamond"]
+        ])
+

@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+29: Summary tables for Diamond added
 28: Bowtie2 and Humann2 were moved to own docker container 
 27: Added camper to contig_annotate
 26: Names of many rules were adjusted to follow a similary naming scheme
