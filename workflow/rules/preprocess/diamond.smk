@@ -75,7 +75,7 @@ rule preprocess__diamond__summarise:
         project_folder=WD,
         database=lambda w: w.diamond_db,
     conda:
-        "__environment_r__.yml"
+        "__environment__.yml"
     container:
         docker["r_report"]
     shell:
