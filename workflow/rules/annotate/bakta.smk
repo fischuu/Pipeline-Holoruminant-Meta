@@ -63,7 +63,7 @@ rule annotate__bakta_mags_run:
               --force \
               --verbose \
               --output {params.out_dir} \
-              --prefix bakta \
+              --prefix bakta_{wildcards.assembly_id} \
               --threads {threads} \
               {params.options} \
               {input.contigs} \
