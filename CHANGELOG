@@ -3,6 +3,8 @@
 
 Version 0.3.*:
 --------------
+31: Apply proteinortho now on the set of proteins obtains from the different MAG sets
+30: Added bakta annotation for each MAG separately instead of applying it to one dereplicated MAG-set only
 29: Summary tables for Diamond added
 28: Bowtie2 and Humann2 were moved to own docker container 
 27: Added camper to contig_annotate

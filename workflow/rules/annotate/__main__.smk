@@ -11,6 +11,7 @@ rule annotate:
     """Evaluate the dereplication steps"""
     input:
         rules.annotate__bakta.output,
+        rules.annotate__bakta_mags.input,
         rules.annotate__eggnog.output,
         rules.annotate__quast.output,
         rules.annotate__checkm2__predict.output,
