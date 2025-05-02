@@ -27,7 +27,6 @@ rule annotate__phylophlan:
             mkdir -p {output}
 
             phylophlan_assign_sgbs -i {input} \
-                                   -e fa \
                                    -d SGB.Jun23 
                                    --database_folder resources/databases/phylophlan/ 
                                    -o {output} \
