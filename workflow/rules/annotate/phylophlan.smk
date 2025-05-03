@@ -6,6 +6,7 @@ rule annotate__phylophlan:
         DREP / "dereplicated_genomes",
     output:
         directory(PHYLOPHLAN / "SGB"),
+        result= PHYLOPHLAN / "SGB" / "SGB.tsv",
     log:
         PHYLOPHLAN / "phylophlan_sgb.log",
     benchmark:
@@ -27,8 +28,9 @@ rule annotate__phylophlan:
             mkdir -p {output}
 
             phylophlan_assign_sgbs -i {input} \
-                                   -d SGB.Jun23 
-                                   --database_folder resources/databases/phylophlan/ 
+                                   -d SGB.Jun23 \
+                                   --database_folder resources/databases/phylophlan/ \
+                                   -e fa.gz \
                                    -o {output} \
                                    --nproc {threads} \
                                    --verbose \
