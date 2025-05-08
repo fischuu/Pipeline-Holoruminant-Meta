@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+32: Adjusted the Output ruleset for contig_annotate__camper and moved from folder to concrete files
 31: Apply proteinortho now on the set of proteins obtains from the different MAG sets
 30: Added bakta annotation for each MAG separately instead of applying it to one dereplicated MAG-set only
 29: Summary tables for Diamond added
