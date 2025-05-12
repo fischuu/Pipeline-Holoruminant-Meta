@@ -15,18 +15,23 @@ rule contig_annotate__prodigal_run:
         CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.log"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: config["resources"]["cpu_per_task"]["single_thread"]
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["single_thread"],
+        time =  config["resources"]["time"]["longrun"]
+    params:
+        tmp_file=lambda wildcards: f"{CONTIG_PRODIGAL}/{wildcards.assembly_id}.fa",
     shell:""" 
          prodigal -i <(gunzip -c {input.assembly}) \
                   -o {output.gtf} \
                   -a {output.fa} \
-                  -p meta -f gff    
+                  -p meta -f gff \
+                  2>> {log} 1>&2
                   
-         grep -v '^#' {output.gtf} > {output.gtfplain}
+         grep -v '^#' {output.gtf} > {output.gtfplain} 2>> {log} 1>&2
+         
+         rm {params.tmp_file}
     """
     
 checkpoint contig_annotate__cut_prodigal:
