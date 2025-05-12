@@ -7,9 +7,9 @@ rule annotate__dram_mag__annotate:
         #gtdbtk_summary=GTDBTK / "gtdbtk.summary.tsv",
         dram_db=features["databases"]["dram"],
     output:
-        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "annotations_{assembly_id}.tsv",
-        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "trnas_{assembly_id}.tsv",
-        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "rrnas_{assembly_id}.tsv",
+        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "annotations.tsv",
+        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "trnas.tsv",
+        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "rrnas.tsv",
     log:
         DRAM / "{assembly_id}" / "annotate_{assembly_id}.log",
     conda:
