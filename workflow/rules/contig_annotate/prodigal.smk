@@ -58,4 +58,5 @@ checkpoint contig_annotate__cut_prodigal:
 rule contig_annotate__prodigal:
     """Run prodigal on all assemblies"""
     input:
-        [CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.prodigal.fa" for assembly_id in ASSEMBLIES],
+       # [CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.prodigal.fa" for assembly_id in ASSEMBLIES],
+        expand(CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.prodigal.fa", assembly_id=ASSEMBLIES),
