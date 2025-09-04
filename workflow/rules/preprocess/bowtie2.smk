@@ -37,7 +37,7 @@ rule preprocess__bowtie2__build:
         """
 
 
-rule _preprocess__bowtie2__map:
+rule preprocess__bowtie2__map:
     """Map one library to reference genome using bowtie2
 
     Output SAM file is piped to samtools sort to generate a CRAM file.
@@ -101,7 +101,7 @@ rule _preprocess__bowtie2__map:
         """
 
 
-rule _preprocess__bowtie2__extract_nonhost:
+rule preprocess__bowtie2__extract_nonhost_run:
     """
     Keep only pairs unmapped to the human reference genome, sort by name rather
     than by coordinate, and convert to FASTQ.
@@ -154,7 +154,7 @@ rule _preprocess__bowtie2__extract_nonhost:
         ) 2> {log} 1>&2
         """
 
-rule _preprocess__store_final_fastq:
+rule preprocess__store_final_fastq:
     """Copy final process
     """
     input:

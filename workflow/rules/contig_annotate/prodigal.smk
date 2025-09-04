@@ -26,12 +26,9 @@ rule contig_annotate__prodigal_run:
          prodigal -i <(gunzip -c {input.assembly}) \
                   -o {output.gtf} \
                   -a {output.fa} \
-                  -p meta -f gff \
-                  2>> {log} 1>&2
+                  -p meta -f gff
                   
-         grep -v '^#' {output.gtf} > {output.gtfplain} 2>> {log} 1>&2
-         
-         rm {params.tmp_file}
+         grep -v '^#' {output.gtf} > {output.gtfplain}
     """
     
 checkpoint contig_annotate__cut_prodigal:

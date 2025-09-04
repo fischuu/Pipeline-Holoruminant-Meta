@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+36: Function names for bowtie rules harmonised
 35: Function call to contig_annotate__prodigal improved
 34: Optional Debug comments added to the Snakefile
 33: DRAM mag rules added
