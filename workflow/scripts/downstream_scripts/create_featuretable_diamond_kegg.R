@@ -1,9 +1,13 @@
+args <- commandArgs(trailingOnly = TRUE)
+project_folder <- args[1]
+
 # Load the required library
 library("data.table")
 
 # Set the paths (set those for manual execution)
 # project_folder <- "/scratch/project_2010176/metaG_groupAssembly/"
-# result_folder <- "results/preprocess/diamond/kegg"
+#project_folder <- "/scratch/project_2009831/devel/"
+ result_folder <- "results/preprocess/diamond/kegg"
 
 # Get the available result files
 result_files <- list.files(file.path(project_folder, result_folder), pattern="*.out")
@@ -85,6 +89,7 @@ filtered_counts_b <- lapply(all_counts_b, function(x) {
 aligned_counts_a <- lapply(filtered_counts_a, align_to_names, all_names = all_names_a)
 aligned_counts_b <- lapply(filtered_counts_b, align_to_names, all_names = all_names_b)
 
+cat("aligned_counts ready!\n")
 
 # Combine the aligned vectors into a data frame
 merged_counts_a <- rbind(aligned_counts_a[[1]], aligned_counts_a[[2]])
@@ -95,11 +100,54 @@ for(i in 3:length(aligned_counts_b)) merged_counts_b <- rbind(merged_counts_b, a
 rownames(merged_counts_a) <- result_files
 rownames(merged_counts_b) <- result_files
 
-export_a <- data.frame(sample_id=rownames(merged_counts_a), merged_counts_a)
-export_b <- data.frame(sample_id=rownames(merged_counts_b), merged_counts_b)
-colnames(export_a) <- c("sample_id", colnames(merged_counts_a))
-colnames(export_b) <- c("sample_id", colnames(merged_counts_b))
+cat("rownames added ready!\n")
+
+#export_a <- data.frame(sample_id=rownames(merged_counts_a), merged_counts_a)
+#export_b <- data.frame(sample_id=rownames(merged_counts_b), merged_counts_b)
+#colnames(export_a) <- c("sample_id", colnames(merged_counts_a))
+#colnames(export_b) <- c("sample_id", colnames(merged_counts_b))
+
+export_a <- t(merged_counts_a)
+export_b <- t(merged_counts_b)
+
+export_a <- data.frame(Feature = row.names(export_a), export_a)
+export_b <- data.frame(Feature = row.names(export_b), export_b)
+
+# Now merge the pathway names into orthologs
+
+procaryotes <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/PROKARYOTES.DAT")
+
+cat("procaryotes reading ready!\n")
+
+# Ensure both are data.tables
+setDT(procaryotes)
+setDT(export_a)
+
+# Merge KO into export based on Feature = gene
+export_merged <- merge(export_a, procaryotes, by.x = "Feature", by.y = "gene", all.x = TRUE)
+
+cat("export_merged ready!\n")
+
+# Remove Feature column (optional, if no longer needed)
+ export_merged[, Feature := NULL]
+
+# Group by KO and sum all sample columns
+summary_by_KO <- export_merged[, lapply(.SD, sum, na.rm = TRUE), by = KO]
+
+ko_info_1 <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/KO00000")
+ko_info_2 <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/KO00002")
+
+cat("ko information read ready!\n")
+
+export_merged_1 <- merge(ko_info_1, summary_by_KO, by.x = "KO", by.y = "KO", all = TRUE)
+export_merged_final <- merge(ko_info_2, export_merged_1, by.x = "KO", by.y = "KO", all = TRUE)
+
+cat("last merging ready!\n")
+
+export_merged_final[is.na(export_merged_final)] <- 0
 
 # Export the data
-write.table(export_a, file=file.path(project_folder, result_folder, "summary_a.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
-write.table(export_b, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+write.table(export_merged_final, file=file.path(project_folder, result_folder, "summary.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+#write.table(export_b, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+
+cat("Complete!\n")

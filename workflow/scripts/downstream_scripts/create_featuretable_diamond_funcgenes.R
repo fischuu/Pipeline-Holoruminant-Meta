@@ -1,9 +1,12 @@
+args <- commandArgs(trailingOnly = TRUE)
+project_folder <- args[1]
+
 # Load the required library
 library("data.table")
 
 # Set the paths (set those for manual execution)
 # project_folder <- "/scratch/project_2010176/metaG_groupAssembly/"
-# result_folder <- "results/preprocess/diamond/funcgenes"
+ result_folder <- "results/preprocess/diamond/funcgenes"
 
 # Get the available result files
 result_files <- list.files(file.path(project_folder, result_folder), pattern="*.out")
@@ -14,7 +17,7 @@ all_counts_b <- list()
 
 # Now loop through all files
 for (sample_run in 1:length(result_files)) {
-  
+
   # Feedback for function
   cat("Started to summarize result file", result_files[sample_run], "at", date(), "...")
   
@@ -96,11 +99,14 @@ for(i in 3:length(aligned_counts_b)) merged_counts_b <- rbind(merged_counts_b, a
 rownames(merged_counts_a) <- result_files
 rownames(merged_counts_b) <- result_files
 
-export_a <- data.frame(sample_id=rownames(merged_counts_a), merged_counts_a)
-export_b <- data.frame(sample_id=rownames(merged_counts_b), merged_counts_b)
-colnames(export_a) <- c("sample_id", colnames(merged_counts_a))
-colnames(export_b) <- c("sample_id", colnames(merged_counts_b))
+export_a <- t(merged_counts_a)
+export_b <- t(merged_counts_b)
+
+export_a <- data.frame(Feature = row.names(export_a), export_a)
+export_b <- data.frame(Feature = row.names(export_b), export_b)
 
 # Export the data
 write.table(export_a, file=file.path(project_folder, result_folder, "summary_a.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
 write.table(export_b, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+
+cat("Complete!\n")
