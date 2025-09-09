@@ -3,6 +3,8 @@
 
 Version 0.3.*:
 --------------
+38: Fixed the output for proteinortho
+37: Output for DRAM_mag rule adjusted
 36: Function names for bowtie rules harmonised
 35: Function call to contig_annotate__prodigal improved
 34: Optional Debug comments added to the Snakefile

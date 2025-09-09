@@ -3,7 +3,7 @@ rule annotate__proteinortho:
     input:
         faa=expand(BAKTAMAG / "bakta_{assembly_id}.faa", assembly_id=ASSEMBLIES),
     output:
-        project=PROTEINORTHO / "proteinortho.proteinortho.tsv",
+        tsv=PROTEINORTHO / "proteinortho.proteinortho.tsv",
     log:
         PROTEINORTHO / "proteinortho.log",
     container:
@@ -13,10 +13,17 @@ rule annotate__proteinortho:
         cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
         mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"]
+    params:
+        outdir=PROTEINORTHO
     shell:
         """
+        
+        mkdir -p {params.outdir}
+        
         proteinortho {input.faa} \
             -cpus={threads} \
-            -project={output.project} \
+            -project=proteinortho \
             2>> {log} 1>&2
+            
+        mv proteinortho.proteinortho.tsv {params.outdir} 
         """
