@@ -26,4 +26,7 @@ rule annotate__proteinortho:
             2>> {log} 1>&2
             
         mv proteinortho.proteinortho.tsv {params.outdir} 
+        mv proteinortho.blast-graph {params.outdir}
+        mv proteinortho.info {params.outdir}
+        mv proteinortho.proteinortho-graph {params.outdir}
         """
