@@ -7,9 +7,9 @@ rule annotate__dram_mag__annotate:
         #gtdbtk_summary=GTDBTK / "gtdbtk.summary.tsv",
         dram_db=features["databases"]["dram"],
     output:
-        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "annotations_{assembly_id}.tsv",
-        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "trnas_{assembly_id}.tsv",
-        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "rrnas_{assembly_id}.tsv",
+        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
+        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_trnas.tsv",
+        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_rrnas.tsv",
     log:
         DRAM / "{assembly_id}" / "annotate_{assembly_id}.log",
     conda:
@@ -47,9 +47,9 @@ rule annotate__dram_mag__annotate:
 rule annotate__dram_mag__distill:
     """Distill DRAM annotations."""
     input:
-        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "annotations_{assembly_id}.tsv",
-        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "trnas_{assembly_id}.tsv",
-        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "rrnas_{assembly_id}.tsv",
+        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
+        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_trnas.tsv",
+        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_rrnas.tsv",
         dram_db=features["databases"]["dram"],
     output:
         genome=DRAMMAG / "{assembly_id}" / "genome_stats.tsv",
@@ -73,7 +73,7 @@ rule annotate__dram_mag__distill:
         """
         DRAM.py distill \
             --config_loc {params.config} \
-            --input_file {input.annotations} \
+            --input_file {input.annotation} \
             --rrna_path {input.rrnas} \
             --trna_path {input.trnas} \
             --output_dir {params.outdir_tmp} \
@@ -86,4 +86,5 @@ rule annotate__dram_mag__distill:
 rule annotate__dram_mags:
     """Run Bakta over the dereplicated mags"""
      input:
-        expand(DRAMMAG / "{assembly_id}" / "annotate"  / "annotations_{assembly_id}.tsv", assembly_id=ASSEMBLIES),
+        #expand(DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv", assembly_id=ASSEMBLIES),
+        expand(DRAMMAG / "{assembly_id}" / "genome_stats.tsv", assembly_id=ASSEMBLIES),
