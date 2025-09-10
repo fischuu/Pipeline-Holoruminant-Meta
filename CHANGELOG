@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+39: Hard-coded threads in reference__hosts__recompress changed to variable
 39: Added the missing proteinortho files to be moved into result folder
 38: Fixed the output for proteinortho
 37: Output for DRAM_mag rule adjusted
