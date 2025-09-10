@@ -6,7 +6,7 @@ rule reference__hosts__recompress:
         HOSTS / "{genome}.fa.gz",
     log:
         HOSTS / "{genome}.log",
-    threads: 24
+    threads: config["resources"]["cpu_per_task"]["multi_thread"]
     conda:
         "__environment__.yml"
     container:
