@@ -27,6 +27,7 @@ PRE_COVERM = PRE / "coverm/"
 KRAKEN2 = PRE / "kraken2/"
 KRONA = PRE / "krona/"
 DIAMOND = PRE / "diamond/"
+PRE_SYLPH = PRE / "sylph/"
 
 # assemble
 ASSEMBLE = Path("results/assemble/")
@@ -69,6 +70,7 @@ CONTIG = Path("results/contig_annotate/")
 CONTIG_CAMPER = CONTIG / "camper"
 CONTIG_PRODIGAL = CONTIG / "prodigal"
 CONTIG_EGGNOG = CONTIG / "eggnog"
+CONTIG_SYLPH = CONTIG / "sylph"
 CONTIG_FEATURECOUNTS = CONTIG / "featurecounts"
 
 
