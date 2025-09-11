@@ -3,6 +3,9 @@
 
 Version 0.3.*:
 --------------
+43: contig_annotate__sylp added
+42: preprocess__sylph added
+41: --keep-going added as default option to run the pipeline
 40: Order of the host decontamination changed, to avoid sequence similarity problems between different genomes
 39: Hard-coded threads in reference__hosts__recompress changed to variable
 39: Added the missing proteinortho files to be moved into result folder

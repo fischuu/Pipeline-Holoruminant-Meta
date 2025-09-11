@@ -11,6 +11,7 @@ include: "phyloflash.smk"
 include: "nonpareil.smk"
 include: "samtools.smk"
 include: "singlem.smk"
+include: "sylph.smk"
 
 rule preprocess:
     """Run the preprocessing steps, included he evaluation ones"""
@@ -26,3 +27,4 @@ rule preprocess:
         rules.preprocess__phyloflash.input,
         rules.preprocess__samtools.input,
         rules.preprocess__singlem.input,
+        rules.preprocess__sylph.input,

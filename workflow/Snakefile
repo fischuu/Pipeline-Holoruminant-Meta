@@ -106,4 +106,4 @@ rule all:
         rules.assemble.input,
         rules.annotate.input,
         rules.contig_annotate.input,
-        rules.report.input,
+  #      rules.report.input,

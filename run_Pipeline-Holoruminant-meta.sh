@@ -52,4 +52,5 @@ snakemake -s $pipelineFolder/workflow/Snakefile \
           --singularity-args "-B /scratch,/projappl,/users,/dev/shm:/dev/shm,/run,/tmp" \
           --latency-wait 60 \
           --scheduler greedy \
+          --keep-going \
           $@
