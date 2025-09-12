@@ -49,13 +49,16 @@ rule annotate__fix_dram_annotations_scaffold:
         DRAM / "annotate" / "annotations.tsv",
     output:
         DRAM / "annotate" / "annotations.fixed.tsv",
+    log:
+        DRAM / "fix_annotation.log",
     container:
         docker["assemble"]
     params:
         script_folder=SCRIPT_FOLDER,
-    script:
-        "python {params.script_folder}/fix_annotations.py {input} {output}"
-
+    shell:
+        """
+        python {params.script_folder}/fix_annotations.py {input} {output} 2>> {log} 1>&2
+        """
 
 rule annotate__dram__distill:
     """Distill DRAM annotations."""

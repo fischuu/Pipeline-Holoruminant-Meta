@@ -49,12 +49,17 @@ rule annotate__fix_dram_mag_annotations_scaffold:
         DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
     output:
         DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.fixed.tsv",
+    log:
+        DRAMMAG / "{assembly_id}_fix_annotation.log",
     container:
         docker["assemble"]
     params:
         script_folder=SCRIPT_FOLDER,
-    script:
-        "python {params.script_folder}/fix_annotations.py {input} {output}"
+    shell:
+        """
+        python {params.script_folder}/fix_annotations.py {input} {output} 2>> {log} 1>&2
+        """
+        
     
 
 rule annotate__dram_mag__distill:
