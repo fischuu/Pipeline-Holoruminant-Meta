@@ -9,7 +9,7 @@ rule preprocess__sylph_profile:
     log:
         PRE_SYLPH / "{sample_id}.{library_id}.profiling_report.log",
     conda:
-        "sylph.yml"
+        "__environment__.yml"
     container:
         docker["sylph"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
@@ -20,16 +20,14 @@ rule preprocess__sylph_profile:
         nvme = config["resources"]["nvme"]["small"],
     shell:
         """
-        sylph profile {input.db} -1 {input.forwards} -2 {input.backwards} -t {threads} > {output} 2>> {log} 1>&2
+        sylph profile {input.db} -1 {input.forwards} -2 {input.reverses} -t {threads} > {output} 2>> {log} 1>&2
         """
 
 
 rule preprocess__sylph:
     """Run Sylph"""
     input:
-        rules.preprocess__sylph_profile.output,
-        
         [
-            PRE_SYLPH / "{sample_id}.{library_id}.profiling.tsv"
+            PRE_SYLPH / f"{sample_id}.{library_id}.profiling.tsv"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
