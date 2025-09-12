@@ -7,8 +7,6 @@ rule contig_annotate__sylph_profile:
         CONTIG_SYLPH / "{assembly_id}" / "profiling.tsv",
     log:
         CONTIG_SYLPH / "{assembly_id}" / "quality_report.log",
-    conda:
-        "sylph.yml"
     container:
         docker["sylph"]
     threads: config["resources"]["cpu_per_task"]["multi_thread"]
@@ -26,4 +24,4 @@ rule contig_annotate__sylph_profile:
 rule contig_annotate__sylph:
     """Run Sylph"""
     input:
-        [CONTIG_SYLPH / "{assembly_id}" / "profiling.tsv" for assembly_id in ASSEMBLIES],
+        [CONTIG_SYLPH / f"{assembly_id}" / "profiling.tsv" for assembly_id in ASSEMBLIES],

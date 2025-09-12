@@ -43,11 +43,24 @@ rule annotate__dram_mag__annotate:
                 --threads {threads} \
         2>> {log} 1>&2
     """
+    
+rule annotate__fix_dram_mag_annotations_scaffold:
+    input:
+        DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
+    output:
+        DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.fixed.tsv",
+    container:
+        docker["assemble"]
+    params:
+        script_folder=SCRIPT_FOLDER,
+    script:
+        "python {params.script_folder}/fix_annotations.py {input} {output}"
+    
 
 rule annotate__dram_mag__distill:
     """Distill DRAM annotations."""
     input:
-        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
+        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.fixed.tsv",
         trnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_trnas.tsv",
         rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_rrnas.tsv",
         dram_db=features["databases"]["dram"],

@@ -7,6 +7,8 @@ include: "eggnog.smk"
 include: "checkm2.smk"
 include: "proteinortho.smk"
 include: "phylophlan.smk"
+include: "sylph.smk"
+
 
 rule annotate:
     """Evaluate the dereplication steps"""
@@ -21,3 +23,4 @@ rule annotate:
         rules.annotate__dram_mags.input,
         rules.annotate__proteinortho.output,
         rules.annotate__phylophlan.output,
+        rules.annotate__sylph.output,

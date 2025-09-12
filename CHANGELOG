@@ -3,6 +3,8 @@
 
 Version 0.3.*:
 --------------
+45: DRAM distill input fixed, annotation had wrong scaffold entry so output was too strongly condensed
+44: Sylp added to annotate module
 43: contig_annotate__sylp added
 42: preprocess__sylph added
 41: --keep-going added as default option to run the pipeline

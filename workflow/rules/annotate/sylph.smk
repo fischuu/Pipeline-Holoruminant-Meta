@@ -7,8 +7,6 @@ rule _annotate__sylph_profile:
         SYLPH / "profiling.tsv",
     log:
         SYLPH / "quality_report.log",
-    conda:
-        "sylph.yml"
     container:
         docker["sylph"]
     params:
