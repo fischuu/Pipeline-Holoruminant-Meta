@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+46: Sylph for contigs and mags removed for now
 45: DRAM distill input fixed, annotation had wrong scaffold entry so output was too strongly condensed
 44: Sylp added to annotate module
 43: contig_annotate__sylp added

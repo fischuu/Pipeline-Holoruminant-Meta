@@ -20,7 +20,7 @@ rule preprocess__sylph_profile:
         nvme = config["resources"]["nvme"]["small"],
     shell:
         """
-        sylph profile {input.db} -1 {input.forwards} -2 {input.reverses} -t {threads} > {output} 2>> {log} 1>&2
+        sylph profile {input.db} -1 {input.forwards} -2 {input.reverses} -t {threads} > {output} 2> {log}
         """
 
 
