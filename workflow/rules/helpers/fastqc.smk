@@ -1,19 +1,19 @@
 rule helpers__fastqc:
-    """Run fastqc on a single file"""
     input:
-        "{prefix}.fq.gz",
+        "{prefix}.fq.gz"
     output:
         html="{prefix}_fastqc.html",
-        zip="{prefix}_fastqc.zip",
+        zip="{prefix}_fastqc.zip"
     conda:
         "__environment__.yml"
     container:
         docker["helpers"]
     resources:
-        time =  config["resources"]["time"]["shortrun"]
+        time = lambda wc: get_resources(wc, starting_profile="small", escalation_order=["medium"])["time"],
+        mem_mb = lambda wc: get_resources(wc, starting_profile="small", escalation_order=["medium"])["mem_mb"],
+        cpus = lambda wc: get_resources(wc, starting_profile="small", escalation_order=["medium"])["cpus"],
     log:
-        "{prefix}_fastqc.log",
-    benchmark:
-        "benchmark/{prefix}_fastqc.tsv",
+        "{prefix}_fastqc.log"
+    retries: 2  # will escalate from medium → large if first attempt fails
     shell:
         "fastqc {input} 2> {log} 1>&2"
