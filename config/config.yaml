@@ -72,6 +72,13 @@ resource_sets:
     cpus: 8
     partition: "small"
     nvme: 50
+    
+  large:
+    runtime: 4000
+    mem_mb: 320000
+    cpus: 20
+    partition: "small"
+    nvme: 50
 
   highmem:
     runtime: 4000
