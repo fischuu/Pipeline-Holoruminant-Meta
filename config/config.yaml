@@ -61,42 +61,42 @@ resources:
 resource_sets:
   small:
     time: 300        # minutes
-    mem_mb: 16000
+    mem_per_cpu: 16000
     cpus: 1
     partition: "small"
     nvme: 10
 
   medium:
     time: 4000
-    mem_mb: 160000
+    mem_per_cpu: 20000
     cpus: 8
     partition: "small"
     nvme: 50
 
   highmem:
     time: 4000
-    mem_mb: 1400000
+    mem_per_cpu: 70000
     cpus: 20
     partition: "hugemem"
     nvme: 250
 
   longrun:
     time: 20000
-    mem_mb: 320000
+    mem_per_cpu: 16000
     cpus: 20
     partition: "longrun"
     nvme: 250
 
   hm_longrun:
     time: 20000
-    mem_mb: 1400000
+    mem_per_cpu: 70000
     cpus: 20
     partition: "hugemem_longrun"
     nvme: 250
 
   kraken:
     time: 4000
-    mem_mb: 1400000
+    mem_per_cpu: 70000
     cpus: 20
     partition: "hugemem"
     nvme: 250
