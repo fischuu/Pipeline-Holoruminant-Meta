@@ -6,7 +6,7 @@ This Snakemake pipeline dedicated to Metagenomic data analysis consists out of s
 (Red marked rules have currently still unsolved issues)
 
 # Requirements
-The pipeline requires version 8 or later (Snakemake > 8.x)
+The pipeline requires version 8 or later (Snakemake > 8.4.9). Further, it is currently tested with the slurm executor and as such this one is also required to be installed. 
 
 Supports:
 SLURM executor / local execution
@@ -18,6 +18,8 @@ Since Snakemake 8, it is required to install a cluster-generic plugin to submit 
 
 ```
 pip install snakemake-executor-plugin-cluster-generic
+pip install snakemake-executor-plugin-slurm
+
 ```
 
 Of course you can also install specific plugins like the slurm plugin, but this might need more adjustments to the existing files.
