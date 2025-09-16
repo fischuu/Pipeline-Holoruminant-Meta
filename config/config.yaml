@@ -64,14 +64,14 @@ resource_sets:
     mem_mb: 16000
     cpus: 1
     partition: "small"
-    nvme: 10
+    nvme: 0
 
   medium:
     runtime: 4000
     mem_mb: 160000
     cpus: 8
     partition: "small"
-    nvme: 50
+    nvme: 10
     
   large:
     runtime: 4000
@@ -82,7 +82,7 @@ resource_sets:
 
   highmem:
     runtime: 4000
-    mem_mb: 140000
+    mem_mb: 1400000
     cpus: 20
     partition: "hugemem"
     nvme: 250
@@ -94,16 +94,9 @@ resource_sets:
     partition: "longrun"
     nvme: 250
 
-  hm_longrun:
+  highmem_longrun:
     runtime: 20000
-    mem_mb: 140000
+    mem_mb: 1400000
     cpus: 20
     partition: "hugemem_longrun"
-    nvme: 250
-
-  kraken:
-    runtime: 4000
-    mem_mb: 140000
-    cpus: 20
-    partition: "hugemem"
     nvme: 250

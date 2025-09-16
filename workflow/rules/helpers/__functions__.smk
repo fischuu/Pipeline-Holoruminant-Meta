@@ -7,9 +7,7 @@ def get_attempt(wildcards, attempt):
     """Get the number of attempt in resources"""
     return attempt
 
-def get_resources(attempt=None, escalation_order=None):
-    if attempt is None:
-        attempt = 1  # default for dry-run / first attempt
+def get_resources(wildcards, attempt, escalation_order=None):
 
     if escalation_order is None:
         escalation_order = ["small", "medium", "large"]
@@ -26,3 +24,7 @@ def get_resources(attempt=None, escalation_order=None):
     resources["mem_per_cpu"] = int(resources["mem_mb"] / resources["cpus"])
 
     return resources
+
+def esc(key):
+    return lambda wc, attempt: get_resources(wc, attempt, ESCALATION)[key]
+
