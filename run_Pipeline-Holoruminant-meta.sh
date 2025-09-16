@@ -50,7 +50,9 @@ snakemake -s $pipelineFolder/workflow/Snakefile \
           --configfile $projectFolder/config/config.yaml \
           --profile $Profile \
           --singularity-args "-B /scratch,/projappl,/users,/dev/shm:/dev/shm,/run,/tmp" \
+          --singularity-prefix $projectFolder/docker_images/ \
           --latency-wait 60 \
           --scheduler greedy \
           --keep-going \
+          --resources high_io_intense_parallel=20 \
           $@

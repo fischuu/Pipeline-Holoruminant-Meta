@@ -7,24 +7,23 @@ def get_attempt(wildcards, attempt):
     """Get the number of attempt in resources"""
     return attempt
 
-def get_resources(wildcards, attempt, escalation_order=None):
-    """
-    Return the resource set for the current attempt, with escalation.
+def get_resources(wildcards, attempt=None, escalation_order=None):
+    if attempt is None:
+        attempt = 1  # default for dry-run / first attempt
 
-    Args:
-        wildcards: Snakemake wildcards (needed for lambda in resources)
-        attempt: Snakemake attempt counter (starts at 1)
-        escalation_order: list of profile names in escalation order.
-                          Example: ["small", "medium", "large"]
-
-    Returns:
-        dict with resource allocations from config["resource_sets"]
-    """
     if escalation_order is None:
-        escalation_order = ["small", "medium", "highmem", "longrun", "hm_longrun"]
+        escalation_order = ["small", "medium", "large"]
 
-    # clamp attempt to list length
     profile_idx = min(attempt - 1, len(escalation_order) - 1)
     profile_name = escalation_order[profile_idx]
 
-    return config["resource_sets"][profile_name]
+    resources = config["resource_sets"][profile_name].copy()
+
+    # Ensure numeric types
+    resources["runtime"] = int(resources["runtime"])
+    resources["cpus"] = int(resources["cpus"])
+    resources["mem_mb"] = int(resources["mem_mb"])
+    resources["mem_per_cpu"] = int(resources["mem_mb"] / resources["cpus"])
+
+    print(f"DEBUG get_resources: attempt={attempt}, profile={profile_name}, resources={resources}")
+    return resources
