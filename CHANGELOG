@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+50: Cosmetic changes for the escalation setting
 49: Fixed a bug that prevented a dryrun to run while escalating resources were defined
 48: Added the singularity-prefix to the run script
 47: Added resource sets, resource escalation functions and retries (trial in helpers__fastqc)
