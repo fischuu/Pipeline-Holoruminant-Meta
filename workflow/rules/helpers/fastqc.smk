@@ -14,8 +14,8 @@ rule helpers__fastqc:
         mem_mb=esc("mem_mb"),
         cpu_per_task=esc("cpus"),
         partition=esc("partition"),
+    retries: len(ESCALATION)
     log:
         "{prefix}_fastqc.log"
-    retries: len(ESCALATION)
     shell:
         "fastqc {input} 2> {log} 1>&2"

@@ -25,6 +25,7 @@ graph <- grViz("
     pre_phyloflash [label = 'PhyloFlash, v3.4.2 \n SILVA_SSU.noLSU 138.1']
     pre_nonpareil [label = 'Nonpareil, v.3.4.1']
     pre_singlem [label = 'SingleM, v0.18.0 \n S4.3.0.GTDB_r220.metapackage_20240523']
+    pre_sylph [label = 'Sylph, v0.7.0 \n gtdb-r220-c200-dbv1']
     pre_diamond [label = 'Diamond, v.2.1.8 \n Cazy 07142024']
     pre_krona [label = 'Krona, v.x.x.x']
 
@@ -48,7 +49,6 @@ graph <- grViz("
     annotate_checkm2 [label = 'CheckM2, v1.0.2 \n uniref100.KO.1.dmnd']
     annotate_proteinortho [label = 'Proteinortho, v6.3.1', fillcolor = 'red']
     annotate_phylophlan [label = 'PhyloPhlan, v3.1.1', fillcolor = 'red']
-    annotate_sylph [label = 'Sylph, v0.7.0 \n gtdb-r220-c200-dbv1']
 
     # Define the contig annotate nodes
     contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
@@ -56,22 +56,6 @@ graph <- grViz("
     contig_annotate_bowtie [label = 'Bowtie, v2.5.1']
     contig_annotate_camper [label = 'Camper, v1.0.0']
     contig_annotate_feature [label = 'FeatureCounts, v2.0.1']
-
-#    dram_dbs [label = 'DRAM DBs \n
-#    kegg: null \n
-#    kofam_hmm: 20240524/kofam_profiles.hmm \n
-#    kofam_ko_list: 20240524/kofam_ko_list.tsv \n
-#    uniref: 20240524/uniref90.20240524.mmsdb \n
-#    pfam: 20240524/pfam.mmspro \n
-#    dbcan: 20240524/dbCAN-HMMdb-V11.txt \n
-#    viral: 20240524/refseq_viral.20240524.mmsdb \n
-#    peptidase: 20240524/peptidases.20240524.mmsdb \n
-#    vogdb: 20240524/vog_latest_hmms.txt \n
-#    camper_hmm: null \n
-#    camper_fa_db: null \n
-#    camper_hmm_cutoffs: null \n
-#    camper_fa_db_cutoffs: null
-#    ', shape = folder]
     
     # Define quantify nodes
     quantify_bowtie2 [label = 'Bowtie2, v2.5.1']
@@ -104,6 +88,7 @@ graph <- grViz("
     pre_bowtie2 -> pre_singlem
     pre_bowtie2 -> ass_assembler_rep
     pre_bowtie2 -> pre_diamond
+    pre_bowtie2 -> pre_sylph
     pre_kraken2 -> pre_krona
     
     # Define edges for assembly
@@ -157,7 +142,7 @@ graph <- grViz("
 
     # Define a subgraph to group preprocessing nodes
     subgraph cluster_preprocess {
-      label = 'Preprocess, v0.5'
+      label = 'Preprocess'
       style = dashed
       color = lightgray
 
@@ -173,11 +158,12 @@ graph <- grViz("
       pre_singlem
       pre_host
       pre_diamond
+      pre_sylph
     }
 
     # Define a subgraph to group assembly nodes
     subgraph cluster_assemble {
-      label = 'Assemble, v0.3'
+      label = 'Assemble'
       style = dashed
       color = lightgray
 
@@ -213,7 +199,7 @@ graph <- grViz("
 
 # Define a subgraph to group quantify nodes
     subgraph cluster_quantify {
-      label = 'Quantify, v'
+      label = 'Quantify'
       style = dashed
       color = lightgray
 
@@ -260,7 +246,6 @@ graph <- grViz("
       annotate_checkm2
       annotate_proteinortho
       annotate_phylophlan
-      annotate_sylph
     }
   }
 ")

@@ -1,3 +1,5 @@
+ESCALATION = ["medium","large"]
+
 rule preprocess__fastp__run:
     """Run fastp on one library"""
     input:
@@ -14,8 +16,6 @@ rule preprocess__fastp__run:
         FASTP / "{sample_id}.{library_id}.log",
     benchmark:
         FASTP / "benchmark/{sample_id}.{library_id}.tsv"
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
     params:
@@ -27,11 +27,13 @@ rule preprocess__fastp__run:
         temp_reverse_=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_2.fq",
         temp_unpaired1=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_u1.fq",
         temp_unpaired2=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_u2.fq",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     shell:        """
         # Run fastp with intermediate files
         fastp \

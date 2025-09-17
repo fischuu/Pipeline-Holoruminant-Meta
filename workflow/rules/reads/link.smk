@@ -10,8 +10,6 @@ rule reads__link_run:
         READS / "{sample}.{library}.log"
     benchmark:
         READS / "benchmark/{sample}.{library}.tsv"
-    conda:
-        "__environment__.yml"
     container:
         docker["reads"]
     shell:
@@ -19,7 +17,6 @@ rule reads__link_run:
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_} 2>  {log} 1>&2
         ln --symbolic $(readlink --canonicalize {input.reverse_}) {output.reverse_} 2>> {log} 1>&2
         """
-
 
 rule reads__link:
     """Link all reads in the samples.tsv"""
