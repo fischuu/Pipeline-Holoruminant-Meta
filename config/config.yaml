@@ -69,7 +69,7 @@ resource_sets:
   medium:
     runtime: 4000
     mem_mb: 160000
-    cpus: 8
+    cpus: 10
     partition: "small"
     nvme: 10
     
