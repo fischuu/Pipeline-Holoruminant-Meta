@@ -1,3 +1,5 @@
+ESCALATION = ["medium","large"]
+
 rule quantify__coverm__genome_run:
     """Run coverm genome for one library and one mag catalogue"""
     input:
@@ -7,13 +9,15 @@ rule quantify__coverm__genome_run:
         fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
         tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["quantify"]
+    threads: esc("cpus")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     log:
         COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -47,16 +51,18 @@ rule quantify__coverm__genome_aggregate:
         tsv=COVERM / "genome.{method}.tsv",
     log:
         COVERM / "genome.{method}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["quantify"]
     params:
         input_dir=lambda w: COVERM / "genome" / w.method,
         script_folder=SCRIPT_FOLDER,
+    threads: esc("cpus")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     shell:
         """
         Rscript --vanilla {params.script_folder}/aggregate_coverm.R \
@@ -85,10 +91,15 @@ rule quantify__coverm__contig_one:
         fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
         tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["quantify"]
+    threads: esc("cpus")
+    resources:
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     log:
         COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -117,16 +128,18 @@ rule quantify__coverm__contig_aggregate:
         tsv=COVERM / "contig.{method}.tsv",
     log:
         COVERM / "contig.{method}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["quantify"]
     params:
         input_dir=lambda w: COVERM / "contig" / w.method,
         script_folder=SCRIPT_FOLDER,
+    threads: esc("cpus")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     shell:
         """
         Rscript --vanilla {params.script_folder}/aggregate_coverm.R \

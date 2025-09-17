@@ -1,3 +1,5 @@
+ESCALATION = ["medium","large"]
+
 rule quantify__bowtie2__build:
     """Index dereplicader"""
     input:
@@ -6,15 +8,15 @@ rule quantify__bowtie2__build:
         mock=touch(QUANT_INDEX / "dereplicated_genomes"),
     log:
         QUANT_INDEX / "dereplicated_genomes.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["bowtie2"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     shell:
         """
         bowtie2-build \
@@ -37,15 +39,15 @@ rule quantify__bowtie2__map:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
     log:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["bowtie2"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     params:
         samtools_mem=params["quantify"]["samtools"]["mem"],
         rg_id=compose_rg_id,

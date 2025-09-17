@@ -1,15 +1,20 @@
+ESCALATION = ["medium","large"]
+
 rule helpers__samtools__index_bam:
     """Index a bam file"""
     input:
         "{prefix}.bam",
     output:
         "{prefix}.bam.bai",
-    conda:
-        "__environment__.yml"
     container:
         docker["helpers"]
+    threads: esc("cpus")
     resources:
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     log:
         "{prefix}.bam.bai.log",
     benchmark:
@@ -24,12 +29,15 @@ rule helpers__samtools__index_cram:
         "{prefix}.cram",
     output:
         "{prefix}.cram.crai",
-    conda:
-        "__environment__.yml"
     container:
         docker["helpers"]
+    threads: esc("cpus")
     resources:
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     log:
         "{prefix}.cram.crai.log",
     benchmark:
@@ -44,12 +52,15 @@ rule helpers__samtools__faidx_fa:
         "{prefix}.fa",
     output:
         "{prefix}.fa.fai",
-    conda:
-        "__environment__.yml"
     container:
         docker["helpers"]
+    threads: esc("cpus")
     resources:
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     log:
         "{prefix}.fa.fai.log",
     benchmark:
@@ -65,12 +76,15 @@ rule helpers__samtools__faidx_fagz:
     output:
         fai="{prefix}.fa.gz.fai",
         gzi="{prefix}.fa.gz.gzi",
-    conda:
-        "__environment__.yml"
     container:
         docker["helpers"]
+    threads: esc("cpus")
     resources:
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     log:
         "{prefix}.fa.gz.log",
     benchmark:
@@ -90,15 +104,19 @@ rule helpers__samtools__idxstats_cram:
         "{prefix}.idxstats.log",
     benchmark:
         "benchmark/{prefix}.idxstats.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["helpers"]
+    threads: esc("cpus")
     resources:
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     shell:
         "samtools idxstats {input.cram} > {output.tsv} 2> {log}"
 
+ESCALATION = ["small","medium","large"]
 
 rule helpers__samtools__flagstats_cram:
     """Compute flagstats for a cram"""
@@ -109,11 +127,14 @@ rule helpers__samtools__flagstats_cram:
         txt="{prefix}.flagstats.txt",
     log:
         "{prefix}.flagstats.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["helpers"]
+    threads: esc("cpus")
     resources:
-        time =  config["resources"]["time"]["shortrun"]
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     shell:
         "samtools flagstats {input.cram} > {output.txt} 2> {log}"

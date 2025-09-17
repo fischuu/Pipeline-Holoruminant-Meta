@@ -3,7 +3,8 @@
 
 Version 0.3.*:
 --------------
-51: Quantification is now part of the rule all
+52: Removed conda from quantify and added escalation rulesets to all quantify/*.smk files
+51: Quantify is now part of the rule all
 50: Cosmetic changes for the escalation setting
 49: Fixed a bug that prevented a dryrun to run while escalating resources were defined
 48: Added the singularity-prefix to the run script

@@ -1,3 +1,5 @@
+ESCALATION = ["medium","large"]
+
 rule quantify__samtools__stats_cram:
     """Get stats from CRAM files using samtools stats."""
     input:
@@ -9,13 +11,15 @@ rule quantify__samtools__stats_cram:
         txt=QUANT_BOWTIE2 / "{sample_id}.{library_id}.stats.txt",
     log:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["quantify"]
+    threads: esc("cpus")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime"),
+        mem_mb=esc("mem_mb"),
+        cpu_per_task=esc("cpus"),
+        partition=esc("partition"),
+    retries: len(ESCALATION)
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
