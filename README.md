@@ -90,18 +90,18 @@ unpacking the files, as this will significantly increase the speed.
 # Download the various pre-prepared reference databases
   cd $PROJECTFOLDER/resources/databases
   wget https://a3s.fi/Holoruminant-data/2024.09.18.bakta.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.checkm2.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.diamond.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.eggnog.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.humann.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.metaphlan4.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.phylophlan.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.checkm2.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2025.01.28.dram.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.gtdbtk.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.humann.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.kraken2.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2025.02.14.krona.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.metaphlan4.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.phyloflash.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2024.09.18.phylophlan.tar.gz
   wget https://a3s.fi/Holoruminant-data/2024.09.18.singlem.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.01.28.dram.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.02.14.krona.tar.gz
 
 # Unpack all the databases
   tar -xvf 2024.09.18.bakta.tar.gz
