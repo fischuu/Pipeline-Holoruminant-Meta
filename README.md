@@ -105,8 +105,6 @@ unpacking the files, as this will significantly increase the speed.
   wget https://a3s.fi/Holoruminant-data/2025.04.04.singlem.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.sylph.tar.gz
   
- 
-
 # Unpack all the databases
   tar -xvf 2025.04.04.bakta.tar.gz
   tar -xvf 2025.04.04.camper.tar.gz
@@ -127,18 +125,18 @@ unpacking the files, as this will significantly increase the speed.
 # Get the reference genomes relevant for Holorumiant for host contamination removal
 # Obviously, you can also use your own set of reference genomes here instead
   cd $PROJECTFOLDER/resources
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.reference.tar.gz
-  tar -xvf 2024.09.18.reference.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.04.04.reference.tar.gz
+  tar -xvf 2025.04.04.reference.tar.gz
 
 # For MAGScot are also dedicated files needed, which can be pulled in a similar way
   cd $PROJECTFOLDER/resources
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.MAGScot.tar.gz
-  tar -xvf 2024.09.18.MAGScot.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.04.04.MAGScoT.tar.gz
+  tar -xvf 2025.04.04.MAGScoT.tar.gz
 
 # Get the example read data
   cd $PROJECTFOLDER
-  wget https://a3s.fi/Holoruminant-data/2024.09.18.reads.tar.gz
-  tar -xvf 2024.09.18.reads.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.04.04.reads.tar.gz
+  tar -xvf 2025.04.04.reads.tar.gz
 ```
 
 If you have downloaded the resources already into another project, you can share the resources also to a new project, e.g. by creating a symbolic link
