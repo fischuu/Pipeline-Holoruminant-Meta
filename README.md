@@ -105,22 +105,24 @@ unpacking the files, as this will significantly increase the speed.
   wget https://a3s.fi/Holoruminant-data/2025.04.04.singlem.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.sylph.tar.gz
   
-  wget https://a3s.fi/Holoruminant-data/2025.04.04.krona.tar.gz
+ 
 
 # Unpack all the databases
-  tar -xvf 2024.09.18.bakta.tar.gz
-  tar -xvf 2024.09.18.diamond.tar.gz
-  tar -xvf 2024.09.18.eggnog.tar.gz
-  tar -xvf 2024.09.18.humann.tar.gz
-  tar -xvf 2024.09.18.metaphlan4.tar.gz
-  tar -xvf 2024.09.18.phylophlan.tar.gz
-  tar -xvf 2024.09.18.checkm2.tar.gz
-  tar -xvf 2025.01.28.dram.tar.gz
-  tar -xvf 2024.09.18.gtdbtk.tar.gz
-  tar -xvf 2024.09.18.kraken2.tar.gz
-  tar -xvf 2025.02.14.krona.tar.gz
-  tar -xvf 2024.09.18.phyloflash.tar.gz
-  tar -xvf 2024.09.18.singlem.tar.gz
+  tar -xvf 2025.04.04.bakta.tar.gz
+  tar -xvf 2025.04.04.camper.tar.gz
+  tar -xvf 2025.04.04.checkm2.tar.gz
+  tar -xvf 2025.04.04.diamond.tar.gz
+  tar -xvf 2025.04.04.dram.tar.gz
+  tar -xvf 2025.04.04.eggnog.tar.gz
+  tar -xvf 2025.04.04.gtdbtk.tar.gz  
+  tar -xvf 2025.04.04.humann.tar.gz
+  tar -xvf 2025.04.04.kraken2.tar.gz
+  tar -xvf 2025.04.04.krona.tar.gz
+  tar -xvf 2025.04.04.metaphlan4.tar.gz
+  tar -xvf 2025.04.04.phylophlan.tar.gz
+  tar -xvf 2025.04.04.phyloflash.tar.gz
+  tar -xvf 2025.04.04.singlem.tar.gz
+  tar -xvf 2025.04.04.sylph.tar.gz
 
 # Get the reference genomes relevant for Holorumiant for host contamination removal
 # Obviously, you can also use your own set of reference genomes here instead
