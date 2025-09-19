@@ -14,7 +14,7 @@ conda environment (not tested)
 docker/singularity/apptainer support
 
 ## Python dependencies
-Since Snakemake 8, it is required to install a cluster-generic plugin to submit jobs to a queueing system of a HPC system. Please ensure you have installed the corresponding Snakemake plugin installed in case you want to submit your jobs to a queueing system
+Since Snakemake 8, it is required to install an executor plugin to submit jobs to a queueing system of a HPC system. Please ensure you have installed the corresponding Snakemake plugins installed in case you want to submit your jobs to a queueing system
 
 ```
 pip install snakemake-executor-plugin-cluster-generic
@@ -22,7 +22,7 @@ pip install snakemake-executor-plugin-slurm
 
 ```
 
-Of course you can also install specific plugins like the slurm plugin, but this might need more adjustments to the existing files.
+Of course you can also install other, specific executor plugins, but this might need more adjustments to the existing files.
 
 Depending on your Python version, you need to install a Pandas version > 2.1, there were errors when newer Python versions met older Pandas version. In case you run into obscure Pandas error, please make sure to install a newer pandas, e.g.
 
