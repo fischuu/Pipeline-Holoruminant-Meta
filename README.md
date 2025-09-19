@@ -135,8 +135,8 @@ unpacking the files, as this will significantly increase the speed.
 
 # Get the example read data
   cd $PROJECTFOLDER
-  wget https://a3s.fi/Holoruminant-data/2025.04.04.reads.tar.gz
-  tar -xvf 2025.04.04.reads.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.09.19.reads.tar.gz
+  tar -xvf 2025.09.19.reads.tar.gz
 ```
 
 If you have downloaded the resources already into another project, you can share the resources also to a new project, e.g. by creating a symbolic link
