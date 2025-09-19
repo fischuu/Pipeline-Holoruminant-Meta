@@ -44,6 +44,10 @@ mkdir -p $APPTAINER_CACHEDIR
 ################################################################################
 mkdir -p slurm_out
 
+# I removed this part:
+#           --resources high_io_intense_parallel=20 \
+# Add it back in, when you know why it suddenly threw an error
+
 snakemake -s $pipelineFolder/workflow/Snakefile \
           --jobs 150 \
           --use-singularity \
@@ -54,5 +58,4 @@ snakemake -s $pipelineFolder/workflow/Snakefile \
           --latency-wait 60 \
           --scheduler greedy \
           --keep-going \
-          --resources high_io_intense_parallel=20 \
           $@
