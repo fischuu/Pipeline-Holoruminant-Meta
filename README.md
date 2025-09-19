@@ -213,6 +213,48 @@ bash $PIPELINEFOLDER/workflow/scripts/createSampleSheet.sh
 
 It should create the `samples.tsv` for the samples located in the `reads/` folder. You might need to adjust the script maybe accoring to the names of the reads or the adapter sequences you use.
 
+The most common error that can happen here is, that the file format from your samples is not as anticipated in the `createSampleSheet.sh` script. If that happens, you
+will see an error similar to this one:
+
+```
+Looking for files in reads/...
+No forward files found matching pattern *_R1_*.fastq.gz
+No files found in reads/ matching the pattern *_R1_*.fastq.gz
+```
+
+In that case, you need to adjust your script. For that, copy it to the `$PROJECTFOLDER` and edit it there
+
+```
+cp $PIPELINEFOLDER/workflow/scripts/createSampleSheet.sh $PROJECTFOLDER
+```
+
+For example, for the example data it would need to be changed, as the file names are in the format `<NAME>_1.fastq.gz` and `<NAME>_2.fastq.gz` instead
+of `<NAME>_R1_001.fastq.gz` (how it is assumed by the script). That means,you would need to adjust row numbers 20 from 
+
+```
+for file in ${fastq_path}*_R1_*.fastq.gz; do
+```
+
+to 
+
+```
+for file in ${fastq_path}*_1_subset.fastq.gz; do
+```
+
+and row number 26 from 
+
+```
+reverse_file="${fastq_path}$(basename "${file/_R1_/_R2_}")"
+```
+
+to 
+
+```
+reverse_file="${fastq_path}$(basename "${file/_1_subset.fastq/_2_subset.fastq}")"
+```
+
+and rerun the script (`bash createSampleSheet.sh`). Then the sample.tsv should be created successfully. 
+(The additional fastq part in the renaming is added to avoid confusions with other potential '_1' parts in the fie name)
 In case you have several lanes for samples, you can concatenate them prior to creating the samples.tsv script with the script `concatenateFiles.sh`which is in the pipeline folder `workflow/scripts`. Currently, you would need to run the script inside the same folder where the fastq files are located.
 
 # Usage

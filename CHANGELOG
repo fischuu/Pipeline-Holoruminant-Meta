@@ -3,6 +3,9 @@
 
 Version 0.3.*:
 --------------
+55: Updated the README to be more explicit how to setup a fresh installed pipeline
+54: Full_node resource set introduced in config/config.yaml
+53: shm_storage introduced in config/config.yaml
 52: Removed conda from quantify and added escalation rulesets to all quantify/*.smk files
 51: Quantify is now part of the rule all
 50: Cosmetic changes for the escalation setting

@@ -12,9 +12,10 @@ dram-config: "config/dram_config.txt"
 proteinortho-config: "config/proteinortho_config.txt"
 phylophlan-config: "config/phylophlan/supertree_aa.cfg"
 
-kraken_tmp_storage: "$LOCAL_SCRATCH"
+kraken_tmp_storage: "$LOCAL_SCRATCH"     # This entry should be removed, once shm is introduced everywhere
 tmp_storage: "$TMP"
 nvme_storage: "$LOCAL_SCRATCH"
+shm_storage: "/dev/shm"      # If shm is not available, set to a fast disc (same as nvme_storage), if that is not available, point it to a regular disc (like tmp_storage)
 
 assembler: "metaspades"  # "metaspades" or "megahit". Megahit serves as fall-back in case metaspades cannot create the assemblies
 
@@ -99,4 +100,15 @@ resource_sets:
     mem_mb: 1400000
     cpus: 20
     partition: "hugemem_longrun"
+    nvme: 250
+
+ # This node is used for setting up a ramdisc for time-critical tasks. Make sure, that the allocation ensures that the entire node is
+ # requested for the job so that there won't be other users on the same node while the job runs. Their jobs might get affected by the
+ # /dev/shm access that is happening for rules using this resource_set!
+ # In case you do not want to (or cannot) use /dev/shm please define a different file path in config/config.yaml under "shm_storage"
+  full_node:
+    runtime: 4000
+    mem_mb: 360000
+    cpus: 40
+    partition: "small"
     nvme: 250
