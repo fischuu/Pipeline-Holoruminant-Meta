@@ -1,5 +1,3 @@
-ESCALATION = ["medium","large"]
-
 rule quantify__coverm__genome_run:
     """Run coverm genome for one library and one mag catalogue"""
     input:
@@ -11,13 +9,15 @@ rule quantify__coverm__genome_run:
         tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     container:
         docker["quantify"]
-    threads: esc("cpus")
+    threads: esc("cpus", "quantify__coverm__genome_run")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "quantify__coverm__genome_run"),
+        mem_mb=esc("mem_mb", "quantify__coverm__genome_run"),
+        cpu_per_task=esc("cpus", "quantify__coverm__genome_run"),
+        slurm_partition=esc("partition", "quantify__coverm__genome_run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__genome_run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("quantify__coverm__genome_run"))
     log:
         COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -56,13 +56,15 @@ rule quantify__coverm__genome_aggregate:
     params:
         input_dir=lambda w: COVERM / "genome" / w.method,
         script_folder=SCRIPT_FOLDER,
-    threads: esc("cpus")
+    threads: esc("cpus", "quantify__coverm__genome_aggregate")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "quantify__coverm__genome_aggregate"),
+        mem_mb=esc("mem_mb", "quantify__coverm__genome_aggregate"),
+        cpu_per_task=esc("cpus", "quantify__coverm__genome_aggregate"),
+        slurm_partition=esc("partition", "quantify__coverm__genome_aggregate"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__genome_aggregate", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("quantify__coverm__genome_aggregate"))
     shell:
         """
         Rscript --vanilla {params.script_folder}/aggregate_coverm.R \
@@ -93,13 +95,15 @@ rule quantify__coverm__contig_one:
         tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     container:
         docker["quantify"]
-    threads: esc("cpus")
+    threads: esc("cpus", "quantify__coverm__contig_one")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "quantify__coverm__contig_one"),
+        mem_mb=esc("mem_mb", "quantify__coverm__contig_one"),
+        cpu_per_task=esc("cpus", "quantify__coverm__contig_one"),
+        slurm_partition=esc("partition", "quantify__coverm__contig_one"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__contig_one", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("quantify__coverm__contig_one"))
     log:
         COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -133,13 +137,15 @@ rule quantify__coverm__contig_aggregate:
     params:
         input_dir=lambda w: COVERM / "contig" / w.method,
         script_folder=SCRIPT_FOLDER,
-    threads: esc("cpus")
+    threads: esc("cpus", "quantify__coverm__contig_aggregate")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "quantify__coverm__contig_aggregate"),
+        mem_mb=esc("mem_mb", "quantify__coverm__contig_aggregate"),
+        cpu_per_task=esc("cpus", "quantify__coverm__contig_aggregate"),
+        slurm_partition=esc("partition", "quantify__coverm__contig_aggregate"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__contig_aggregate", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("quantify__coverm__contig_aggregate"))
     shell:
         """
         Rscript --vanilla {params.script_folder}/aggregate_coverm.R \

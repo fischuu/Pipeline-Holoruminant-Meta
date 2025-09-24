@@ -1,5 +1,3 @@
-ESCALATION = ["small","medium","large"]
-
 rule helpers__fastqc:
     input:
         "{prefix}.fq.gz"
@@ -8,13 +6,15 @@ rule helpers__fastqc:
         zip="{prefix}_fastqc.zip"
     container:
         docker["helpers"]
-    threads: esc("cpus")
+    threads: esc("cpus", "helpers__fastqc")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "helpers__fastqc"),
+        mem_mb=esc("mem_mb", "helpers__fastqc"),
+        cpu_per_task=esc("cpus", "helpers__fastqc"),
+        slurm_partition=esc("partition", "helpers__fastqc"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "helpers__fastqc", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("helpers__fastqc"))
     log:
         "{prefix}_fastqc.log"
     shell:

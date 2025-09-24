@@ -15,11 +15,15 @@ rule contig_annotate__prodigal_run:
         CONTIG_PRODIGAL / "{assembly_id}/{assembly_id}.log"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    threads: esc("cpus", "contig_annotate__prodigal_run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["single_thread"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime", "contig_annotate__prodigal_run"),
+        mem_mb=esc("mem_mb", "contig_annotate__prodigal_run"),
+        cpu_per_task=esc("cpus", "contig_annotate__prodigal_run"),
+        slurm_partition=esc("partition", "contig_annotate__prodigal_run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__prodigal_run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("contig_annotate__prodigal_run"))
     params:
         tmp_file=lambda wildcards: f"{CONTIG_PRODIGAL}/{wildcards.assembly_id}.fa",
     shell:""" 
@@ -45,11 +49,15 @@ checkpoint contig_annotate__cut_prodigal:
         split=params["contig_annotate"]["prodigal"]["split"]
     log:
         CONTIG_PRODIGAL / "logs/{assembly_id}_cut_prodigal.log"
+    threads: esc("cpus", "contig_annotate__cut_prodigal")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
-        time =  config["resources"]["time"]["shortrun"],
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+        runtime=esc("runtime", "contig_annotate__cut_prodigal"),
+        mem_mb=esc("mem_mb", "contig_annotate__cut_prodigal"),
+        cpu_per_task=esc("cpus", "contig_annotate__cut_prodigal"),
+        slurm_partition=esc("partition", "contig_annotate__cut_prodigal"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__cut_prodigal", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("contig_annotate__cut_prodigal"))
     container:
         docker["annotate"]
     shell:"""

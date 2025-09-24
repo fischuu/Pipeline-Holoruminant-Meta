@@ -8,16 +8,17 @@ rule preprocess__sylph_profile:
         PRE_SYLPH / "{sample_id}.{library_id}.profiling.tsv",
     log:
         PRE_SYLPH / "{sample_id}.{library_id}.profiling_report.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["sylph"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "preprocess__sylph_profile")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"],
+        runtime=esc("runtime", "preprocess__sylph_profile"),
+        mem_mb=esc("mem_mb", "preprocess__sylph_profile"),
+        cpu_per_task=esc("cpus", "preprocess__sylph_profile"),
+        slurm_partition=esc("partition", "preprocess__sylph_profile"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__sylph_profile", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__sylph_profile"))
     shell:
         """
         sylph profile {input.db} -1 {input.forwards} -2 {input.reverses} -t {threads} > {output} 2> {log}

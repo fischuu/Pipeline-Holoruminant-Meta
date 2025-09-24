@@ -14,13 +14,15 @@ rule annotate__bakta:
         db=features["databases"]["bakta"],
         options=params["annotate"]["bakta"]["additional_options"],
         tmpdir=config["tmp_storage"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__bakta")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["verylongrun"],
-        nvme = config["resources"]["nvme"]["small"],
-        partition = config["resources"]["partition"]["longrun"]
+        runtime=esc("runtime", "annotate__bakta"),
+        mem_mb=esc("mem_mb", "annotate__bakta"),
+        cpu_per_task=esc("cpus", "annotate__bakta"),
+        slurm_partition=esc("partition", "annotate__bakta"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__bakta", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__bakta"))
     shell:
         """
         bakta --db {params.db} \
@@ -50,13 +52,15 @@ rule annotate__bakta_mags_run:
         db=features["databases"]["bakta"],
         options=params["annotate"]["bakta"]["additional_options"],
         tmpdir=config["tmp_storage"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__bakta_mags_run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"],
-        partition = config["resources"]["partition"]["small"]
+        runtime=esc("runtime", "annotate__bakta_mags_run"),
+        mem_mb=esc("mem_mb", "annotate__bakta_mags_run"),
+        cpu_per_task=esc("cpus", "annotate__bakta_mags_run"),
+        slurm_partition=esc("partition", "annotate__bakta_mags_run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__bakta_mags_run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__bakta_mags_run"))
     shell:
         """
         bakta --db {params.db} \

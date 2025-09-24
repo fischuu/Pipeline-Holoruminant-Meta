@@ -12,7 +12,6 @@ dram-config: "config/dram_config.txt"
 proteinortho-config: "config/proteinortho_config.txt"
 phylophlan-config: "config/phylophlan/supertree_aa.cfg"
 
-kraken_tmp_storage: "$LOCAL_SCRATCH"     # This entry should be removed, once shm is introduced everywhere
 tmp_storage: "$TMP"
 nvme_storage: "$LOCAL_SCRATCH"
 shm_storage: "/dev/shm"      # If shm is not available, set to a fast disc (same as nvme_storage), if that is not available, point it to a regular disc (like tmp_storage)
@@ -22,42 +21,6 @@ assembler: "metaspades"  # "metaspades" or "megahit". Megahit serves as fall-bac
 #################################
 ##
 ## Server configuration
-
-resources:
-# Time allocations in minutes, for rules that run only short, long or very long 
-    time:
-        shortrun: 300 
-        longrun: 4000
-        verylongrun: 20000
-# Memory allocations in MB for different profiles
-    mem_per_cpu:
-        krakenmem: 140000  # We use /dev/shm, make sure there is enough RAM on node to host the database! between 100GB and 1.5TB!
-        veryhighmem: 1400000
-        quitehighmem: 320000
-        highmem: 160000
-        lowmem: 16000
-# CPU settings for single thread and multi thread jobs
-    cpu_per_task:
-        single_thread: 1
-        multi_thread: 24
-        kraken_thread: 20   # We use /dev/shm, which can consume the nodes RAM without safeguard, so make sure no other job runs on the node!!! For that, allocate all cpus from the node where kraken will run
-# Partition names for slurm executor
-    partition:
-        testing: "test"
-        small: "small"
-        kraken: "small"
-        highmem: "hugemem"
-        longrun: "longrun"
-        highlong: "hugemem_longrun"
-# If your system supports fast nvme disc, set this values, otherwise set to 0 (not tested, as our system has nvme discs!)
-    nvme:
-        small: 10
-        large: 50
-        verylarge: 250
-        kraken: 250
-        
-        
-## Below this line here is the new resource allocations. We will work with predefined onfiguration modules that can be escalated during retries
 
 resource_sets:
   small:
@@ -111,4 +74,4 @@ resource_sets:
     mem_mb: 360000
     cpus: 40
     partition: "small"
-    nvme: 250
+    nvme: 1000

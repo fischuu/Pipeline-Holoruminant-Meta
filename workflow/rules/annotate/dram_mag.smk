@@ -12,8 +12,6 @@ rule annotate__dram_mag__annotate:
         rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_rrnas.tsv",
     log:
         DRAM / "{assembly_id}" / "annotate_{assembly_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["dram"]
     params:
@@ -21,13 +19,15 @@ rule annotate__dram_mag__annotate:
         min_contig_size=1500,
         out_dir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}",
         tmp_dir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}/annotate",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__dram_mag__annotate")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["quitehighmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"],
-        partition = config["resources"]["partition"]["small"]
+        runtime=esc("runtime", "annotate__dram_mag__annotate"),
+        mem_mb=esc("mem_mb", "annotate__dram_mag__annotate"),
+        cpu_per_task=esc("cpus", "annotate__dram_mag__annotate"),
+        slurm_partition=esc("partition", "annotate__dram_mag__annotate"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__dram_mag__annotate", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__dram_mag__annotate"))
     shell:
         """
         rm -rf {params.tmp_dir}
@@ -76,13 +76,17 @@ rule annotate__dram_mag__distill:
         product_tsv=DRAMMAG / "{assembly_id}" / "product.tsv",
     log:
         DRAMMAG / "{assembly_id}" / "distill.log2",
-    conda:
-        "__environment__.yml"
     container:
         docker["dram"]
+    threads: esc("cpus", "annotate__fix_dram_mag_annotations_scaffold")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "annotate__fix_dram_mag_annotations_scaffold"),
+        mem_mb=esc("mem_mb", "annotate__fix_dram_mag_annotations_scaffold"),
+        cpu_per_task=esc("cpus", "annotate__fix_dram_mag_annotations_scaffold"),
+        slurm_partition=esc("partition", "annotate__fix_dram_mag_annotations_scaffold"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__fix_dram_mag_annotations_scaffold", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__fix_dram_mag_annotations_scaffold"))
     params:
         config=config["dram-config"],
         outdir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}",

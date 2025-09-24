@@ -1,5 +1,3 @@
-ESCALATION = ["medium","large"]
-
 rule quantify__bowtie2__build:
     """Index dereplicader"""
     input:
@@ -10,13 +8,15 @@ rule quantify__bowtie2__build:
         QUANT_INDEX / "dereplicated_genomes.log",
     container:
         docker["bowtie2"]
-    threads: esc("cpus")
+    threads: esc("cpus", "quantify__bowtie2__build")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "quantify__bowtie2__build"),
+        mem_mb=esc("mem_mb", "quantify__bowtie2__build"),
+        cpu_per_task=esc("cpus", "quantify__bowtie2__build"),
+        slurm_partition=esc("partition", "quantify__bowtie2__build"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__bowtie2__build", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("quantify__bowtie2__build"))
     shell:
         """
         bowtie2-build \
@@ -41,13 +41,15 @@ rule quantify__bowtie2__map:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.log",
     container:
         docker["bowtie2"]
-    threads: esc("cpus")
+    threads: esc("cpus", "quantify__bowtie2__map")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "quantify__bowtie2__map"),
+        mem_mb=esc("mem_mb", "quantify__bowtie2__map"),
+        cpu_per_task=esc("cpus", "quantify__bowtie2__map"),
+        slurm_partition=esc("partition", "quantify__bowtie2__map"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__bowtie2__map", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("quantify__bowtie2__map"))
     params:
         samtools_mem=params["quantify"]["samtools"]["mem"],
         rg_id=compose_rg_id,

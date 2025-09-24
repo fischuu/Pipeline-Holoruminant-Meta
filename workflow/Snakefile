@@ -6,8 +6,8 @@ import pandas as pd
 import yaml
 import os
 
-DEBUG = False
-version = "0.3.39"
+DEBUG = True
+version = "0.3.55"
 
 def debug(msg):
     if DEBUG:
@@ -64,10 +64,25 @@ debug(f"Total assemblies: {len(ASSEMBLIES)}")
 # Load paths and features
 debug("Loading pipeline-specific paths and feature settings...")
 
+def choose_temp(primary, fallback1=None, fallback2=None):
+    """Choose a temporary storage path with fallbacks based on non-empty strings."""
+    for path in [primary, fallback1, fallback2]:
+        if path != "":  # check if string is not empty
+            return path
+    raise RuntimeError("No temporary storage available!")
+
+
+# Fallback chain: shm -> nvme -> tmp
+KRAKEN2SHM = choose_temp(config["shm_storage"], config["nvme_storage"], config["tmp_storage"])
+DIAMONDSHM = choose_temp(config["nvme_storage"], config["tmp_storage"], None)
+EGGNOGSHM = choose_temp(config["shm_storage"], config["nvme_storage"], config["tmp_storage"])
+
+
 #KRAKEN2SHM = config["kraken_tmp_storage"]
-KRAKEN2SHM = config["shm_storage"]
-DIAMONDSHM = config["nvme_storage"]
-EGGNOGSHM = config["shm_storage"]
+#KRAKEN2SHM = config["shm_storage"]
+KRAKEN2NVME = config["nvme_storage"]
+#DIAMONDSHM = config["nvme_storage"]
+#EGGNOGSHM = config["shm_storage"]
 KRAKEN2_DBS = features["databases"]["kraken2"]
 METAPHLAN_DBS = features["databases"]["metaphlan4"]
 PHYLOFLASH_DBS = features["databases"]["phyloflash"]
@@ -75,6 +90,7 @@ HOST_NAMES = [] if features["hosts"] is None else list(features["hosts"].keys())
 LAST_HOST = HOST_NAMES[-1] if HOST_NAMES else None
 
 debug(f"KRAKEN2 fast temp storage: {KRAKEN2SHM}")
+debug(f"KRAKEN2 fall-back temp storage: {KRAKEN2NVME}")
 debug(f"DIAMOND fast temp storage: {DIAMONDSHM}")
 debug(f"EGGNOG fast temp storage: {EGGNOGSHM}")
 debug(f"Host names: {HOST_NAMES}, last host: {LAST_HOST}")
@@ -84,6 +100,15 @@ PREPROCESS_R = os.path.join(config["pipeline_folder"], "workflow/scripts/R/prepr
 
 debug(f"R script for reads: {READS_R}")
 debug(f"R script for preprocessing: {PREPROCESS_R}")
+
+# Import the escalation orders
+import yaml
+
+# --- Load one-line comma-separated ESCALATION config ---
+with open("config/escalation.yaml") as f:
+    raw = yaml.safe_load(f)
+
+ESCALATION_CONFIG = {k: [x.strip() for x in v.split(",")] for k, v in raw.items()}
 
 # Import subworkflows
 debug("Including subworkflows...")

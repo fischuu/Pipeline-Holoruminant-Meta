@@ -8,11 +8,15 @@ rule annotate__proteinortho:
         PROTEINORTHO / "proteinortho.log",
     container:
         docker["annotate"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__proteinortho")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime", "annotate__proteinortho"),
+        mem_mb=esc("mem_mb", "annotate__proteinortho"),
+        cpu_per_task=esc("cpus", "annotate__proteinortho"),
+        slurm_partition=esc("partition", "annotate__proteinortho"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__proteinortho", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__proteinortho"))
     params:
         outdir=PROTEINORTHO
     shell:

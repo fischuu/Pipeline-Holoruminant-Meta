@@ -10,8 +10,6 @@ rule annotate__dram__annotate:
         rrnas=DRAM / "annotate" / "rrnas.tsv",
     log:
         DRAM / "annotate.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["dram"]
     params:
@@ -20,13 +18,15 @@ rule annotate__dram__annotate:
         out_dir=DRAM,
         tmp_dir=DRAM / "annotate",
         parallel_retries=5,
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__dram__annotate")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["quitehighmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["verylongrun"],
-        nvme = config["resources"]["nvme"]["small"],
-        partition = config["resources"]["partition"]["longrun"]
+        runtime=esc("runtime", "annotate__dram__annotate"),
+        mem_mb=esc("mem_mb", "annotate__dram__annotate"),
+        cpu_per_task=esc("cpus", "annotate__dram__annotate"),
+        slurm_partition=esc("partition", "annotate__dram__annotate"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__dram__annotate", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__dram__annotate"))
     shell:
         """
         rm -rf {params.tmp_dir}
@@ -74,13 +74,17 @@ rule annotate__dram__distill:
         product_tsv=DRAM / "product.tsv",
     log:
         DRAM / "distill.log2",
-    conda:
-        "__environment__.yml"
     container:
         docker["dram"]
+    threads: esc("cpus", "annotate__dram__distill")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "annotate__dram__distill"),
+        mem_mb=esc("mem_mb", "annotate__dram__distill"),
+        cpu_per_task=esc("cpus", "annotate__dram__distill"),
+        slurm_partition=esc("partition", "annotate__dram__distill"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__dram__distill", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__dram__distill"))
     params:
         config=config["dram-config"],
         outdir_tmp=DRAM / "distill",

@@ -6,15 +6,17 @@ rule contig_annotate__cramToBam:
         temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cramToBam.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    threads: esc("cpus", "contig_annotate__cramToBam")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "contig_annotate__cramToBam"),
+        mem_mb=esc("mem_mb", "contig_annotate__cramToBam"),
+        cpu_per_task=esc("cpus", "contig_annotate__cramToBam"),
+        slurm_partition=esc("partition", "contig_annotate__cramToBam"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__cramToBam", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("contig_annotate__cramToBam"))
     shell:
         """
         samtools index {input} 2> {log} 1>&2
@@ -33,11 +35,15 @@ rule contig_annotate__featurecounts_run:
         file=CONTIG_FEATURECOUNTS / "{assembly_id}/{assembly_id}_{sample_id}.{library_id}.prodigal_fc.txt",
     log:
         CONTIG_FEATURECOUNTS / "{assembly_id}/{assembly_id}_{sample_id}.{library_id}.prodigal_fc.log",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "contig_annotate__featurecounts_run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "contig_annotate__featurecounts_run"),
+        mem_mb=esc("mem_mb", "contig_annotate__featurecounts_run"),
+        cpu_per_task=esc("cpus", "contig_annotate__featurecounts_run"),
+        slurm_partition=esc("partition", "contig_annotate__featurecounts_run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__featurecounts_run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("contig_annotate__featurecounts_run"))
     container: docker["subread"]
     shell:"""
         featureCounts -p \

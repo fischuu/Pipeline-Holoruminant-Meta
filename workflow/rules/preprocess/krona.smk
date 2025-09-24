@@ -10,12 +10,15 @@ rule preprocess__krona__visualize:
         KRONA / "{kraken_db}_{sample_id}.{library_id}.log",
     benchmark:
         KRONA / "benchmark/{kraken_db}_{sample_id}.{library_id}bsk.tsv",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "preprocess__krona__visualize")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-    conda:
-        "__environment__.yml"
+        runtime=esc("runtime", "preprocess__krona__visualize"),
+        mem_mb=esc("mem_mb", "preprocess__krona__visualize"),
+        cpu_per_task=esc("cpus", "preprocess__krona__visualize"),
+        slurm_partition=esc("partition", "preprocess__krona__visualize"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__krona__visualize", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__krona__visualize"))
     container:
         docker["krona"]
     params:

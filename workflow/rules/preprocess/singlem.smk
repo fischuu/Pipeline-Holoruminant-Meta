@@ -16,15 +16,17 @@ rule preprocess__singlem__pipe:
         SINGLEM / "pipe" / "{sample_id}.{library_id}.log",
     benchmark:
         SINGLEM / "benchmark/pipe" / "{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    threads: esc("cpus", "preprocess__singlem__pipe")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"]
+        runtime=esc("runtime", "preprocess__singlem__pipe"),
+        mem_mb=esc("mem_mb", "preprocess__singlem__pipe"),
+        cpu_per_task=esc("cpus", "preprocess__singlem__pipe"),
+        slurm_partition=esc("partition", "preprocess__singlem__pipe"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__pipe", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__singlem__pipe"))
     params:
         tmp = config["tmp_storage"]
     shell:
@@ -62,15 +64,19 @@ rule preprocess__singlem__condense:
         SINGLEM / "singlem.log",
     benchmark:
         SINGLEM / "benchmark/singlem.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
     params:
         input_dir=SINGLEM,
+    threads: esc("cpus", "preprocess__singlem__condense")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
-        time =  config["resources"]["time"]["shortrun"]
+        runtime=esc("runtime", "preprocess__singlem__condense"),
+        mem_mb=esc("mem_mb", "preprocess__singlem__condense"),
+        cpu_per_task=esc("cpus", "preprocess__singlem__condense"),
+        slurm_partition=esc("partition", "preprocess__singlem__condense"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__condense", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__singlem__condense"))
     shell:
         """
         singlem condense \
@@ -96,13 +102,17 @@ rule preprocess__singlem__microbial_fraction:
         SINGLEM / "microbial_fraction" / "{sample_id}.{library_id}.log",
     benchmark:
         SINGLEM / "benchmark/microbial_fraction" / "{sample_id}.{library_id}.tsv"
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
+    threads: esc("cpus", "preprocess__singlem__microbial_fraction")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime", "preprocess__singlem__microbial_fraction"),
+        mem_mb=esc("mem_mb", "preprocess__singlem__microbial_fraction"),
+        cpu_per_task=esc("cpus", "preprocess__singlem__microbial_fraction"),
+        slurm_partition=esc("partition", "preprocess__singlem__microbial_fraction"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__microbial_fraction", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__singlem__microbial_fraction"))
     shell:
         """
         singlem microbial_fraction \
@@ -128,13 +138,17 @@ rule preprocess__singlem__aggregate_microbial_fraction:
         SINGLEM / "microbial_fraction.log",
     benchmark:
         SINGLEM / "benchmark/microbial_fraction.tsv"
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
+    threads: esc("cpus", "preprocess__singlem__aggregate_microbial_fraction")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime", "preprocess__singlem__aggregate_microbial_fraction"),
+        mem_mb=esc("mem_mb", "preprocess__singlem__aggregate_microbial_fraction"),
+        cpu_per_task=esc("cpus", "preprocess__singlem__aggregate_microbial_fraction"),
+        slurm_partition=esc("partition", "preprocess__singlem__aggregate_microbial_fraction"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__aggregate_microbial_fraction", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__singlem__aggregate_microbial_fraction"))
     shell:
         """
         ( csvstack \
@@ -145,7 +159,6 @@ rule preprocess__singlem__aggregate_microbial_fraction:
         > {output.tsv} \
         ) 2> {log}
         """
-
 
 rule preprocess__singlem:
     input:

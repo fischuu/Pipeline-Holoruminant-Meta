@@ -1,4 +1,4 @@
-rule _annotate__gtdbtk_assembly__classify:
+rule annotate__gtdbtk_assembly__classify:
     """Run GTDB-Tk over the assembly genomes."""
     input:
         fasta_folder=DREP / "dereplicated_genomes",

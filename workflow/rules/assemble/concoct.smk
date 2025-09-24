@@ -1,4 +1,4 @@
-rule _assemble__concoct:
+rule assemble__concoct_run:
     input:
         assembly=lambda wildcards: (
             MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
@@ -9,15 +9,17 @@ rule _assemble__concoct:
         directory(CONCOCT / "{assembly_id}"),
     log:
         CONCOCT / "{assembly_id}.log",
-    conda:
-        "concoct.yml"
     container:
         docker["concoct"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__concoct_run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__concoct_run"),
+        mem_mb=esc("mem_mb", "assemble__concoct_run"),
+        cpu_per_task=esc("cpus", "assemble__concoct_run"),
+        slurm_partition=esc("partition", "assemble__concoct_run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__concoct_run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__concoct_run"))
     params:
         workdir=lambda w: CONCOCT / w.assembly_id,
     shell:

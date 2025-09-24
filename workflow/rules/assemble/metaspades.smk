@@ -1,4 +1,4 @@
-rule _assemble__metaspades:
+rule assemble__metaspades__run:
     """Run MetaSPAdes over one sample, merging all libraries in the process"""
     input:
         forwards=get_forwards_from_assembly_id,
@@ -10,17 +10,17 @@ rule _assemble__metaspades:
         concatenated_reverses=temp(METASPADES / "{assembly_id}_R2_concat.fastq.gz"),
     log:
         log=METASPADES / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__metaspades__run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["veryhighmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time=config["resources"]["time"]["verylongrun"],
-        partition=config["resources"]["partition"]["highlong"],
+        runtime=esc("runtime", "assemble__metaspades__run"),
+        mem_mb=esc("mem_mb", "assemble__metaspades__run"),
+        cpu_per_task=esc("cpus", "assemble__metaspades__run"),
+        slurm_partition=esc("partition", "assemble__metaspades__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__metaspades__run", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__metaspades__run"))
     params:
         out_dir=lambda w: METASPADES / w.assembly_id,
         kmer_size=params["assemble"]["metaspades"]["kmer_size"],

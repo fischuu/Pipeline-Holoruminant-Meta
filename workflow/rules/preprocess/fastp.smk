@@ -1,5 +1,4 @@
-ESCALATION = ["medium","large"]
-
+# ---------- preprocess__fastp__run ----------
 rule preprocess__fastp__run:
     """Run fastp on one library"""
     input:
@@ -15,27 +14,30 @@ rule preprocess__fastp__run:
     log:
         FASTP / "{sample_id}.{library_id}.log",
     benchmark:
-        FASTP / "benchmark/{sample_id}.{library_id}.tsv"
+        FASTP / "benchmark/{sample_id}.{library_id}.tsv",
     container:
-        docker["preprocess"]
+        docker["preprocess"],
     params:
         adapter_forward=get_forward_adapter,
         adapter_reverse=get_reverse_adapter,
         extra=params["preprocess"]["fastp"]["extra"],
         length_required=params["preprocess"]["fastp"]["length_required"],
-        temp_forward_=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_1.fq",
-        temp_reverse_=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_2.fq",
-        temp_unpaired1=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_u1.fq",
-        temp_unpaired2=lambda wildcards: FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_tmp_u2.fq",
-    threads: esc("cpus")
+        temp_forward_=lambda w: FASTP / f"{w.sample_id}.{w.library_id}_tmp_1.fq",
+        temp_reverse_=lambda w: FASTP / f"{w.sample_id}.{w.library_id}_tmp_2.fq",
+        temp_unpaired1=lambda w: FASTP / f"{w.sample_id}.{w.library_id}_tmp_u1.fq",
+        temp_unpaired2=lambda w: FASTP / f"{w.sample_id}.{w.library_id}_tmp_u2.fq",
+    threads: esc("cpus", "preprocess__fastp__run"),
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
-    shell:        """
-        # Run fastp with intermediate files
+        runtime=esc("runtime", "preprocess__fastp__run"),
+        mem_mb=esc("mem_mb", "preprocess__fastp__run"),
+        cpu_per_task=esc("cpus", "preprocess__fastp__run"),
+        partition=esc("partition", "preprocess__fastp__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__fastp__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__fastp__run")),
+    shell: """
+        echo "LOCAL_SCRATCH is " $LOCAL_SCRATCH 2> {log}.{resources.attempt} 1>&2
+
         fastp \
             --in1 {input.forward_} \
             --in2 {input.reverse_} \
@@ -51,39 +53,38 @@ rule preprocess__fastp__run:
             --length_required {params.length_required} \
             --thread {threads} \
             {params.extra} \
-        2> {log} 1>&2
+        2> {log}.{resources.attempt} 1>&2
 
-        # Compress the outputs using bgzip
         bgzip -l 9 -@ {threads} {params.temp_forward_}
         bgzip -l 9 -@ {threads} {params.temp_reverse_}
         bgzip -l 9 -@ {threads} {params.temp_unpaired1}
         bgzip -l 9 -@ {threads} {params.temp_unpaired2}
 
-        # Move the compressed files to the final destination
         mv {params.temp_forward_}.gz {output.forward_}
         mv {params.temp_reverse_}.gz {output.reverse_}
         mv {params.temp_unpaired1}.gz {output.unpaired1}
         mv {params.temp_unpaired2}.gz {output.unpaired2}
 
+        echo "Checking integrity of output files" >> {log}.{resources.attempt}
+        gzip -t {output.forward_} 2>> {log}.{resources.attempt}
+        gzip -t {output.reverse_} 2>> {log}.{resources.attempt}
+        gzip -t {output.unpaired1} 2>> {log}.{resources.attempt}
+        gzip -t {output.unpaired2} 2>> {log}.{resources.attempt}
+        echo "Integrity check completed" >> {log}.{resources.attempt}
 
-        # Check the integrity of the gzipped files and log the output
-        echo "Checking integrity of output files" >> {log}
-        gzip -t {output.forward_} 2>> {log}
-        gzip -t {output.reverse_} 2>> {log}
-        gzip -t {output.unpaired1} 2>> {log}
-        gzip -t {output.unpaired2} 2>> {log}
-        echo "Integrity check completed" >> {log}
-        """
+        mv {log}.{resources.attempt} {log}
+    """
 
+# ---------- preprocess__fastp ----------
 rule preprocess__fastp:
-    """Get all files from fastp"""
+    """Aggregate all fastp outputs"""
     input:
         reads=[
             FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for end in "1 2 u1 u2".split(" ")
+            for end in "1 2 u1 u2".split()
         ],
         json=[
             FASTP / f"{sample_id}.{library_id}_fastp.json"
             for sample_id, library_id in SAMPLE_LIBRARY
-        ],
+        ]

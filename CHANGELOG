@@ -3,6 +3,14 @@
 
 Version 0.3.*:
 --------------
+63: Totally overhauled escalation system added to all rules.
+62: Option to turn off the use of /dev/shm drive
+61: Puhti slurm profil adjsuted for output and error
+60: Escalation system added to preprocess_diamond
+59: Escalation system added to preprocess_bowtie2
+58: Escalation function updated, it needs an additional argument to work dynamically
+57: kraken rule chooses either the shm or the nvme disc, depending on db size and disc space availability
+56: Fixed some log entries to avoid emtpy log files
 55: Updated the README to be more explicit how to setup a fresh installed pipeline
 54: Full_node resource set introduced in config/config.yaml
 53: shm_storage introduced in config/config.yaml

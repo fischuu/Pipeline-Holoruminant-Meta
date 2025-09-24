@@ -1,9 +1,6 @@
+# ---------- preprocess__bowtie2__build ----------
 rule preprocess__bowtie2__build:
-    """Build PRE_BOWTIE2 index for the host reference
-
-    Let the script decide to use a small or a large index based on the size of
-    the reference genome.
-    """
+    """Build PRE_BOWTIE2 index for the host reference"""
     input:
         reference=HOSTS / "{genome}.fa.gz",
         faidx=HOSTS / "{genome}.fa.gz.fai",
@@ -13,16 +10,17 @@ rule preprocess__bowtie2__build:
         PRE_INDEX / "{genome}.log",
     benchmark:
         PRE_INDEX / "benchmark/{genome}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["bowtie2"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "preprocess__bowtie2__build")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "preprocess__bowtie2__build"),
+        mem_mb=esc("mem_mb", "preprocess__bowtie2__build"),
+        cpu_per_task=esc("cpus", "preprocess__bowtie2__build"),
+        partition=esc("partition", "preprocess__bowtie2__build"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__bowtie2__build", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__bowtie2__build"))
     shell:
         """
         bowtie2-build \
@@ -31,17 +29,12 @@ rule preprocess__bowtie2__build:
             {output.mock} \
         2> {log}.{resources.attempt} 1>&2
 
-        mv \
-            {log}.{resources.attempt} \
-            {log}
+        mv {log}.{resources.attempt} {log}
         """
 
-
+# ---------- preprocess__bowtie2__map ----------
 rule preprocess__bowtie2__map:
-    """Map one library to reference genome using bowtie2
-
-    Output SAM file is piped to samtools sort to generate a CRAM file.
-    """
+    """Map one library to reference genome using bowtie2"""
     input:
         forward_=get_input_forward_for_host_mapping,
         reverse_=get_input_reverse_for_host_mapping,
@@ -50,7 +43,7 @@ rule preprocess__bowtie2__map:
         faidx=HOSTS / "{genome}.fa.gz.fai",
     output:
         cram=temp(PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram"),
-        counts= PRE_QUANT / "{genome}" / "{sample_id}.{library_id}.chr_alignment_counts.tsv"
+        counts=PRE_QUANT / "{genome}" / "{sample_id}.{library_id}.chr_alignment_counts.tsv"
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -59,53 +52,35 @@ rule preprocess__bowtie2__map:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
-    conda:
-        "__environment__.yml"
     container:
         docker["bowtie2"]
+    threads: esc("cpus", "preprocess__bowtie2__map")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "preprocess__bowtie2__map"),
+        mem_mb=esc("mem_mb", "preprocess__bowtie2__map"),
+        cpu_per_task=esc("cpus", "preprocess__bowtie2__map"),
+        partition=esc("partition", "preprocess__bowtie2__map"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__bowtie2__map", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__bowtie2__map"))
     shell:
         """
-        find \
-            $(dirname {output.cram}) \
-            -name "$(basename {output.cram}).tmp.*.bam" \
-            -delete \
-        2> {log}.{resources.attempt} 1>&2
+        find $(dirname {output.cram}) -name "$(basename {output.cram}).tmp.*.bam" -delete 2> {log}.{resources.attempt} 1>&2
 
-        ( bowtie2 \
-            -x {input.mock} \
-            -1 {input.forward_} \
-            -2 {input.reverse_} \
-            --threads {threads} \
-            --rg-id '{params.rg_id}' \
-            --rg '{params.rg_extra}' \
-        | samtools sort \
-            -l 9 \
-            -M \
-            -m {params.samtools_mem} \
-            -o {output.cram} \
-            --reference {input.reference} \
-            --threads {threads} \
-        ) 2>> {log}.{resources.attempt} 1>&2
+        ( bowtie2 -x {input.mock} -1 {input.forward_} -2 {input.reverse_} \
+            --threads {threads} --rg-id '{params.rg_id}' --rg '{params.rg_extra}' \
+        | samtools sort -l 9 -M -m {params.samtools_mem} -o {output.cram} \
+            --reference {input.reference} --threads {threads} ) \
+        2>> {log}.{resources.attempt} 1>&2
 
         samtools idxstats {output.cram} | awk '{{print $1, $3}}' > {output.counts}
 
-        mv \
-            {log}.{resources.attempt} \
-            {log}
+        mv {log}.{resources.attempt} {log}
         """
 
-
+# ---------- preprocess__bowtie2__extract_nonhost_run ----------
 rule preprocess__bowtie2__extract_nonhost_run:
-    """
-    Keep only pairs unmapped to the human reference genome, sort by name rather
-    than by coordinate, and convert to FASTQ.
-    """
+    """Extract non-host reads and convert to FASTQ"""
     input:
         cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
         reference=HOSTS / "{genome}.fa.gz",
@@ -117,46 +92,30 @@ rule preprocess__bowtie2__extract_nonhost_run:
         PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}.log",
     benchmark:
         PRE_BOWTIE2 / "benchmark/non{genome}" / "{sample_id}.{library_id}.tsv"
-    conda:
-        "__environment__.yml"
     container:
         docker["bowtie2"]
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "preprocess__bowtie2__extract_nonhost_run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time = config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["large"]
+        runtime=esc("runtime", "preprocess__bowtie2__extract_nonhost_run"),
+        mem_mb=esc("mem_mb", "preprocess__bowtie2__extract_nonhost_run"),
+        cpu_per_task=esc("cpus", "preprocess__bowtie2__extract_nonhost_run"),
+        partition=esc("partition", "preprocess__bowtie2__extract_nonhost_run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__bowtie2__extract_nonhost_run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__bowtie2__extract_nonhost_run"))
     shell:
         """
-        ( samtools view \
-            --reference {input.reference} \
-            --threads {threads} \
-            -u \
-            -o /dev/stdout \
-            -f 12 \
-            {input.cram} \
-        | samtools collate \
-            -O \
-            -u \
-            -f \
-            --reference {input.reference} \
-            -@ {threads} \
-            - \
-        | samtools fastq \
-            -1 >(pigz > {output.forward_}) \
-            -2 >(pigz > {output.reverse_}) \
-            -0 /dev/null \
-            -c 9 \
-            --threads {threads} \
-        ) 2> {log} 1>&2
+        ( samtools view --reference {input.reference} --threads {threads} -u -o /dev/stdout -f 12 {input.cram} \
+        | samtools collate -O -u -f --reference {input.reference} -@ {threads} - \
+        | samtools fastq -1 >(pigz > {output.forward_}) -2 >(pigz > {output.reverse_}) \
+            -0 /dev/null -c 9 --threads {threads} ) 2> {log} 1>&2
         """
 
+# ---------- preprocess__store_final_fastq ----------
 rule preprocess__store_final_fastq:
-    """Copy final process
-    """
+    """Copy final processed FASTQ files"""
     input:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
@@ -167,32 +126,33 @@ rule preprocess__store_final_fastq:
         PRE_BOWTIE2 / "decontaminated_reads" / "log" / "{sample_id}.{library_id}.log",
     benchmark:
         PRE_BOWTIE2 / "decontaminated_reads" / "benchmark" / "{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["bowtie2"]
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    threads: esc("cpus", "preprocess__store_final_fastq")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
-        time =  config["resources"]["time"]["shortrun"],
+        runtime=esc("runtime", "preprocess__store_final_fastq"),
+        mem_mb=esc("mem_mb", "preprocess__store_final_fastq"),
+        cpu_per_task=esc("cpus", "preprocess__store_final_fastq"),
+        partition=esc("partition", "preprocess__store_final_fastq"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__store_final_fastq", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__store_final_fastq"))
     shell:
         """
         cp {input.forward_} {output.forward_}
         cp {input.reverse_} {output.reverse_}
         """
 
+# ---------- preprocess__bowtie2__extract_nonhost ----------
 rule preprocess__bowtie2__extract_nonhost:
     """Run bowtie2_extract_nonhost for all PE libraries"""
     input:
-        [
-        PRE_BOWTIE2 / "decontaminated_reads" / f"{sample_id}.{library_id}_{end}.fq.gz"
-        for sample_id, library_id in SAMPLE_LIBRARY
-        for end in ["1", "2"]
-        ],
+        [PRE_BOWTIE2 / "decontaminated_reads" / f"{sample_id}.{library_id}_{end}.fq.gz"
+         for sample_id, library_id in SAMPLE_LIBRARY
+         for end in ["1", "2"]]
 
-
+# ---------- preprocess__bowtie2 ----------
 rule preprocess__bowtie2:
     """Run all the preprocessing steps for bowtie2"""
     input:
-        rules.preprocess__bowtie2__extract_nonhost.input,
+        rules.preprocess__bowtie2__extract_nonhost.input

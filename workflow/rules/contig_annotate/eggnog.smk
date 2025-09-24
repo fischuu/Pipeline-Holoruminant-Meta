@@ -14,12 +14,15 @@ rule contig_annotate__eggnog_find_homology:
         tmp=config["nvme_storage"],
         out="prodigal.chunk.{i}",
         fa=features["databases"]["eggnog"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "contig_annotate__eggnog_find_homology")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["large"]
+        runtime=esc("runtime", "contig_annotate__eggnog_find_homology"),
+        mem_mb=esc("mem_mb", "contig_annotate__eggnog_find_homology"),
+        cpu_per_task=esc("cpus", "contig_annotate__eggnog_find_homology"),
+        slurm_partition=esc("partition", "contig_annotate__eggnog_find_homology"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__eggnog_find_homology", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("contig_annotate__eggnog_find_homology"))
     container:
         docker["annotate"]
     shell:""" 
@@ -63,12 +66,15 @@ rule contig_annotate__eggnog_orthology:
         tmp=config["nvme_storage"],
         fa=features["databases"]["eggnog"],
         out = lambda wildcards: CONTIG_EGGNOG / f"{wildcards.assembly_id}/eggnog_output",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "contig_annotate__eggnog_orthology")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["large"]
+        runtime=esc("runtime", "contig_annotate__eggnog_orthology"),
+        mem_mb=esc("mem_mb", "contig_annotate__eggnog_orthology"),
+        cpu_per_task=esc("cpus", "contig_annotate__eggnog_orthology"),
+        slurm_partition=esc("partition", "contig_annotate__eggnog_orthology"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__eggnog_orthology", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("contig_annotate__eggnog_orthology"))
     container:
         docker["annotate"]
     shell:"""

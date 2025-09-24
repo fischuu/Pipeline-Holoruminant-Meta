@@ -269,3 +269,4 @@ svg_code <- export_svg(graph)
 # Save as an HTML file
 html_code <- paste0('<html><body>', svg_code, '</body></html>')
 write(html_code, file = "pipeline_diagram.html")
+

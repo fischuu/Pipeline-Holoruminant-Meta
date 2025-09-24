@@ -1,4 +1,4 @@
-rule _assemble__metabat2__run:
+rule assemble__metabat2__run:
     """Run metabat2 end-to-end on a single assembly"""
     input:
         crams=get_crams_from_assembly_id,
@@ -11,8 +11,6 @@ rule _assemble__metabat2__run:
         bins=directory(METABAT2 / "{assembly_id}"),
     log:
         METABAT2 / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
     params:
@@ -22,11 +20,15 @@ rule _assemble__metabat2__run:
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
         workdir=METABAT2,
         minLen=params["assemble"]["metabat"]["min_contig_len"],
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__metabat2__run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__metabat2__run"),
+        mem_mb=esc("mem_mb", "assemble__metabat2__run"),
+        cpu_per_task=esc("cpus", "assemble__metabat2__run"),
+        slurm_partition=esc("partition", "assemble__metabat2__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__metabat2__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__metabat2__run"))
     shell:
         """
         for cram in {input.crams} ; do

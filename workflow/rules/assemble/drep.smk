@@ -1,17 +1,21 @@
-rule _assemble__drep__separate_bins:
+rule assemble__drep__separate_bins:
     input:
         assemblies=[MAGSCOT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],
     output:
         out_dir=directory(DREP / "separated_bins"),
     log:
         DREP / "separate_bins.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
+      threads: esc("cpus", "assemble__drep__separate_bins")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["shortrun"],
+        runtime=esc("runtime", "assemble__drep__separate_bins"),
+        mem_mb=esc("mem_mb", "assemble__drep__separate_bins"),
+        cpu_per_task=esc("cpus", "assemble__drep__separate_bins"),
+        slurm_partition=esc("partition", "assemble__drep__separate_bins"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__drep__separate_bins", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__drep__separate_bins"))
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
@@ -29,7 +33,7 @@ rule _assemble__drep__separate_bins:
         """
 
 
-rule _assemble__drep__run:
+rule assemble__drep__run:
     """Dereplicate all the bins using dRep."""
     input:
         genomes=DREP / "separated_bins",
@@ -39,17 +43,17 @@ rule _assemble__drep__run:
         data_tables=DREP / "data_tables.tar.gz",
     log:
         DREP / "drep.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__drep__run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"],
+        runtime=esc("runtime", "assemble__drep__run"),
+        mem_mb=esc("mem_mb", "assemble__drep__run"),
+        cpu_per_task=esc("cpus", "assemble__drep__run"),
+        slurm_partition=esc("partition", "assemble__drep__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__drep__run", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__drep__run"))
     params:
         out_dir=DREP,
         completeness=params["assemble"]["drep"]["completeness"],
@@ -114,7 +118,7 @@ rule _assemble__drep__run:
         """
 
 
-rule _assemble__drep__join_genomes:
+rule assemble__drep__join_genomes:
     """Join all the dereplicated genomes into a single file."""
     input:
         DREP / "dereplicated_genomes",
@@ -122,16 +126,17 @@ rule _assemble__drep__join_genomes:
         DREP / "dereplicated_genomes.fa.gz",
     log:
         DREP / "dereplicated_genomes.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__drep__join_genomes")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["shortrun"],
-        nvme = config["resources"]["nvme"]["small"]
+        runtime=esc("runtime", "assemble__drep__join_genomes"),
+        mem_mb=esc("mem_mb", "assemble__drep__join_genomes"),
+        cpu_per_task=esc("cpus", "assemble__drep__join_genomes"),
+        slurm_partition=esc("partition", "assemble__drep__join_genomes"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__drep__join_genomes", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__drep__join_genomes"))
     shell:
         """
         ( zcat \

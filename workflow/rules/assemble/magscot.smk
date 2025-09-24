@@ -1,4 +1,4 @@
-rule _assemble__magscot__prodigal:
+rule assemble__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
         assembly=lambda wildcards: (
@@ -9,17 +9,17 @@ rule _assemble__magscot__prodigal:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
     log:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__magscot__prodigal")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        nvme = config["resources"]["nvme"]["small"],
+        runtime=esc("runtime", "assemble__magscot__prodigal"),
+        mem_mb=esc("mem_mb", "assemble__magscot__prodigal"),
+        cpu_per_task=esc("cpus", "assemble__magscot__prodigal"),
+        slurm_partition=esc("partition", "assemble__magscot__prodigal"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__prodigal", attempt=1)) + "'",
         attempt=get_attempt,
-    retries: 5
+    retries: len(get_escalation_order("assemble__magscot__prodigal"))
     shell:
         """
         
@@ -45,7 +45,7 @@ rule _assemble__magscot__prodigal:
         """
 
 
-rule _assemble__magscot__hmmsearch_pfam:
+rule assemble__magscot__hmmsearch_pfam:
     """Run hmmsearch over the predicted proteins of an assembly using Pfam as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -54,15 +54,17 @@ rule _assemble__magscot__hmmsearch_pfam:
         tblout=MAGSCOT / "{assembly_id}" / "pfam.tblout.gz",
     log:
         MAGSCOT / "{assembly_id}" / "pfam.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__magscot__hmmsearch_pfam")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__magscot__hmmsearch_pfam"),
+        mem_mb=esc("mem_mb", "assemble__magscot__hmmsearch_pfam"),
+        cpu_per_task=esc("cpus", "assemble__magscot__hmmsearch_pfam"),
+        slurm_partition=esc("partition", "assemble__magscot__hmmsearch_pfam"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__hmmsearch_pfam", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__magscot__hmmsearch_pfam"))
     shell:
         """
         hmmsearch \
@@ -78,7 +80,7 @@ rule _assemble__magscot__hmmsearch_pfam:
         """
 
 
-rule _assemble__magscot__hmmsearch_tigr:
+rule assemble__magscot__hmmsearch_tigr:
     """Run hmmsearch over the predicted proteins of an assembly using TIGR as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -87,15 +89,17 @@ rule _assemble__magscot__hmmsearch_tigr:
         tblout=MAGSCOT / "{assembly_id}" / "tigr.tblout.gz",
     log:
         MAGSCOT / "{assembly_id}" / "tigr.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__magscot__hmmsearch_tigr")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__magscot__hmmsearch_tigr"),
+        mem_mb=esc("mem_mb", "assemble__magscot__hmmsearch_tigr"),
+        cpu_per_task=esc("cpus", "assemble__magscot__hmmsearch_tigr"),
+        slurm_partition=esc("partition", "assemble__magscot__hmmsearch_tigr"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__hmmsearch_tigr", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__magscot__hmmsearch_tigr"))
     shell:
         """
         hmmsearch \
@@ -111,7 +115,7 @@ rule _assemble__magscot__hmmsearch_tigr:
         """
 
 
-rule _assemble__magscot__join_hmms:
+rule assemble__magscot__join_hmms:
     """Join the results of hmmsearch over TIGR and Pfam
 
     Note: "|| true" is used to avoid grep returning an error code when no lines are found
@@ -123,13 +127,17 @@ rule _assemble__magscot__join_hmms:
         merged=MAGSCOT / "{assembly_id}" / "hmm.tblout",
     log:
         MAGSCOT / "{assembly_id}" / "hmm.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
+    threads: esc("cpus", "assemble__magscot__join_hmms")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__magscot__join_hmms"),
+        mem_mb=esc("mem_mb", "assemble__magscot__join_hmms"),
+        cpu_per_task=esc("cpus", "assemble__magscot__join_hmms"),
+        slurm_partition=esc("partition", "assemble__magscot__join_hmms"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__join_hmms", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__magscot__join_hmms"))
     shell:
         """
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
@@ -142,7 +150,7 @@ rule _assemble__magscot__join_hmms:
         """
 
 
-rule _assemble__magscot__merge_contig_to_bin:
+rule assemble__magscot__merge_contig_to_bin:
     """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2
 
     The output file should have the following format:
@@ -156,13 +164,17 @@ rule _assemble__magscot__merge_contig_to_bin:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
     log:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
+    threads: esc("cpus", "assemble__magscot__merge_contig_to_bin")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__magscot__merge_contig_to_bin"),
+        mem_mb=esc("mem_mb", "assemble__magscot__merge_contig_to_bin"),
+        cpu_per_task=esc("cpus", "assemble__magscot__merge_contig_to_bin"),
+        slurm_partition=esc("partition", "assemble__magscot__merge_contig_to_bin"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__merge_contig_to_bin", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__magscot__merge_contig_to_bin"))
     shell:
         """
         for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
@@ -184,7 +196,7 @@ rule _assemble__magscot__merge_contig_to_bin:
         done >> {output} 2>> {log}
         """
 
-rule _assemble__magscot__run:
+rule assemble__magscot__run:
     """Run MAGSCOT over one assembly"""
     input:
         contigs_to_bin=MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
@@ -199,8 +211,6 @@ rule _assemble__magscot__run:
         scores=MAGSCOT / "{assembly_id}" / "magscot.scores.out",
     log:
         MAGSCOT / "{assembly_id}/magscot.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
     params:
@@ -208,9 +218,15 @@ rule _assemble__magscot__run:
         extra=params["assemble"]["magscot"]["extra"],
         th=params["assemble"]["magscot"]["threshold"],
         script_folder=SCRIPT_FOLDER,
+    threads: esc("cpus", "assemble__magscot__run")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__magscot__run"),
+        mem_mb=esc("mem_mb", "assemble__magscot__run"),
+        cpu_per_task=esc("cpus", "assemble__magscot__run"),
+        slurm_partition=esc("partition", "assemble__magscot__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__magscot__run"))
     shell:
         """
         set -e
@@ -228,7 +244,7 @@ rule _assemble__magscot__run:
         """
 
 
-rule _assemble__magscot__reformat:
+rule assemble__magscot__reformat:
     """Reformat the results from MAGSCOT"""
     input:
         refined_contig_to_bin=MAGSCOT
@@ -238,13 +254,17 @@ rule _assemble__magscot__reformat:
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     log:
         MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
+    threads: esc("cpus", "assemble__magscot__reformat")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
-        time =  config["resources"]["time"]["shortrun"],
+        runtime=esc("runtime", "assemble__magscot__reformat"),
+        mem_mb=esc("mem_mb", "assemble__magscot__reformat"),
+        cpu_per_task=esc("cpus", "assemble__magscot__reformat"),
+        slurm_partition=esc("partition", "assemble__magscot__reformat"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__reformat", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__magscot__reformat"))
     params:
         script_folder=SCRIPT_FOLDER,
     shell:
@@ -258,7 +278,7 @@ rule _assemble__magscot__reformat:
         """
 
 
-rule _assemble__magscot__rename:
+rule assemble__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
         assembly=lambda wildcards: (
@@ -270,13 +290,17 @@ rule _assemble__magscot__rename:
         fasta=MAGSCOT / "{assembly_id}.fa.gz",
     log:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
+    threads: esc("cpus", "assemble__magscot__rename")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
-        time =  config["resources"]["time"]["shortrun"],
+        runtime=esc("runtime", "assemble__magscot__rename"),
+        mem_mb=esc("mem_mb", "assemble__magscot__rename"),
+        cpu_per_task=esc("cpus", "assemble__magscot__rename"),
+        slurm_partition=esc("partition", "assemble__magscot__rename"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__rename", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__magscot__rename"))
     params:
         script_folder=SCRIPT_FOLDER,
     shell:

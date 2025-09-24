@@ -17,8 +17,6 @@ rule preprocess__nonpareil__run:
         NONPAREIL / "{sample_id}.{library_id}.log",
     benchmark:
         NONPAREIL / "benchmark/{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
     params:
@@ -26,11 +24,15 @@ rule preprocess__nonpareil__run:
         reads=lambda w: NONPAREIL /  f"{w.sample_id}.{w.library_id}_1.fq",
         X=params["preprocess"]["nonpareil"]["X"],
         tmp = config["tmp_storage"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "preprocess__nonpareil__run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime", "preprocess__nonpareil__run"),
+        mem_mb=esc("mem_mb", "preprocess__nonpareil__run"),
+        cpu_per_task=esc("cpus", "preprocess__nonpareil__run"),
+        slurm_partition=esc("partition", "preprocess__nonpareil__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__nonpareil__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__nonpareil__run"))
     shell:
         """
         TMPDIR={params.tmp}
@@ -63,13 +65,17 @@ rule preprocess__nonpareil__aggregate:
         NONPAREIL / "nonpareil.log",
     benchmark:
         NONPAREIL / "benchmark/nonpareil.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
+    threads: esc("cpus", "preprocess__nonpareil__aggregate")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime", "preprocess__nonpareil__aggregate"),
+        mem_mb=esc("mem_mb", "preprocess__nonpareil__aggregate"),
+        cpu_per_task=esc("cpus", "preprocess__nonpareil__aggregate"),
+        slurm_partition=esc("partition", "preprocess__nonpareil__aggregate"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__nonpareil__aggregate", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__nonpareil__aggregate"))
     params:
         input_dir=NONPAREIL,
         script_folder=SCRIPT_FOLDER,

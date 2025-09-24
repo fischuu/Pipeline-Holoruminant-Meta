@@ -12,16 +12,17 @@ rule preprocess__phyloflash__run:
         PHYLOFLASH / "log" / "{sample_id}.{library_id}.log",
     benchmark:
         PHYLOFLASH / "benchmark" / "{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["phyloflash"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "preprocess__phyloflash__run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["quitehighmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"]
+        runtime=esc("runtime", "preprocess__phyloflash__run"),
+        mem_mb=esc("mem_mb", "preprocess__phyloflash__run"),
+        cpu_per_task=esc("cpus", "preprocess__phyloflash__run"),
+        slurm_partition=esc("partition", "preprocess__phyloflash__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__phyloflash__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__phyloflash__run"))
     params:
         lib="{sample_id}_{library_id}",
         outdir=PHYLOFLASH
@@ -56,14 +57,19 @@ rule preprocess__phyloflash__condense:
         PHYLOFLASH / "phyloflash.log",
     benchmark:
         PHYLOFLASH / "benchmark/phyloflash.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["phyloflash"]
     params:
         input_dir=PHYLOFLASH,
+    threads: esc("cpus", "preprocess__phyloflash__condense")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]
+        runtime=esc("runtime", "preprocess__phyloflash__condense"),
+        mem_mb=esc("mem_mb", "preprocess__phyloflash__condense"),
+        cpu_per_task=esc("cpus", "preprocess__phyloflash__condense"),
+        slurm_partition=esc("partition", "preprocess__phyloflash__condense"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__phyloflash__condense", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__phyloflash__condense"))
     shell:
         """
         cat {input.genefamily_data} > {output}

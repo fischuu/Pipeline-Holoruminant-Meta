@@ -1,4 +1,4 @@
-rule _annotate__camper__annotate:
+rule annotate__camper__annotate:
     """Annotate dereplicate genomes with CAMPER"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes.fa.gz"
@@ -13,12 +13,15 @@ rule _annotate__camper__annotate:
     params:
         out_dir=CAMPER,
         parallel_retries=5,
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__camper__annotate")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"]
+        runtime=esc("runtime", "annotate__camper__annotate"),
+        mem_mb=esc("mem_mb", "annotate__camper__annotate"),
+        cpu_per_task=esc("cpus", "annotate__camper__annotate"),
+        slurm_partition=esc("partition", "annotate__camper__annotate"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__camper__annotate", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__camper__annotate"))
     shell:
         """
         camper_annotate -i {input} \

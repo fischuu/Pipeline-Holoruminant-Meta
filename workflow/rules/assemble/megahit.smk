@@ -1,4 +1,4 @@
-rule _assemble__megahit:
+rule assemble__megahit__run:
     """Run megahit over one sample, merging all libraries in the process
 
     Note: the initial rm -rf is to delete the folder that snakemake creates.
@@ -12,17 +12,17 @@ rule _assemble__megahit:
         tarball=MEGAHIT / "{assembly_id}.tar.gz",
     log:
         log=MEGAHIT / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__megahit__run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["veryhighmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["verylongrun"],
-        partition = config["resources"]["partition"]["highlong"],
+        runtime=esc("runtime", "assemble__megahit__run"),
+        mem_mb=esc("mem_mb", "assemble__megahit__run"),
+        cpu_per_task=esc("cpus", "assemble__megahit__run"),
+        slurm_partition=esc("partition", "assemble__megahit__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__megahit__run", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__megahit__run"))
     params:
         out_dir=lambda w: MEGAHIT / w.assembly_id,
         mincount=params["assemble"]["megahit"]["mincount"],

@@ -11,13 +11,17 @@ rule preprocess__samtools__stats_cram:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.stats.log",
     benchmark:
         PRE_BOWTIE2 / "benchmark/{genome}" / "{sample_id}.{library_id}.stats.tsv"
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
+    threads: esc("cpus", "preprocess__samtools__stats_cram")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
-        time =  config["resources"]["time"]["shortrun"]
+        runtime=esc("runtime", "preprocess__samtools__stats_cram"),
+        mem_mb=esc("mem_mb", "preprocess__samtools__stats_cram"),
+        cpu_per_task=esc("cpus", "preprocess__samtools__stats_cram"),
+        slurm_partition=esc("partition", "preprocess__samtools__stats_cram"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__samtools__stats_cram", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__samtools__stats_cram"))
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 

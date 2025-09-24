@@ -1,4 +1,4 @@
-rule _assemble__maxbin2__run:
+rule assemble__maxbin2__run:
     """Run MaxBin2 over a single assembly"""
     input:
         assembly=lambda wildcards: (
@@ -10,16 +10,17 @@ rule _assemble__maxbin2__run:
         workdir=directory(MAXBIN2 / "{assembly_id}"),
     log:
         MAXBIN2 / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__maxbin2__run")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["verylongrun"],
-        partition = config["resources"]["partition"]["longrun"],
+        runtime=esc("runtime", "assemble__maxbin2__run"),
+        mem_mb=esc("mem_mb", "assemble__maxbin2__run"),
+        cpu_per_task=esc("cpus", "assemble__maxbin2__run"),
+        slurm_partition=esc("partition", "assemble__maxbin2__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__maxbin2__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__maxbin2__run"))
     params:
         seed=1,
         coverage=lambda w: MAXBIN2 / f"{w.assembly_id}/maxbin2.coverage",

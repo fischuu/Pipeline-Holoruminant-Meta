@@ -1,4 +1,4 @@
-rule _assemble__bowtie2__build:
+rule assemble__bowtie2__build_run:
     """Index a megahit assembly"""
     input:
         contigs=lambda wildcards: (
@@ -9,16 +9,17 @@ rule _assemble__bowtie2__build:
         mock=touch(ASSEMBLE_INDEX / "{assembly_id}"),
     log:
         ASSEMBLE_INDEX / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__bowtie2__build")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__bowtie2__build"),
+        mem_mb=esc("mem_mb", "assemble__bowtie2__build"),
+        cpu_per_task=esc("cpus", "assemble__bowtie2__build"),
+        slurm_partition=esc("partition", "assemble__bowtie2__build"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__bowtie2__build", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__bowtie2__build"))
     shell:
         """
         bowtie2-build \
@@ -37,7 +38,7 @@ rule assemble__bowtie2__build:
         [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
-rule _assemble__bowtie2__map:
+rule assemble__bowtie2__map:
     """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
@@ -55,16 +56,17 @@ rule _assemble__bowtie2__map:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["assemble"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "assemble__bowtie2__map")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "assemble__bowtie2__map"),
+        mem_mb=esc("mem_mb", "assemble__bowtie2__map"),
+        cpu_per_task=esc("cpus", "assemble__bowtie2__map"),
+        slurm_partition=esc("partition", "assemble__bowtie2__map"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__bowtie2__map", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("assemble__bowtie2__map"))
     params:
         samtools_mem=params["assemble"]["samtools"]["mem"],
         rg_id=compose_rg_id,

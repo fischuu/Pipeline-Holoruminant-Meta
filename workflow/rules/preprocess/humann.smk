@@ -1,6 +1,8 @@
+# ---------- preprocess__humann__run ----------
+ESCALATION = ["medium","large", "highmem", "longrun", "highmem_longrun"]
+
 rule preprocess__humann__run:
-    """Run HumanN3 over one sample
-    """
+    """Run HumanN3 over one sample"""
     input:
         forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
@@ -9,42 +11,47 @@ rule preprocess__humann__run:
         mp_out=METAPHLAN / "profiled" / "{sample_id}.{library_id}.txt",
     output:
         humann_out=HUMANN / "{sample_id}.{library_id}_genefamilies.tsv",
-        cat= temp(HUMANN / "{sample_id}.{library_id}_concatenated.fastq.gz"),
+        cat=temp(HUMANN / "{sample_id}.{library_id}_concatenated.fastq.gz"),
     log:
         HUMANN / "log" / "{sample_id}.{library_id}.log",
     benchmark:
         HUMANN / "benchmark" / "{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
-        docker["humann"]
+        docker["humann"],
     params:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
         additional_options=params["preprocess"]["humann"]["additional_options"],
-        tmp = config["tmp_storage"]
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+        tmp=config["tmp_storage"],
+    threads: esc("cpus", "preprocess__humann__run"),
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"]
-    shell:
-        """
+        runtime=esc("runtime", "preprocess__humann__run"),
+        mem_mb=esc("mem_mb", "preprocess__humann__run"),
+        cpu_per_task=esc("cpus", "preprocess__humann__run"),
+        partition=esc("partition", "preprocess__humann__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__humann__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__humann__run")),
+    shell: """
         TMPDIR={params.tmp}
+
+        echo "$(date) **Starting rule preprocess__humann__run, attempt {resources.attempt}**" > {log}.{resources.attempt}
 
         cat {input.forward_} {input.reverse_} > {output.cat}
         
         humann --input {output.cat} --output {params.out_folder} \
-        --threads {threads} \
-        --protein-database {input.prot_dbs} \
-        --nucleotide-database {input.nt_dbs} \
-        --output-basename {params.out_name} \
-        --taxonomic-profile {input.mp_out} \
-        {params.additional_options} \
-        2>> {log} 1>&2
+               --threads {threads} \
+               --protein-database {input.prot_dbs} \
+               --nucleotide-database {input.nt_dbs} \
+               --output-basename {params.out_name} \
+               --taxonomic-profile {input.mp_out} \
+               {params.additional_options} \
+        2>> {log}.{resources.attempt} 1>&2
 
-        """
+        echo "$(date) **Finished rule preprocess__humann__run, attempt {resources.attempt}**" >> {log}.{resources.attempt}
 
+        mv {log}.{resources.attempt} {log}
+    """
 
 rule preprocess__humann__condense:
     """Aggregate all the HumanN results into a single table"""
@@ -59,8 +66,6 @@ rule preprocess__humann__condense:
         HUMANN / "humann.log",
     benchmark:
         HUMANN / "benchmark/humann.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["humann"]
     params:

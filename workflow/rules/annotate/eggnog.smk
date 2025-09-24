@@ -12,12 +12,15 @@ rule annotate__eggnog:
         out_dir=EGGNOG,
         db=features["databases"]["eggnog"],
         prefix="eggnog"
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__eggnog")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["verylarge"]
+        runtime=esc("runtime", "annotate__eggnog"),
+        mem_mb=esc("mem_mb", "annotate__eggnog"),
+        cpu_per_task=esc("cpus", "annotate__eggnog"),
+        slurm_partition=esc("partition", "annotate__eggnog"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__eggnog", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__eggnog"))
     shell:
         """
          cp -r {params.db}/* $TMPDIR  2>> {log} 1>&2;

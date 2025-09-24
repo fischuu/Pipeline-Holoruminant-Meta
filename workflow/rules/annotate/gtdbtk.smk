@@ -10,20 +10,21 @@ rule annotate__gtdbtk__classify:
         identify=GTDBTK / "identify.tar.gz",
     log:
         GTDBTK / "gtdbtk_classify.log",
-    conda:
-        "gtdbtk.yml"
     container:
         docker["gtdbtk"]
     params:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
         bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__gtdbtk__classify")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        attempt=get_attempt
+        runtime=esc("runtime", "annotate__gtdbtk__classify"),
+        mem_mb=esc("mem_mb", "annotate__gtdbtk__classify"),
+        cpu_per_task=esc("cpus", "annotate__gtdbtk__classify"),
+        slurm_partition=esc("partition", "annotate__gtdbtk__classify"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__gtdbtk__classify", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__gtdbtk__classify"))
     shell:
         """
         rm \

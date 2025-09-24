@@ -7,18 +7,19 @@ rule annotate__checkm2__predict:
         CHECKM / "quality_report.tsv",
     log:
         CHECKM / "quality_report.log",
-    conda:
-        "checkm2.yml"
     container:
         docker["checkm2"]
     params:
         out_dir=CHECKM / "predict",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__checkm2__predict")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]//config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["large"],
+        runtime=esc("runtime", "annotate__checkm2__predict"),
+        mem_mb=esc("mem_mb", "annotate__checkm2__predict"),
+        cpu_per_task=esc("cpus", "annotate__checkm2__predict"),
+        slurm_partition=esc("partition", "annotate__checkm2__predict"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__checkm2__predict", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__checkm2__predict"))
     shell:
         """
         rm -rfv {params.out_dir} 2> {log} 1>&2

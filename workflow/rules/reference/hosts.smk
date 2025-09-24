@@ -6,16 +6,24 @@ rule reference__hosts__recompress:
         HOSTS / "{genome}.fa.gz",
     log:
         HOSTS / "{genome}.log",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
-    conda:
-        "__environment__.yml"
     container:
         docker["reference"]
+    threads: esc("cpus", "reference__hosts__recompress")
     resources:
-        time =  config["resources"]["time"]["shortrun"]
+        runtime=esc("runtime", "reference__hosts__recompress"),
+        mem_mb=esc("mem_mb", "reference__hosts__recompress"),
+        cpu_per_task=esc("cpus", "reference__hosts__recompress"),
+        slurm_partition=esc("partition", "reference__hosts__recompress"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "reference__hosts__recompress", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("reference__hosts__recompress"))
     shell:
         """
+        echo "$(date) **Starting rule reference__hosts__recompress**" > {log}
+
         (gzip -dc {input.fa_gz} | bgzip -@ {threads} > {output}) 2> {log}
+        
+        echo "$(date) **Finished rule reference__hosts__recompress**" >> {log}
         """
 
 

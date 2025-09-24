@@ -1,0 +1,81 @@
+annotate__bakta: medium,large,highmem,longrun,highmem_longrun
+annotate__bakta_mags_run: medium,large,highmem,longrun,highmem_longrun
+annotate__camper__annotate: medium,large,highmem,longrun,highmem_longrun
+annotate__checkm2__predict: medium,large,highmem,longrun,highmem_longrun
+annotate__dram__annotate: large,highmem,longrun,highmem_longrun
+annotate__dram__distill: small, medium, large
+annotate__dram_mag__annotate: large,highmem,longrun,highmem_longrun
+annotate__eggnog: large,highmem,longrun,highmem_longrun
+annotate__fix_dram_mag_annotations_scaffold: small, medium, large
+annotate__gtdbtk__classify: large,highmem,longrun,highmem_longrun
+annotate__phylophlan: medium,large
+annotate__proteinortho: medium,large
+annotate__quast: medium,large
+
+assemble__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
+assemble__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
+assemble__concoct_run: large,highmem,longrun,highmem_longrun
+assemble__drep__join_genomes: medium,large
+assemble__drep__run: medium,large,highmem,longrun,highmem_longrun
+assemble__drep__separate_bins: small, medium, large
+assemble__magscot__prodigal: medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__hmmsearch_pfam: medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__hmmsearch_tigr: medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__join_hmms: small,medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__merge_contig_to_bin: small,medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__run: small,medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__reformat: small,medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__rename: small,medium,large,highmem,longrun,highmem_longrun
+assemble__maxbin2__run: large,highmem,longrun,highmem_longrun
+assemble__metabat2__run: large,highmem,longrun,highmem_longrun
+assemble__megahit__run: large,highmem,longrun,highmem_longrun
+assemble__metaspades__run: large,highmem,longrun,highmem_longrun
+
+contig_annotate__camper__annotate: medium,large
+contig_annotate__eggnog_find_homology: medium,large,highmem,longrun,highmem_longrun
+contig_annotate__eggnog_orthology: large,highmem,longrun,highmem_longrun
+contig_annotate__cramToBam: small, medium, large
+contig_annotate__featurecounts_run: medium,large
+contig_annotate__prodigal_run: medium,large,highmem,longrun,highmem_longrun
+contig_annotate__cut_prodigal: medium,large,highmem,longrun,highmem_longrun
+
+helpers__fastqc: small, medium, large
+helpers__samtools__faidx_fa: small,medium,large
+helpers__samtools__faidx_fagz: small,medium,large
+helpers__samtools__flagstats_cram: small,medium,large
+helpers__samtools__idxstats_cram: small,medium,large
+helpers__samtools__index_bam: medium,large
+helpers__samtools__index_cram: small,medium,large
+
+preprocess__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
+preprocess__bowtie2__extract_nonhost: small,medium,large,highmem,longrun,highmem_longrun
+preprocess__bowtie2__extract_nonhost_run: large,highmem,longrun,highmem_longrun
+preprocess__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
+preprocess__diamond__assign: medium,large,highmem,longrun,highmem_longrun
+preprocess__diamond__summarise: small,medium,large
+preprocess__fastp__run: medium,large
+preprocess__humann__run: medium,large,highmem,longrun,highmem_longrun
+preprocess__kraken2__assign: medium, full_node
+preprocess__krona__visualize: medium,large
+preprocess__metaphlan__run: medium,large
+preprocess__nonpareil__aggregate: small, medium,large
+preprocess__nonpareil__run: medium,large
+preprocess__phyloflash__condense: small, medium,large
+preprocess__phyloflash__run: medium,large
+preprocess__samtools__stats_cram: small, medium, large
+preprocess__singlem__condense: small, medium, large
+preprocess__singlem__microbial_fraction: small, medium, large
+preprocess__singlem__pipe: small, medium, large
+preprocess__singlem__aggregate_microbial_fraction: small, medium,large
+preprocess__store_final_fastq: small,medium,large,highmem,longrun,highmem_longrun
+preprocess__sylph_profile: medium, large
+
+quantify__bowtie2__build: small, medium,large
+quantify__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
+quantify__coverm__contig_aggregate: small, medium,large
+quantify__coverm__contig_one: small, medium,large
+quantify__coverm__genome_aggregate: small, medium,large
+quantify__coverm__genome_run: small, medium,large
+quantify__samtools__stats_cram: small, medium,large
+
+reference__hosts__recompress: small,medium,large

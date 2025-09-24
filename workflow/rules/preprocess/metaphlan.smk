@@ -12,14 +12,17 @@ rule preprocess__metaphlan__run:
         METAPHLAN / "log" / "{sample_id}.{library_id}.log",
     benchmark:
         METAPHLAN / "benchmark" / "{sample_id}.{library_id}.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    threads: esc("cpus", "preprocess__metaphlan__run")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time =  config["resources"]["time"]["longrun"]
+        runtime=esc("runtime", "preprocess__metaphlan__run"),
+        mem_mb=esc("mem_mb", "preprocess__metaphlan__run"),
+        cpu_per_task=esc("cpus", "preprocess__metaphlan__run"),
+        slurm_partition=esc("partition", "preprocess__metaphlan__run"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__metaphlan__run", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__metaphlan__run"))
     params:
         tmp = config["tmp_storage"]
     shell:

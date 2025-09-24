@@ -11,14 +11,15 @@ rule annotate__phylophlan:
         PHYLOPHLAN / "phylophlan_sgb.log",
     benchmark:
         PHYLOPHLAN / "benchmark/phylophlan_sgb.tsv",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "annotate__phylophlan")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time=config["resources"]["time"]["longrun"],
-        nvme=config["resources"]["nvme"]["large"]
-    conda:
-        "__environment__.yml"
+        runtime=esc("runtime", "annotate__phylophlan"),
+        mem_mb=esc("mem_mb", "annotate__phylophlan"),
+        cpu_per_task=esc("cpus", "annotate__phylophlan"),
+        slurm_partition=esc("partition", "annotate__phylophlan"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__phylophlan", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("annotate__phylophlan"))
     container:
         docker["annotate"]
     shell:

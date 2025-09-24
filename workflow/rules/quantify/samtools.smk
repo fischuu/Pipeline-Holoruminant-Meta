@@ -1,5 +1,3 @@
-ESCALATION = ["medium","large"]
-
 rule quantify__samtools__stats_cram:
     """Get stats from CRAM files using samtools stats."""
     input:
@@ -13,13 +11,15 @@ rule quantify__samtools__stats_cram:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
     container:
         docker["quantify"]
-    threads: esc("cpus")
+    threads: esc("cpus", "quantify__samtools__stats_cram")
     resources:
-        runtime=esc("runtime"),
-        mem_mb=esc("mem_mb"),
-        cpu_per_task=esc("cpus"),
-        partition=esc("partition"),
-    retries: len(ESCALATION)
+        runtime=esc("runtime", "quantify__samtools__stats_cram"),
+        mem_mb=esc("mem_mb", "quantify__samtools__stats_cram"),
+        cpu_per_task=esc("cpus", "quantify__samtools__stats_cram"),
+        slurm_partition=esc("partition", "quantify__samtools__stats_cram"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__samtools__stats_cram", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("quantify__samtools__stats_cram"))
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 

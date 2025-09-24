@@ -7,8 +7,6 @@ rule contig_annotate__camper__annotate:
         distillate = CONTIG_CAMPER / "{assembly_id}" / "distillate.tsv",
     log:
         CONTIG_CAMPER / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["camper"]
     params:
@@ -16,12 +14,15 @@ rule contig_annotate__camper__annotate:
         out_dir = lambda wildcards: f"{CONTIG_CAMPER}/{wildcards.assembly_id}",
         camper_db=features["databases"]["camper"],
         nvme=config["nvme_storage"],
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: esc("cpus", "contig_annotate__camper__annotate")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        nvme = config["resources"]["nvme"]["small"]
+        runtime=esc("runtime", "contig_annotate__camper__annotate"),
+        mem_mb=esc("mem_mb", "contig_annotate__camper__annotate"),
+        cpu_per_task=esc("cpus", "contig_annotate__camper__annotate"),
+        slurm_partition=esc("partition", "contig_annotate__camper__annotate"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__camper__annotate", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("contig_annotate__camper__annotate"))
     shell:
         """
         
