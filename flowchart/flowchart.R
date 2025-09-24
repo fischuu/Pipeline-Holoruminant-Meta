@@ -41,14 +41,16 @@ graph <- grViz("
 
     # Define annotation nodes
     annotate_bakta [label = 'Bakta, v1.9.3']
+    annotate_baktamag [label = 'Bakta, v1.9.3 \n bakta_mag']
     annotate_camper [label = 'Camper, v1.0.0']
     annotate_quast [label = 'QUAST, v5.2.0']
     annotate_gtdbtk [label = 'GTDB-Tk, v2.4.0 \n Release 220']
-    annotate_dram [label = 'DRAM, v1.5.0 \n 20240524', fillcolor = 'red']
+    annotate_dram [label = 'DRAM, v1.5.0 \n 20240524']
+    annotate_drammag [label = 'DRAM, v1.5.0 \n 20240524 \n dram_mag']
     annotate_eggnog [label = 'EggNOG, v2.1.12 \n emapperdb-5.0.2']
     annotate_checkm2 [label = 'CheckM2, v1.0.2 \n uniref100.KO.1.dmnd']
-    annotate_proteinortho [label = 'Proteinortho, v6.3.1', fillcolor = 'red']
-    annotate_phylophlan [label = 'PhyloPhlan, v3.1.1', fillcolor = 'red']
+    annotate_proteinortho [label = 'Proteinortho, v6.3.1']
+    annotate_phylophlan [label = 'PhyloPhlan, v3.1.1']
 
     # Define the contig annotate nodes
     contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
@@ -116,6 +118,8 @@ graph <- grViz("
     
     # Define the edges for annotate
     ass_drep -> annotate_bakta
+    ass_magscot -> annotate_baktamag
+    ass_magscot -> annotate_drammag
     ass_drep -> annotate_checkm2
     annotate_gtdbtk -> annotate_dram
     ass_drep -> annotate_dram
@@ -124,9 +128,8 @@ graph <- grViz("
     ass_drep -> annotate_phylophlan
     annotate_bakta -> annotate_proteinortho
     ass_drep -> annotate_quast
-    ass_drep -> annotate_sylph
 #    dram_dbs -> annotate_dram
-    annotate_dram -> annotate_camper
+    ass_drep -> annotate_camper
 
     # Define the edges for contig annotate
     ass_assembly -> contig_annotate_prodigal
@@ -238,10 +241,12 @@ graph <- grViz("
       color = lightgray
 
       annotate_bakta
+      annotate_baktamag
       annotate_camper
       annotate_quast
       annotate_gtdbtk
       annotate_dram
+      annotate_drammag
       annotate_eggnog
       annotate_checkm2
       annotate_proteinortho
