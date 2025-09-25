@@ -3,6 +3,7 @@
 
 Version 0.3.*:
 --------------
+64: Kraken2 has now a /dev/shm -> nvme -> orig failproof speedup
 63: Totally overhauled escalation system added to all rules.
 62: Option to turn off the use of /dev/shm drive
 61: Puhti slurm profil adjsuted for output and error
