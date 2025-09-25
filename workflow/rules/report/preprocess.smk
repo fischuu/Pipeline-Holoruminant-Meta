@@ -10,19 +10,21 @@ rule report__preprocess:
         PIPELINE_REPORT / "preprocess.log",
     benchmark:
         PIPELINE_REPORT / "preprocess_benchmark.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["r_report"]
     params:
        script=PREPROCESS_R,
        features=config["features-file"],
        project=WD
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    threads: esc("cpus", "report__preprocess")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"],
-        time=config["resources"]["time"]["longrun"],
+        runtime=esc("runtime", "report__preprocess"),
+        mem_mb=esc("mem_mb", "report__preprocess"),
+        cpu_per_task=esc("cpus", "report__preprocess"),
+        slurm_partition=esc("partition", "report__preprocess"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__preprocess", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("report__preprocess"))
     shell:"""
        R -e "features_file <- '{params.features}'; \
              project_folder <- '{params.project}' ; \

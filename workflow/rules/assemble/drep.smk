@@ -7,7 +7,7 @@ rule assemble__drep__separate_bins:
         DREP / "separate_bins.log",
     container:
         docker["assemble"]
-      threads: esc("cpus", "assemble__drep__separate_bins")
+    threads: esc("cpus", "assemble__drep__separate_bins")
     resources:
         runtime=esc("runtime", "assemble__drep__separate_bins"),
         mem_mb=esc("mem_mb", "assemble__drep__separate_bins"),

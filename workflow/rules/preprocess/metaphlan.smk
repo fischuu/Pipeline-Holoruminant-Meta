@@ -52,14 +52,19 @@ rule preprocess__metaphlan__condense:
         METAPHLAN / "metaphlan.log",
     benchmark:
         METAPHLAN / "benchmark/metaphlan.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["preprocess"]
     params:
         input_dir=METAPHLAN,
+    threads: esc("cpus", "preprocess__metaphlan__condense")
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]
+        runtime=esc("runtime", "preprocess__metaphlan__condense"),
+        mem_mb=esc("mem_mb", "preprocess__metaphlan__condense"),
+        cpu_per_task=esc("cpus", "preprocess__metaphlan__condense"),
+        slurm_partition=esc("partition", "preprocess__metaphlan__condense"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__metaphlan__condense", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__metaphlan__condense"))
     shell:
         """
          merge_metaphlan_tables.py {input.profiled_data} > {output}

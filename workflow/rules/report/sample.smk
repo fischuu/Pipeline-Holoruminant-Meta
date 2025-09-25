@@ -5,15 +5,20 @@ rule report__sample__multiqc:
         html=REPORT_SAMPLE / "{sample_id}.{library_id}.html",
     log:
         REPORT_SAMPLE / "{sample_id}.{library_id}.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["report"]
     params:
         dir=REPORT_SAMPLE,
         filename=lambda wildcards: f"{wildcards.sample_id}.{wildcards.library_id}",
+    threads: esc("cpus", "report__sample__multiqc")
     resources:
-        mem_mb=8 * 1024,
+        runtime=esc("runtime", "report__sample__multiqc"),
+        mem_mb=esc("mem_mb", "report__sample__multiqc"),
+        cpu_per_task=esc("cpus", "report__sample__multiqc"),
+        slurm_partition=esc("partition", "report__sample__multiqc"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__sample__multiqc", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("report__sample__multiqc"))
     shell:
         """
         multiqc \

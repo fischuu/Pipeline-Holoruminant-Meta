@@ -10,19 +10,21 @@ rule report__reads:
         PIPELINE_REPORT / "reads.log",
     benchmark:
         PIPELINE_REPORT / "reads_benchmark.tsv",
-    conda:
-        "__environment__.yml"
     container:
         docker["r_report"]
     params:
        script=READS_R,
        features=config["features-file"],
        wd=WD
-    threads: config["resources"]["cpu_per_task"]["single_thread"]
+    threads: esc("cpus", "report__reads")
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["single_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["lowmem"],
-        time=config["resources"]["time"]["shortrun"],
+        runtime=esc("runtime", "report__reads"),
+        mem_mb=esc("mem_mb", "report__reads"),
+        cpu_per_task=esc("cpus", "report__reads"),
+        slurm_partition=esc("partition", "report__reads"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__reads", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("report__reads"))
     shell:"""
        R -e "working_dir <- '{params.wd}'; \
              features_file <- '{params.features}'; \

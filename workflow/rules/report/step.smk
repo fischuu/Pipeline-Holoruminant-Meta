@@ -6,15 +6,19 @@ rule report__step__reads:
         html=REPORT_STEP / "reads.html",
     log:
         REPORT_STEP / "reads.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["report"]
     params:
         dir=REPORT_STEP,
+    threads: esc("cpus", "report__step__reads")
     resources:
-        mem_mb=8 * 1024,
+        runtime=esc("runtime", "report__step__reads"),
+        mem_mb=esc("mem_mb", "report__step__reads"),
+        cpu_per_task=esc("cpus", "report__step__reads"),
+        slurm_partition=esc("partition", "report__step__reads"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__reads", attempt=1)) + "'",
         attempt=get_attempt,
+    retries: len(get_escalation_order("report__step__reads"))
     shell:
         """
         multiqc \
@@ -38,17 +42,19 @@ rule report__step__preprocess:
         html=REPORT_STEP / "preprocess.html",
     log:
         REPORT_STEP / "preprocess.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["report"]
     params:
         dir=REPORT_STEP,
+    threads: esc("cpus", "report__step__preprocess")
     resources:
-        mem_mb=double_ram(4),
-        runtime=6 * 60,
+        runtime=esc("runtime", "report__step__preprocess"),
+        mem_mb=esc("mem_mb", "report__step__preprocess"),
+        cpu_per_task=esc("cpus", "report__step__preprocess"),
+        slurm_partition=esc("partition", "report__step__preprocess"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__preprocess", attempt=1)) + "'",
         attempt=get_attempt,
-    retries: 5
+    retries: len(get_escalation_order("report__step__preprocess"))
     shell:
         """
         multiqc \
@@ -73,14 +79,19 @@ rule report__step__assemble:
         REPORT_STEP / "assemble.html",
     log:
         REPORT_STEP / "assemble.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["report"]
     params:
         dir=REPORT_STEP,
+    threads: esc("cpus", "report__step__assemble")
     resources:
-        mem_mb=8 * 1024,
+        runtime=esc("runtime", "report__step__assemble"),
+        mem_mb=esc("mem_mb", "report__step__assemble"),
+        cpu_per_task=esc("cpus", "report__step__assemble"),
+        slurm_partition=esc("partition", "report__step__assemble"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__assemble", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("report__step__assemble"))
     shell:
         """
         multiqc \
@@ -101,14 +112,19 @@ rule report__step__quantify:
         REPORT_STEP / "quantify.html",
     log:
         REPORT_STEP / "quantify.log",
-    conda:
-        "__environment__.yml"
     container:
         docker["report"]
     params:
         dir=REPORT_STEP,
+    threads: esc("cpus", "report__step__quantify")
     resources:
-        mem_mb=8 * 1024,
+        runtime=esc("runtime", "report__step__quantify"),
+        mem_mb=esc("mem_mb", "report__step__quantify"),
+        cpu_per_task=esc("cpus", "report__step__quantify"),
+        slurm_partition=esc("partition", "report__step__quantify"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__quantify", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("report__step__quantify"))
     shell:
         """
         multiqc \

@@ -55,8 +55,10 @@ preprocess__diamond__assign: medium,large,highmem,longrun,highmem_longrun
 preprocess__diamond__summarise: small,medium,large
 preprocess__fastp__run: medium,large
 preprocess__humann__run: medium,large,highmem,longrun,highmem_longrun
+preprocess__humann_condense: small, medium, large
 preprocess__kraken2__assign: medium, full_node
 preprocess__krona__visualize: medium,large
+preprocess__metaphlan__condense: small, medium, large
 preprocess__metaphlan__run: medium,large
 preprocess__nonpareil__aggregate: small, medium,large
 preprocess__nonpareil__run: medium,large
@@ -79,3 +81,11 @@ quantify__coverm__genome_run: small, medium,large
 quantify__samtools__stats_cram: small, medium,large
 
 reference__hosts__recompress: small,medium,large
+
+report__preprocess: small,medium,large
+report__reads: small,medium,large
+report__sample__multiqc: small,medium,large
+report__step__reads: small,medium,large
+report__step__preprocess: small,medium,large
+report__step__assemble: small,medium,large
+report__step__quantify: small,medium,large

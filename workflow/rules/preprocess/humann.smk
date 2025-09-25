@@ -1,6 +1,4 @@
 # ---------- preprocess__humann__run ----------
-ESCALATION = ["medium","large", "highmem", "longrun", "highmem_longrun"]
-
 rule preprocess__humann__run:
     """Run HumanN3 over one sample"""
     input:
@@ -70,8 +68,15 @@ rule preprocess__humann__condense:
         docker["humann"]
     params:
         input_dir=HUMANN,
+    threads: esc("cpus", "preprocess__humann__condense"),
     resources:
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"]
+        runtime=esc("runtime", "preprocess__humann__condense"),
+        mem_mb=esc("mem_mb", "preprocess__humann__condense"),
+        cpu_per_task=esc("cpus", "preprocess__humann__condense"),
+        partition=esc("partition", "preprocess__humann__condense"),
+        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__humann__condense", attempt=1)) + "'",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("preprocess__humann__condense")),
     shell:
         """
         cat {input.genefamily_data} > {output}
