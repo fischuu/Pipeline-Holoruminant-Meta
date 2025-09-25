@@ -10,7 +10,7 @@ rule helpers__fastqc:
     resources:
         runtime=esc("runtime", "helpers__fastqc"),
         mem_mb=esc("mem_mb", "helpers__fastqc"),
-        cpu_per_task=esc("cpus", "helpers__fastqc"),
+        cpus_per_task=esc("cpus", "helpers__fastqc"),
         slurm_partition=esc("partition", "helpers__fastqc"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "helpers__fastqc", attempt=1)) + "'",
         attempt=get_attempt,

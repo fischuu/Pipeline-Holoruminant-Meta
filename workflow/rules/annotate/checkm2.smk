@@ -15,7 +15,7 @@ rule annotate__checkm2__predict:
     resources:
         runtime=esc("runtime", "annotate__checkm2__predict"),
         mem_mb=esc("mem_mb", "annotate__checkm2__predict"),
-        cpu_per_task=esc("cpus", "annotate__checkm2__predict"),
+        cpus_per_task=esc("cpus", "annotate__checkm2__predict"),
         slurm_partition=esc("partition", "annotate__checkm2__predict"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__checkm2__predict", attempt=1)) + "'",
         attempt=get_attempt,

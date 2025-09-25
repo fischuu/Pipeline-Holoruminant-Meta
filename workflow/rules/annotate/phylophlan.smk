@@ -15,7 +15,7 @@ rule annotate__phylophlan:
     resources:
         runtime=esc("runtime", "annotate__phylophlan"),
         mem_mb=esc("mem_mb", "annotate__phylophlan"),
-        cpu_per_task=esc("cpus", "annotate__phylophlan"),
+        cpus_per_task=esc("cpus", "annotate__phylophlan"),
         slurm_partition=esc("partition", "annotate__phylophlan"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__phylophlan", attempt=1)) + "'",
         attempt=get_attempt,
@@ -56,10 +56,10 @@ rule annotate__phylophlan:
 #        PHYLOPHLAN / "{phylophlan_db}.log",
 #    benchmark:
 #        PHYLOPHLAN / "benchmark/{phylophlan_db}.tsv",
-#    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+#    threads: config["resources"]["cpus_per_task"]["multi_thread"]
 #    resources:
-#        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-#        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
+#        cpus_per_task=config["resources"]["cpus_per_task"]["multi_thread"],
+#        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpus_per_task"]["multi_thread"],
 #        time=config["resources"]["time"]["longrun"],
 #        nvme=config["resources"]["nvme"]["large"]
 #    params:

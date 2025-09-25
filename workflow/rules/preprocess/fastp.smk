@@ -30,7 +30,7 @@ rule preprocess__fastp__run:
     resources:
         runtime=esc("runtime", "preprocess__fastp__run"),
         mem_mb=esc("mem_mb", "preprocess__fastp__run"),
-        cpu_per_task=esc("cpus", "preprocess__fastp__run"),
+        cpus_per_task=esc("cpus", "preprocess__fastp__run"),
         partition=esc("partition", "preprocess__fastp__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__fastp__run", attempt=1)) + "'",
         attempt=get_attempt,

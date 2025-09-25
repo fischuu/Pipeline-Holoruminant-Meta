@@ -32,7 +32,7 @@ rule preprocess__kraken2__assign:
     resources:
         runtime=esc("runtime", "preprocess__kraken2__assign"),
         mem_mb=esc("mem_mb", "preprocess__kraken2__assign"),
-        cpu_per_task=esc("cpus", "preprocess__kraken2__assign"),
+        cpus_per_task=esc("cpus", "preprocess__kraken2__assign"),
         partition=esc("partition", "preprocess__kraken2__assign"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__kraken2__assign", attempt=1)) + "'",
         attempt=get_attempt,

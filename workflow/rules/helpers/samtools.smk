@@ -10,7 +10,7 @@ rule helpers__samtools__index_bam:
     resources:
         runtime=esc("runtime", "helpers__samtools__index_bam"),
         mem_mb=esc("mem_mb", "helpers__samtools__index_bam"),
-        cpu_per_task=esc("cpus", "helpers__samtools__index_bam"),
+        cpus_per_task=esc("cpus", "helpers__samtools__index_bam"),
         partition=esc("partition", "helpers__samtools__index_bam"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "helpers__samtools__index_bam")) + "'",
         attempt=get_attempt,
@@ -35,7 +35,7 @@ rule helpers__samtools__index_cram:
     resources:
         runtime=esc("runtime", "helpers__samtools__index_cram"),
         mem_mb=esc("mem_mb", "helpers__samtools__index_cram"),
-        cpu_per_task=esc("cpus", "helpers__samtools__index_cram"),
+        cpus_per_task=esc("cpus", "helpers__samtools__index_cram"),
         partition=esc("partition", "helpers__samtools__index_cram"),
     retries: len(get_escalation_order("helpers__samtools__index_cram"))
     log:
@@ -58,7 +58,7 @@ rule helpers__samtools__faidx_fa:
     resources:
         runtime=esc("runtime", "helpers__samtools__faidx_fa"),
         mem_mb=esc("mem_mb", "helpers__samtools__faidx_fa"),
-        cpu_per_task=esc("cpus", "helpers__samtools__faidx_fa"),
+        cpus_per_task=esc("cpus", "helpers__samtools__faidx_fa"),
         partition=esc("partition", "helpers__samtools__faidx_fa"),
     retries: len(get_escalation_order("helpers__samtools__faidx_fa"))
     log:
@@ -81,7 +81,7 @@ rule helpers__samtools__faidx_fagz:
     resources:
         runtime=esc("runtime", "helpers__samtools__faidx_fagz"),
         mem_mb=esc("mem_mb", "helpers__samtools__faidx_fagz"),
-        cpu_per_task=esc("cpus", "helpers__samtools__faidx_fagz"),
+        cpus_per_task=esc("cpus", "helpers__samtools__faidx_fagz"),
         partition=esc("partition", "helpers__samtools__faidx_fagz"),
     retries: len(get_escalation_order("helpers__samtools__faidx_fagz"))
     log:
@@ -109,7 +109,7 @@ rule helpers__samtools__idxstats_cram:
     resources:
         runtime=esc("runtime", "helpers__samtools__idxstats_cram"),
         mem_mb=esc("mem_mb", "helpers__samtools__idxstats_cram"),
-        cpu_per_task=esc("cpus", "helpers__samtools__idxstats_cram"),
+        cpus_per_task=esc("cpus", "helpers__samtools__idxstats_cram"),
         partition=esc("partition", "helpers__samtools__idxstats_cram"),
     retries: len(get_escalation_order("helpers__samtools__idxstats_cram"))
     shell:
@@ -131,7 +131,7 @@ rule helpers__samtools__flagstats_cram:
     resources:
         runtime=esc("runtime", "helpers__samtools__flagstats_cram"),
         mem_mb=esc("mem_mb", "helpers__samtools__flagstats_cram"),
-        cpu_per_task=esc("cpus", "helpers__samtools__flagstats_cram"),
+        cpus_per_task=esc("cpus", "helpers__samtools__flagstats_cram"),
         partition=esc("partition", "helpers__samtools__flagstats_cram"),
     retries: len(get_escalation_order("helpers__samtools__flagstats_cram"))
     shell:

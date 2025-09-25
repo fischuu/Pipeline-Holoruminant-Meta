@@ -14,7 +14,7 @@ rule preprocess__diamond__assign:
     resources:
         runtime=esc("runtime", "preprocess__diamond__assign"),
         mem_mb=esc("mem_mb", "preprocess__diamond__assign"),
-        cpu_per_task=esc("cpus", "preprocess__diamond__assign"),
+        cpus_per_task=esc("cpus", "preprocess__diamond__assign"),
         partition=esc("partition", "preprocess__diamond__assign"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__diamond__assign", attempt=1)) + "'",
         attempt=get_attempt,
@@ -62,7 +62,7 @@ rule preprocess__diamond__summarise:
     resources:
         runtime=esc("runtime", "preprocess__diamond__summarise"),
         mem_mb=esc("mem_mb", "preprocess__diamond__summarise"),
-        cpu_per_task=esc("cpus", "preprocess__diamond__summarise"),
+        cpus_per_task=esc("cpus", "preprocess__diamond__summarise"),
         partition=esc("partition", "preprocess__diamond__summarise"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__diamond__summarise", attempt=1)) + "'",
         attempt=get_attempt,

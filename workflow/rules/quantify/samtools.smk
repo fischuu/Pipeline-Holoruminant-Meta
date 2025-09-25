@@ -15,7 +15,7 @@ rule quantify__samtools__stats_cram:
     resources:
         runtime=esc("runtime", "quantify__samtools__stats_cram"),
         mem_mb=esc("mem_mb", "quantify__samtools__stats_cram"),
-        cpu_per_task=esc("cpus", "quantify__samtools__stats_cram"),
+        cpus_per_task=esc("cpus", "quantify__samtools__stats_cram"),
         slurm_partition=esc("partition", "quantify__samtools__stats_cram"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__samtools__stats_cram", attempt=1)) + "'",
         attempt=get_attempt,

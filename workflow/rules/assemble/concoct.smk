@@ -15,7 +15,7 @@ rule assemble__concoct_run:
     resources:
         runtime=esc("runtime", "assemble__concoct_run"),
         mem_mb=esc("mem_mb", "assemble__concoct_run"),
-        cpu_per_task=esc("cpus", "assemble__concoct_run"),
+        cpus_per_task=esc("cpus", "assemble__concoct_run"),
         slurm_partition=esc("partition", "assemble__concoct_run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__concoct_run", attempt=1)) + "'",
         attempt=get_attempt,

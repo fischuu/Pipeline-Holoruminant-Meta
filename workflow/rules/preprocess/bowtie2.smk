@@ -16,7 +16,7 @@ rule preprocess__bowtie2__build:
     resources:
         runtime=esc("runtime", "preprocess__bowtie2__build"),
         mem_mb=esc("mem_mb", "preprocess__bowtie2__build"),
-        cpu_per_task=esc("cpus", "preprocess__bowtie2__build"),
+        cpus_per_task=esc("cpus", "preprocess__bowtie2__build"),
         partition=esc("partition", "preprocess__bowtie2__build"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__bowtie2__build", attempt=1)) + "'",
         attempt=get_attempt,
@@ -58,7 +58,7 @@ rule preprocess__bowtie2__map:
     resources:
         runtime=esc("runtime", "preprocess__bowtie2__map"),
         mem_mb=esc("mem_mb", "preprocess__bowtie2__map"),
-        cpu_per_task=esc("cpus", "preprocess__bowtie2__map"),
+        cpus_per_task=esc("cpus", "preprocess__bowtie2__map"),
         partition=esc("partition", "preprocess__bowtie2__map"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__bowtie2__map", attempt=1)) + "'",
         attempt=get_attempt,
@@ -100,7 +100,7 @@ rule preprocess__bowtie2__extract_nonhost_run:
     resources:
         runtime=esc("runtime", "preprocess__bowtie2__extract_nonhost_run"),
         mem_mb=esc("mem_mb", "preprocess__bowtie2__extract_nonhost_run"),
-        cpu_per_task=esc("cpus", "preprocess__bowtie2__extract_nonhost_run"),
+        cpus_per_task=esc("cpus", "preprocess__bowtie2__extract_nonhost_run"),
         partition=esc("partition", "preprocess__bowtie2__extract_nonhost_run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__bowtie2__extract_nonhost_run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -132,7 +132,7 @@ rule preprocess__store_final_fastq:
     resources:
         runtime=esc("runtime", "preprocess__store_final_fastq"),
         mem_mb=esc("mem_mb", "preprocess__store_final_fastq"),
-        cpu_per_task=esc("cpus", "preprocess__store_final_fastq"),
+        cpus_per_task=esc("cpus", "preprocess__store_final_fastq"),
         partition=esc("partition", "preprocess__store_final_fastq"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__store_final_fastq", attempt=1)) + "'",
         attempt=get_attempt,

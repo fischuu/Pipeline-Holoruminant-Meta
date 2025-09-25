@@ -12,7 +12,7 @@ rule contig_annotate__cramToBam:
     resources:
         runtime=esc("runtime", "contig_annotate__cramToBam"),
         mem_mb=esc("mem_mb", "contig_annotate__cramToBam"),
-        cpu_per_task=esc("cpus", "contig_annotate__cramToBam"),
+        cpus_per_task=esc("cpus", "contig_annotate__cramToBam"),
         slurm_partition=esc("partition", "contig_annotate__cramToBam"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__cramToBam", attempt=1)) + "'",
         attempt=get_attempt,
@@ -39,7 +39,7 @@ rule contig_annotate__featurecounts_run:
     resources:
         runtime=esc("runtime", "contig_annotate__featurecounts_run"),
         mem_mb=esc("mem_mb", "contig_annotate__featurecounts_run"),
-        cpu_per_task=esc("cpus", "contig_annotate__featurecounts_run"),
+        cpus_per_task=esc("cpus", "contig_annotate__featurecounts_run"),
         slurm_partition=esc("partition", "contig_annotate__featurecounts_run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__featurecounts_run", attempt=1)) + "'",
         attempt=get_attempt,

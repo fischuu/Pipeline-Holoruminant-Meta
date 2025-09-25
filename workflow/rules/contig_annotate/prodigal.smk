@@ -19,7 +19,7 @@ rule contig_annotate__prodigal_run:
     resources:
         runtime=esc("runtime", "contig_annotate__prodigal_run"),
         mem_mb=esc("mem_mb", "contig_annotate__prodigal_run"),
-        cpu_per_task=esc("cpus", "contig_annotate__prodigal_run"),
+        cpus_per_task=esc("cpus", "contig_annotate__prodigal_run"),
         slurm_partition=esc("partition", "contig_annotate__prodigal_run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__prodigal_run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -53,7 +53,7 @@ checkpoint contig_annotate__cut_prodigal:
     resources:
         runtime=esc("runtime", "contig_annotate__cut_prodigal"),
         mem_mb=esc("mem_mb", "contig_annotate__cut_prodigal"),
-        cpu_per_task=esc("cpus", "contig_annotate__cut_prodigal"),
+        cpus_per_task=esc("cpus", "contig_annotate__cut_prodigal"),
         slurm_partition=esc("partition", "contig_annotate__cut_prodigal"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__cut_prodigal", attempt=1)) + "'",
         attempt=get_attempt,

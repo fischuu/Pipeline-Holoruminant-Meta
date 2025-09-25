@@ -11,7 +11,7 @@ rule assemble__drep__separate_bins:
     resources:
         runtime=esc("runtime", "assemble__drep__separate_bins"),
         mem_mb=esc("mem_mb", "assemble__drep__separate_bins"),
-        cpu_per_task=esc("cpus", "assemble__drep__separate_bins"),
+        cpus_per_task=esc("cpus", "assemble__drep__separate_bins"),
         slurm_partition=esc("partition", "assemble__drep__separate_bins"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__drep__separate_bins", attempt=1)) + "'",
         attempt=get_attempt,
@@ -49,7 +49,7 @@ rule assemble__drep__run:
     resources:
         runtime=esc("runtime", "assemble__drep__run"),
         mem_mb=esc("mem_mb", "assemble__drep__run"),
-        cpu_per_task=esc("cpus", "assemble__drep__run"),
+        cpus_per_task=esc("cpus", "assemble__drep__run"),
         slurm_partition=esc("partition", "assemble__drep__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__drep__run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -132,7 +132,7 @@ rule assemble__drep__join_genomes:
     resources:
         runtime=esc("runtime", "assemble__drep__join_genomes"),
         mem_mb=esc("mem_mb", "assemble__drep__join_genomes"),
-        cpu_per_task=esc("cpus", "assemble__drep__join_genomes"),
+        cpus_per_task=esc("cpus", "assemble__drep__join_genomes"),
         slurm_partition=esc("partition", "assemble__drep__join_genomes"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__drep__join_genomes", attempt=1)) + "'",
         attempt=get_attempt,

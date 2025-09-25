@@ -12,7 +12,7 @@ rule reference__hosts__recompress:
     resources:
         runtime=esc("runtime", "reference__hosts__recompress"),
         mem_mb=esc("mem_mb", "reference__hosts__recompress"),
-        cpu_per_task=esc("cpus", "reference__hosts__recompress"),
+        cpus_per_task=esc("cpus", "reference__hosts__recompress"),
         slurm_partition=esc("partition", "reference__hosts__recompress"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "reference__hosts__recompress", attempt=1)) + "'",
         attempt=get_attempt,

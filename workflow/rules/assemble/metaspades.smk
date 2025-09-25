@@ -16,7 +16,7 @@ rule assemble__metaspades__run:
     resources:
         runtime=esc("runtime", "assemble__metaspades__run"),
         mem_mb=esc("mem_mb", "assemble__metaspades__run"),
-        cpu_per_task=esc("cpus", "assemble__metaspades__run"),
+        cpus_per_task=esc("cpus", "assemble__metaspades__run"),
         slurm_partition=esc("partition", "assemble__metaspades__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__metaspades__run", attempt=1)) + "'",
         attempt=get_attempt,

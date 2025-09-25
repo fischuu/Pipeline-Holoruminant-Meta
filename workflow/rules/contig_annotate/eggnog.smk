@@ -18,7 +18,7 @@ rule contig_annotate__eggnog_find_homology:
     resources:
         runtime=esc("runtime", "contig_annotate__eggnog_find_homology"),
         mem_mb=esc("mem_mb", "contig_annotate__eggnog_find_homology"),
-        cpu_per_task=esc("cpus", "contig_annotate__eggnog_find_homology"),
+        cpus_per_task=esc("cpus", "contig_annotate__eggnog_find_homology"),
         slurm_partition=esc("partition", "contig_annotate__eggnog_find_homology"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__eggnog_find_homology", attempt=1)) + "'",
         attempt=get_attempt,
@@ -70,7 +70,7 @@ rule contig_annotate__eggnog_orthology:
     resources:
         runtime=esc("runtime", "contig_annotate__eggnog_orthology"),
         mem_mb=esc("mem_mb", "contig_annotate__eggnog_orthology"),
-        cpu_per_task=esc("cpus", "contig_annotate__eggnog_orthology"),
+        cpus_per_task=esc("cpus", "contig_annotate__eggnog_orthology"),
         slurm_partition=esc("partition", "contig_annotate__eggnog_orthology"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__eggnog_orthology", attempt=1)) + "'",
         attempt=get_attempt,

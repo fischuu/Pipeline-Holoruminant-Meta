@@ -12,7 +12,7 @@ rule quantify__bowtie2__build:
     resources:
         runtime=esc("runtime", "quantify__bowtie2__build"),
         mem_mb=esc("mem_mb", "quantify__bowtie2__build"),
-        cpu_per_task=esc("cpus", "quantify__bowtie2__build"),
+        cpus_per_task=esc("cpus", "quantify__bowtie2__build"),
         slurm_partition=esc("partition", "quantify__bowtie2__build"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__bowtie2__build", attempt=1)) + "'",
         attempt=get_attempt,
@@ -45,7 +45,7 @@ rule quantify__bowtie2__map:
     resources:
         runtime=esc("runtime", "quantify__bowtie2__map"),
         mem_mb=esc("mem_mb", "quantify__bowtie2__map"),
-        cpu_per_task=esc("cpus", "quantify__bowtie2__map"),
+        cpus_per_task=esc("cpus", "quantify__bowtie2__map"),
         slurm_partition=esc("partition", "quantify__bowtie2__map"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__bowtie2__map", attempt=1)) + "'",
         attempt=get_attempt,

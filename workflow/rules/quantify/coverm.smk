@@ -13,7 +13,7 @@ rule quantify__coverm__genome_run:
     resources:
         runtime=esc("runtime", "quantify__coverm__genome_run"),
         mem_mb=esc("mem_mb", "quantify__coverm__genome_run"),
-        cpu_per_task=esc("cpus", "quantify__coverm__genome_run"),
+        cpus_per_task=esc("cpus", "quantify__coverm__genome_run"),
         slurm_partition=esc("partition", "quantify__coverm__genome_run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__genome_run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -60,7 +60,7 @@ rule quantify__coverm__genome_aggregate:
     resources:
         runtime=esc("runtime", "quantify__coverm__genome_aggregate"),
         mem_mb=esc("mem_mb", "quantify__coverm__genome_aggregate"),
-        cpu_per_task=esc("cpus", "quantify__coverm__genome_aggregate"),
+        cpus_per_task=esc("cpus", "quantify__coverm__genome_aggregate"),
         slurm_partition=esc("partition", "quantify__coverm__genome_aggregate"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__genome_aggregate", attempt=1)) + "'",
         attempt=get_attempt,
@@ -99,7 +99,7 @@ rule quantify__coverm__contig_one:
     resources:
         runtime=esc("runtime", "quantify__coverm__contig_one"),
         mem_mb=esc("mem_mb", "quantify__coverm__contig_one"),
-        cpu_per_task=esc("cpus", "quantify__coverm__contig_one"),
+        cpus_per_task=esc("cpus", "quantify__coverm__contig_one"),
         slurm_partition=esc("partition", "quantify__coverm__contig_one"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__contig_one", attempt=1)) + "'",
         attempt=get_attempt,
@@ -141,7 +141,7 @@ rule quantify__coverm__contig_aggregate:
     resources:
         runtime=esc("runtime", "quantify__coverm__contig_aggregate"),
         mem_mb=esc("mem_mb", "quantify__coverm__contig_aggregate"),
-        cpu_per_task=esc("cpus", "quantify__coverm__contig_aggregate"),
+        cpus_per_task=esc("cpus", "quantify__coverm__contig_aggregate"),
         slurm_partition=esc("partition", "quantify__coverm__contig_aggregate"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "quantify__coverm__contig_aggregate", attempt=1)) + "'",
         attempt=get_attempt,

@@ -14,7 +14,7 @@ rule report__sample__multiqc:
     resources:
         runtime=esc("runtime", "report__sample__multiqc"),
         mem_mb=esc("mem_mb", "report__sample__multiqc"),
-        cpu_per_task=esc("cpus", "report__sample__multiqc"),
+        cpus_per_task=esc("cpus", "report__sample__multiqc"),
         slurm_partition=esc("partition", "report__sample__multiqc"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__sample__multiqc", attempt=1)) + "'",
         attempt=get_attempt,

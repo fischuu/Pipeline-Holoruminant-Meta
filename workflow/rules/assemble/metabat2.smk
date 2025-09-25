@@ -24,7 +24,7 @@ rule assemble__metabat2__run:
     resources:
         runtime=esc("runtime", "assemble__metabat2__run"),
         mem_mb=esc("mem_mb", "assemble__metabat2__run"),
-        cpu_per_task=esc("cpus", "assemble__metabat2__run"),
+        cpus_per_task=esc("cpus", "assemble__metabat2__run"),
         slurm_partition=esc("partition", "assemble__metabat2__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__metabat2__run", attempt=1)) + "'",
         attempt=get_attempt,

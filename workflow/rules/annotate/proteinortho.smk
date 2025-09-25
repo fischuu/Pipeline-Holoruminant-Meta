@@ -12,7 +12,7 @@ rule annotate__proteinortho:
     resources:
         runtime=esc("runtime", "annotate__proteinortho"),
         mem_mb=esc("mem_mb", "annotate__proteinortho"),
-        cpu_per_task=esc("cpus", "annotate__proteinortho"),
+        cpus_per_task=esc("cpus", "annotate__proteinortho"),
         slurm_partition=esc("partition", "annotate__proteinortho"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__proteinortho", attempt=1)) + "'",
         attempt=get_attempt,

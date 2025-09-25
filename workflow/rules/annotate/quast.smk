@@ -12,7 +12,7 @@ rule annotate__quast:
     resources:
         runtime=esc("runtime", "annotate__quast"),
         mem_mb=esc("mem_mb", "annotate__quast"),
-        cpu_per_task=esc("cpus", "annotate__quast"),
+        cpus_per_task=esc("cpus", "annotate__quast"),
         slurm_partition=esc("partition", "annotate__quast"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__quast", attempt=1)) + "'",
         attempt=get_attempt,

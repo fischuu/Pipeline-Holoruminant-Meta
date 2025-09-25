@@ -25,7 +25,7 @@ rule preprocess__humann__run:
     resources:
         runtime=esc("runtime", "preprocess__humann__run"),
         mem_mb=esc("mem_mb", "preprocess__humann__run"),
-        cpu_per_task=esc("cpus", "preprocess__humann__run"),
+        cpus_per_task=esc("cpus", "preprocess__humann__run"),
         partition=esc("partition", "preprocess__humann__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__humann__run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -72,7 +72,7 @@ rule preprocess__humann__condense:
     resources:
         runtime=esc("runtime", "preprocess__humann__condense"),
         mem_mb=esc("mem_mb", "preprocess__humann__condense"),
-        cpu_per_task=esc("cpus", "preprocess__humann__condense"),
+        cpus_per_task=esc("cpus", "preprocess__humann__condense"),
         partition=esc("partition", "preprocess__humann__condense"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__humann__condense", attempt=1)) + "'",
         attempt=get_attempt,

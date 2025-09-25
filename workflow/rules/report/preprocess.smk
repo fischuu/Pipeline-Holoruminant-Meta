@@ -20,7 +20,7 @@ rule report__preprocess:
     resources:
         runtime=esc("runtime", "report__preprocess"),
         mem_mb=esc("mem_mb", "report__preprocess"),
-        cpu_per_task=esc("cpus", "report__preprocess"),
+        cpus_per_task=esc("cpus", "report__preprocess"),
         slurm_partition=esc("partition", "report__preprocess"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__preprocess", attempt=1)) + "'",
         attempt=get_attempt,

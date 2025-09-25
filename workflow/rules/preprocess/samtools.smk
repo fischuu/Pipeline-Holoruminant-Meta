@@ -17,7 +17,7 @@ rule preprocess__samtools__stats_cram:
     resources:
         runtime=esc("runtime", "preprocess__samtools__stats_cram"),
         mem_mb=esc("mem_mb", "preprocess__samtools__stats_cram"),
-        cpu_per_task=esc("cpus", "preprocess__samtools__stats_cram"),
+        cpus_per_task=esc("cpus", "preprocess__samtools__stats_cram"),
         slurm_partition=esc("partition", "preprocess__samtools__stats_cram"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__samtools__stats_cram", attempt=1)) + "'",
         attempt=get_attempt,

@@ -18,7 +18,7 @@ rule assemble__megahit__run:
     resources:
         runtime=esc("runtime", "assemble__megahit__run"),
         mem_mb=esc("mem_mb", "assemble__megahit__run"),
-        cpu_per_task=esc("cpus", "assemble__megahit__run"),
+        cpus_per_task=esc("cpus", "assemble__megahit__run"),
         slurm_partition=esc("partition", "assemble__megahit__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__megahit__run", attempt=1)) + "'",
         attempt=get_attempt,

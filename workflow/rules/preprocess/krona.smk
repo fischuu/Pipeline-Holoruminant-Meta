@@ -14,7 +14,7 @@ rule preprocess__krona__visualize:
     resources:
         runtime=esc("runtime", "preprocess__krona__visualize"),
         mem_mb=esc("mem_mb", "preprocess__krona__visualize"),
-        cpu_per_task=esc("cpus", "preprocess__krona__visualize"),
+        cpus_per_task=esc("cpus", "preprocess__krona__visualize"),
         slurm_partition=esc("partition", "preprocess__krona__visualize"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__krona__visualize", attempt=1)) + "'",
         attempt=get_attempt,

@@ -22,7 +22,7 @@ rule annotate__dram__annotate:
     resources:
         runtime=esc("runtime", "annotate__dram__annotate"),
         mem_mb=esc("mem_mb", "annotate__dram__annotate"),
-        cpu_per_task=esc("cpus", "annotate__dram__annotate"),
+        cpus_per_task=esc("cpus", "annotate__dram__annotate"),
         slurm_partition=esc("partition", "annotate__dram__annotate"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__dram__annotate", attempt=1)) + "'",
         attempt=get_attempt,
@@ -80,7 +80,7 @@ rule annotate__dram__distill:
     resources:
         runtime=esc("runtime", "annotate__dram__distill"),
         mem_mb=esc("mem_mb", "annotate__dram__distill"),
-        cpu_per_task=esc("cpus", "annotate__dram__distill"),
+        cpus_per_task=esc("cpus", "annotate__dram__distill"),
         slurm_partition=esc("partition", "annotate__dram__distill"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__dram__distill", attempt=1)) + "'",
         attempt=get_attempt,

@@ -18,10 +18,10 @@ rule annotate__gtdbtk_assembly__classify:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
         bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
-    threads: config["resources"]["cpu_per_task"]["multi_thread"]
+    threads: config["resources"]["cpus_per_task"]["multi_thread"]
     resources:
-        cpu_per_task=config["resources"]["cpu_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpu_per_task"]["multi_thread"],
+        cpus_per_task=config["resources"]["cpus_per_task"]["multi_thread"],
+        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpus_per_task"]["multi_thread"],
         time =  config["resources"]["time"]["longrun"],
         attempt=get_attempt
     shell:

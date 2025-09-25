@@ -22,7 +22,7 @@ rule preprocess__singlem__pipe:
     resources:
         runtime=esc("runtime", "preprocess__singlem__pipe"),
         mem_mb=esc("mem_mb", "preprocess__singlem__pipe"),
-        cpu_per_task=esc("cpus", "preprocess__singlem__pipe"),
+        cpus_per_task=esc("cpus", "preprocess__singlem__pipe"),
         slurm_partition=esc("partition", "preprocess__singlem__pipe"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__pipe", attempt=1)) + "'",
         attempt=get_attempt,
@@ -72,7 +72,7 @@ rule preprocess__singlem__condense:
     resources:
         runtime=esc("runtime", "preprocess__singlem__condense"),
         mem_mb=esc("mem_mb", "preprocess__singlem__condense"),
-        cpu_per_task=esc("cpus", "preprocess__singlem__condense"),
+        cpus_per_task=esc("cpus", "preprocess__singlem__condense"),
         slurm_partition=esc("partition", "preprocess__singlem__condense"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__condense", attempt=1)) + "'",
         attempt=get_attempt,
@@ -108,7 +108,7 @@ rule preprocess__singlem__microbial_fraction:
     resources:
         runtime=esc("runtime", "preprocess__singlem__microbial_fraction"),
         mem_mb=esc("mem_mb", "preprocess__singlem__microbial_fraction"),
-        cpu_per_task=esc("cpus", "preprocess__singlem__microbial_fraction"),
+        cpus_per_task=esc("cpus", "preprocess__singlem__microbial_fraction"),
         slurm_partition=esc("partition", "preprocess__singlem__microbial_fraction"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__microbial_fraction", attempt=1)) + "'",
         attempt=get_attempt,
@@ -144,7 +144,7 @@ rule preprocess__singlem__aggregate_microbial_fraction:
     resources:
         runtime=esc("runtime", "preprocess__singlem__aggregate_microbial_fraction"),
         mem_mb=esc("mem_mb", "preprocess__singlem__aggregate_microbial_fraction"),
-        cpu_per_task=esc("cpus", "preprocess__singlem__aggregate_microbial_fraction"),
+        cpus_per_task=esc("cpus", "preprocess__singlem__aggregate_microbial_fraction"),
         slurm_partition=esc("partition", "preprocess__singlem__aggregate_microbial_fraction"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__aggregate_microbial_fraction", attempt=1)) + "'",
         attempt=get_attempt,

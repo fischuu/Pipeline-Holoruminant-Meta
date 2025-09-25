@@ -18,7 +18,7 @@ rule contig_annotate__camper__annotate:
     resources:
         runtime=esc("runtime", "contig_annotate__camper__annotate"),
         mem_mb=esc("mem_mb", "contig_annotate__camper__annotate"),
-        cpu_per_task=esc("cpus", "contig_annotate__camper__annotate"),
+        cpus_per_task=esc("cpus", "contig_annotate__camper__annotate"),
         slurm_partition=esc("partition", "contig_annotate__camper__annotate"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "contig_annotate__camper__annotate", attempt=1)) + "'",
         attempt=get_attempt,

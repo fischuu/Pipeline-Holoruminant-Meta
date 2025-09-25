@@ -16,7 +16,7 @@ rule assemble__maxbin2__run:
     resources:
         runtime=esc("runtime", "assemble__maxbin2__run"),
         mem_mb=esc("mem_mb", "assemble__maxbin2__run"),
-        cpu_per_task=esc("cpus", "assemble__maxbin2__run"),
+        cpus_per_task=esc("cpus", "assemble__maxbin2__run"),
         slurm_partition=esc("partition", "assemble__maxbin2__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__maxbin2__run", attempt=1)) + "'",
         attempt=get_attempt,

@@ -17,7 +17,7 @@ rule annotate__camper__annotate:
     resources:
         runtime=esc("runtime", "annotate__camper__annotate"),
         mem_mb=esc("mem_mb", "annotate__camper__annotate"),
-        cpu_per_task=esc("cpus", "annotate__camper__annotate"),
+        cpus_per_task=esc("cpus", "annotate__camper__annotate"),
         slurm_partition=esc("partition", "annotate__camper__annotate"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__camper__annotate", attempt=1)) + "'",
         attempt=get_attempt,

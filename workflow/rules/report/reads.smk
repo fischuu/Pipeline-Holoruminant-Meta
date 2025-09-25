@@ -20,7 +20,7 @@ rule report__reads:
     resources:
         runtime=esc("runtime", "report__reads"),
         mem_mb=esc("mem_mb", "report__reads"),
-        cpu_per_task=esc("cpus", "report__reads"),
+        cpus_per_task=esc("cpus", "report__reads"),
         slurm_partition=esc("partition", "report__reads"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__reads", attempt=1)) + "'",
         attempt=get_attempt,

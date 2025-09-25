@@ -14,7 +14,7 @@ rule report__step__reads:
     resources:
         runtime=esc("runtime", "report__step__reads"),
         mem_mb=esc("mem_mb", "report__step__reads"),
-        cpu_per_task=esc("cpus", "report__step__reads"),
+        cpus_per_task=esc("cpus", "report__step__reads"),
         slurm_partition=esc("partition", "report__step__reads"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__reads", attempt=1)) + "'",
         attempt=get_attempt,
@@ -50,7 +50,7 @@ rule report__step__preprocess:
     resources:
         runtime=esc("runtime", "report__step__preprocess"),
         mem_mb=esc("mem_mb", "report__step__preprocess"),
-        cpu_per_task=esc("cpus", "report__step__preprocess"),
+        cpus_per_task=esc("cpus", "report__step__preprocess"),
         slurm_partition=esc("partition", "report__step__preprocess"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__preprocess", attempt=1)) + "'",
         attempt=get_attempt,
@@ -87,7 +87,7 @@ rule report__step__assemble:
     resources:
         runtime=esc("runtime", "report__step__assemble"),
         mem_mb=esc("mem_mb", "report__step__assemble"),
-        cpu_per_task=esc("cpus", "report__step__assemble"),
+        cpus_per_task=esc("cpus", "report__step__assemble"),
         slurm_partition=esc("partition", "report__step__assemble"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__assemble", attempt=1)) + "'",
         attempt=get_attempt,
@@ -120,7 +120,7 @@ rule report__step__quantify:
     resources:
         runtime=esc("runtime", "report__step__quantify"),
         mem_mb=esc("mem_mb", "report__step__quantify"),
-        cpu_per_task=esc("cpus", "report__step__quantify"),
+        cpus_per_task=esc("cpus", "report__step__quantify"),
         slurm_partition=esc("partition", "report__step__quantify"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__quantify", attempt=1)) + "'",
         attempt=get_attempt,

@@ -14,7 +14,7 @@ rule preprocess__sylph_profile:
     resources:
         runtime=esc("runtime", "preprocess__sylph_profile"),
         mem_mb=esc("mem_mb", "preprocess__sylph_profile"),
-        cpu_per_task=esc("cpus", "preprocess__sylph_profile"),
+        cpus_per_task=esc("cpus", "preprocess__sylph_profile"),
         slurm_partition=esc("partition", "preprocess__sylph_profile"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__sylph_profile", attempt=1)) + "'",
         attempt=get_attempt,

@@ -18,7 +18,7 @@ rule preprocess__phyloflash__run:
     resources:
         runtime=esc("runtime", "preprocess__phyloflash__run"),
         mem_mb=esc("mem_mb", "preprocess__phyloflash__run"),
-        cpu_per_task=esc("cpus", "preprocess__phyloflash__run"),
+        cpus_per_task=esc("cpus", "preprocess__phyloflash__run"),
         slurm_partition=esc("partition", "preprocess__phyloflash__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__phyloflash__run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -65,7 +65,7 @@ rule preprocess__phyloflash__condense:
     resources:
         runtime=esc("runtime", "preprocess__phyloflash__condense"),
         mem_mb=esc("mem_mb", "preprocess__phyloflash__condense"),
-        cpu_per_task=esc("cpus", "preprocess__phyloflash__condense"),
+        cpus_per_task=esc("cpus", "preprocess__phyloflash__condense"),
         slurm_partition=esc("partition", "preprocess__phyloflash__condense"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__phyloflash__condense", attempt=1)) + "'",
         attempt=get_attempt,

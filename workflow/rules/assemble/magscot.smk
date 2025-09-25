@@ -15,7 +15,7 @@ rule assemble__magscot__prodigal:
     resources:
         runtime=esc("runtime", "assemble__magscot__prodigal"),
         mem_mb=esc("mem_mb", "assemble__magscot__prodigal"),
-        cpu_per_task=esc("cpus", "assemble__magscot__prodigal"),
+        cpus_per_task=esc("cpus", "assemble__magscot__prodigal"),
         slurm_partition=esc("partition", "assemble__magscot__prodigal"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__prodigal", attempt=1)) + "'",
         attempt=get_attempt,
@@ -60,7 +60,7 @@ rule assemble__magscot__hmmsearch_pfam:
     resources:
         runtime=esc("runtime", "assemble__magscot__hmmsearch_pfam"),
         mem_mb=esc("mem_mb", "assemble__magscot__hmmsearch_pfam"),
-        cpu_per_task=esc("cpus", "assemble__magscot__hmmsearch_pfam"),
+        cpus_per_task=esc("cpus", "assemble__magscot__hmmsearch_pfam"),
         slurm_partition=esc("partition", "assemble__magscot__hmmsearch_pfam"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__hmmsearch_pfam", attempt=1)) + "'",
         attempt=get_attempt,
@@ -95,7 +95,7 @@ rule assemble__magscot__hmmsearch_tigr:
     resources:
         runtime=esc("runtime", "assemble__magscot__hmmsearch_tigr"),
         mem_mb=esc("mem_mb", "assemble__magscot__hmmsearch_tigr"),
-        cpu_per_task=esc("cpus", "assemble__magscot__hmmsearch_tigr"),
+        cpus_per_task=esc("cpus", "assemble__magscot__hmmsearch_tigr"),
         slurm_partition=esc("partition", "assemble__magscot__hmmsearch_tigr"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__hmmsearch_tigr", attempt=1)) + "'",
         attempt=get_attempt,
@@ -133,7 +133,7 @@ rule assemble__magscot__join_hmms:
     resources:
         runtime=esc("runtime", "assemble__magscot__join_hmms"),
         mem_mb=esc("mem_mb", "assemble__magscot__join_hmms"),
-        cpu_per_task=esc("cpus", "assemble__magscot__join_hmms"),
+        cpus_per_task=esc("cpus", "assemble__magscot__join_hmms"),
         slurm_partition=esc("partition", "assemble__magscot__join_hmms"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__join_hmms", attempt=1)) + "'",
         attempt=get_attempt,
@@ -170,7 +170,7 @@ rule assemble__magscot__merge_contig_to_bin:
     resources:
         runtime=esc("runtime", "assemble__magscot__merge_contig_to_bin"),
         mem_mb=esc("mem_mb", "assemble__magscot__merge_contig_to_bin"),
-        cpu_per_task=esc("cpus", "assemble__magscot__merge_contig_to_bin"),
+        cpus_per_task=esc("cpus", "assemble__magscot__merge_contig_to_bin"),
         slurm_partition=esc("partition", "assemble__magscot__merge_contig_to_bin"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__merge_contig_to_bin", attempt=1)) + "'",
         attempt=get_attempt,
@@ -222,7 +222,7 @@ rule assemble__magscot__run:
     resources:
         runtime=esc("runtime", "assemble__magscot__run"),
         mem_mb=esc("mem_mb", "assemble__magscot__run"),
-        cpu_per_task=esc("cpus", "assemble__magscot__run"),
+        cpus_per_task=esc("cpus", "assemble__magscot__run"),
         slurm_partition=esc("partition", "assemble__magscot__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -260,7 +260,7 @@ rule assemble__magscot__reformat:
     resources:
         runtime=esc("runtime", "assemble__magscot__reformat"),
         mem_mb=esc("mem_mb", "assemble__magscot__reformat"),
-        cpu_per_task=esc("cpus", "assemble__magscot__reformat"),
+        cpus_per_task=esc("cpus", "assemble__magscot__reformat"),
         slurm_partition=esc("partition", "assemble__magscot__reformat"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__reformat", attempt=1)) + "'",
         attempt=get_attempt,
@@ -296,7 +296,7 @@ rule assemble__magscot__rename:
     resources:
         runtime=esc("runtime", "assemble__magscot__rename"),
         mem_mb=esc("mem_mb", "assemble__magscot__rename"),
-        cpu_per_task=esc("cpus", "assemble__magscot__rename"),
+        cpus_per_task=esc("cpus", "assemble__magscot__rename"),
         slurm_partition=esc("partition", "assemble__magscot__rename"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "assemble__magscot__rename", attempt=1)) + "'",
         attempt=get_attempt,

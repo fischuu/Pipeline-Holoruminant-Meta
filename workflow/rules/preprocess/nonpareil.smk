@@ -28,7 +28,7 @@ rule preprocess__nonpareil__run:
     resources:
         runtime=esc("runtime", "preprocess__nonpareil__run"),
         mem_mb=esc("mem_mb", "preprocess__nonpareil__run"),
-        cpu_per_task=esc("cpus", "preprocess__nonpareil__run"),
+        cpus_per_task=esc("cpus", "preprocess__nonpareil__run"),
         slurm_partition=esc("partition", "preprocess__nonpareil__run"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__nonpareil__run", attempt=1)) + "'",
         attempt=get_attempt,
@@ -71,7 +71,7 @@ rule preprocess__nonpareil__aggregate:
     resources:
         runtime=esc("runtime", "preprocess__nonpareil__aggregate"),
         mem_mb=esc("mem_mb", "preprocess__nonpareil__aggregate"),
-        cpu_per_task=esc("cpus", "preprocess__nonpareil__aggregate"),
+        cpus_per_task=esc("cpus", "preprocess__nonpareil__aggregate"),
         slurm_partition=esc("partition", "preprocess__nonpareil__aggregate"),
         slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__nonpareil__aggregate", attempt=1)) + "'",
         attempt=get_attempt,
