@@ -44,6 +44,7 @@ rule preprocess__kraken2__assign:
         out_folder=lambda w: KRAKEN2 / w.kraken_db,
         kraken2_shm=KRAKEN2SHM,
         kraken2_nvme=KRAKEN2NVME,
+        kraken2_db=lambda w: w.kraken_db,
         kraken_db_shm=lambda w: os.path.join(KRAKEN2SHM, w.kraken_db),
         kraken_db_nvme=lambda w: os.path.join(KRAKEN2NVME, w.kraken_db),
     container:
@@ -51,32 +52,32 @@ rule preprocess__kraken2__assign:
     shell: """
         set -eo pipefail
 
-        echo "Starting Kraken2 rule attempt {resources.attempt}" > {log}.{resources.attempt}
+        echo "Starting Kraken2 rule attempt {resources.attempt}" > {log}.{resources.attempt} 1>&2
         
-        mkdir --parents {params.out_folder} 2>> {log}.{resources.attempt}
+        mkdir --parents {params.out_folder} 2>> {log}.{resources.attempt} 1>&2
 
-        echo "Assign variables" 2>> {log}.{resources.attempt}
-        echo "DB_SRC" 2>> {log}.{resources.attempt}
+        echo "Assign variables" 2>> {log}.{resources.attempt} 1>&2
+        echo "DB_SRC" 2>> {log}.{resources.attempt} 1>&2
         DB_SRC="{input.database}"
-        echo "SHM" 2>> {log}.{resources.attempt}
+        echo "SHM" 2>> {log}.{resources.attempt} 1>&2
         SHM="{params.kraken2_shm}"
-        echo "DB_SHM" 2>> {log}.{resources.attempt}
+        echo "DB_SHM" 2>> {log}.{resources.attempt} 1>&2
         DB_SHM="{params.kraken_db_shm}"
-        echo "DB_NVME" 2>> {log}.{resources.attempt}
-        DB_NVME="{params.kraken_db_nvme}"
+        echo "DB_NVME" 2>> {log}.{resources.attempt} 1>&2
+        DB_NVME={params.kraken2_nvme}/{params.kraken2_db}
         
-        echo "Catching non-existing variables, if there are any" 2>> {log}.{resources.attempt}
+        echo "Catching non-existing variables, if there are any" 2>> {log}.{resources.attempt} 1>&2
         
         : "${{DB_SRC:=}}"
         : "${{DB_SHM:=}}"
         : "${{DB_NVME:=}}"
 
-        echo "DB_SRC: $DB_SRC, DB_SHM: $DB_SHM, DB_NVME: $DB_NVME" 2>> {log}.{resources.attempt}
+        echo "DB_SRC: $DB_SRC, DB_SHM: $DB_SHM, DB_NVME: $DB_NVME" 2>> {log}.{resources.attempt} 1>&2
 
         DB_SIZE=$(du -sb $DB_SRC | cut -f1)
         SHM_AVAIL=$(timeout 10s df --output=avail -B1 "$SHM" 2>/dev/null | tail -1 || echo 0)
         NVME_AVAIL=$(( {params.nvme} * 2**30 ))
-        echo "DB_SIZE: $DB_SIZE, SHM_AVAIL: $SHM_AVAIL, NVME_AVAIL: $NVME_AVAIL" 2>> {log}.{resources.attempt}
+        echo "DB_SIZE: $DB_SIZE, SHM_AVAIL: $SHM_AVAIL, NVME_AVAIL: $NVME_AVAIL" 2>> {log}.{resources.attempt} 1>&2
 
         if [ "$DB_SIZE" -lt "$SHM_AVAIL" ]; then
             DB_DST="$DB_SHM"
@@ -87,7 +88,7 @@ rule preprocess__kraken2__assign:
                 if [ {resources.attempt} -eq {params.retries} ]; then
                     DB_DST="{input.database}"
                 else
-                    echo "DB too large for available storage, aborting attempt {resources.attempt}" 2>> {log}.{resources.attempt}
+                    echo "DB too large for available storage, aborting attempt {resources.attempt}" 2>> {log}.{resources.attempt} 1>&2
                     exit 1
                 fi
             fi
@@ -106,7 +107,7 @@ rule preprocess__kraken2__assign:
             report={params.out_folder}/${{sample_id}}.report
             log_file={params.out_folder}/${{sample_id}}.log
 
-            echo "Processing $sample_id" 2>> {log}.{resources.attempt}
+            echo "Processing $sample_id" 2>> {log}.{resources.attempt} 1>&2
 
             kraken2 \
                 --db $DB_DST \

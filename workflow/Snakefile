@@ -74,13 +74,13 @@ def choose_temp(primary, fallback1=None, fallback2=None):
 
 # Fallback chain: shm -> nvme -> tmp
 KRAKEN2SHM = choose_temp(config["shm_storage"], config["nvme_storage"], config["tmp_storage"])
+KRAKEN2NVME = config["nvme_storage"]
 DIAMONDSHM = choose_temp(config["nvme_storage"], config["tmp_storage"], None)
 EGGNOGSHM = choose_temp(config["shm_storage"], config["nvme_storage"], config["tmp_storage"])
 
 
 #KRAKEN2SHM = config["kraken_tmp_storage"]
 #KRAKEN2SHM = config["shm_storage"]
-KRAKEN2NVME = config["nvme_storage"]
 #DIAMONDSHM = config["nvme_storage"]
 #EGGNOGSHM = config["shm_storage"]
 KRAKEN2_DBS = features["databases"]["kraken2"]
