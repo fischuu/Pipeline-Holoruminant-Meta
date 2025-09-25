@@ -56,7 +56,7 @@ preprocess__diamond__summarise: small,medium,large
 preprocess__fastp__run: medium,large
 preprocess__humann__run: medium,large,highmem,longrun,highmem_longrun
 preprocess__humann_condense: small, medium, large
-preprocess__kraken2__assign: medium, full_node
+preprocess__kraken2__assign: full_node      # The full_node setting is for the /dev/shm ramdisc speedup. If you have nvme discs, better pick a set with those
 preprocess__krona__visualize: medium,large
 preprocess__metaphlan__condense: small, medium, large
 preprocess__metaphlan__run: medium,large

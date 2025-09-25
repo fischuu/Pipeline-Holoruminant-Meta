@@ -50,23 +50,19 @@ rule preprocess__kraken2__assign:
     container:
         docker["preprocess"],
     shell: """
-        set -eo pipefail
+        
+        # Don't use the strict mode, to handle nvme assignments in a more safer way
+        set +u
 
         echo "Starting Kraken2 rule attempt {resources.attempt}" > {log}.{resources.attempt} 1>&2
         
         mkdir --parents {params.out_folder} 2>> {log}.{resources.attempt} 1>&2
 
-        echo "Assign variables" 2>> {log}.{resources.attempt} 1>&2
-        echo "DB_SRC" 2>> {log}.{resources.attempt} 1>&2
         DB_SRC="{input.database}"
-        echo "SHM" 2>> {log}.{resources.attempt} 1>&2
         SHM="{params.kraken2_shm}"
-        echo "DB_SHM" 2>> {log}.{resources.attempt} 1>&2
         DB_SHM="{params.kraken_db_shm}"
-        echo "DB_NVME" 2>> {log}.{resources.attempt} 1>&2
-        DB_NVME={params.kraken2_nvme}/{params.kraken2_db}
-        
-        echo "Catching non-existing variables, if there are any" 2>> {log}.{resources.attempt} 1>&2
+        DB_NVME_2={params.kraken2_nvme}/{params.kraken2_db}
+        DB_NVME={params.kraken_db_nvme}
         
         : "${{DB_SRC:=}}"
         : "${{DB_SHM:=}}"
@@ -76,7 +72,8 @@ rule preprocess__kraken2__assign:
 
         DB_SIZE=$(du -sb $DB_SRC | cut -f1)
         SHM_AVAIL=$(timeout 10s df --output=avail -B1 "$SHM" 2>/dev/null | tail -1 || echo 0)
-        NVME_AVAIL=$(( {params.nvme} * 2**30 ))
+        #NVME_AVAIL=$(( {params.nvme} * 2**30 ))
+        NVME_AVAIL=$(timeout 10s df --output=avail -B1 "$DB_NVME" 2>/dev/null | tail -1 || echo 0)
         echo "DB_SIZE: $DB_SIZE, SHM_AVAIL: $SHM_AVAIL, NVME_AVAIL: $NVME_AVAIL" 2>> {log}.{resources.attempt} 1>&2
 
         if [ "$DB_SIZE" -lt "$SHM_AVAIL" ]; then

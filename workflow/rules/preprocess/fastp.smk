@@ -36,10 +36,6 @@ rule preprocess__fastp__run:
         attempt=get_attempt,
     retries: len(get_escalation_order("preprocess__fastp__run")),
     shell: """
-        # echo "LOCAL_SCRATCH is " $LOCAL_SCRATCH 2> {log}.{resources.attempt} 1>&2
-
-        #echo "LOCAL_SCRATCH is ${{LOCAL_SCRATCH:-undefined}}" 2> {log}.{resources.attempt} 1>&2
-
         fastp \
             --in1 {input.forward_} \
             --in2 {input.reverse_} \
