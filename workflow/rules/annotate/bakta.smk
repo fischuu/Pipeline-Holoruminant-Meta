@@ -20,7 +20,7 @@ rule annotate__bakta:
         mem_mb=esc("mem_mb", "annotate__bakta"),
         cpus_per_task=esc("cpus", "annotate__bakta"),
         slurm_partition=esc("partition", "annotate__bakta"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__bakta", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__bakta')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__bakta"))
     shell:
@@ -58,7 +58,7 @@ rule annotate__bakta_mags_run:
         mem_mb=esc("mem_mb", "annotate__bakta_mags_run"),
         cpus_per_task=esc("cpus", "annotate__bakta_mags_run"),
         slurm_partition=esc("partition", "annotate__bakta_mags_run"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__bakta_mags_run", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__bakta_mags_run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__bakta_mags_run"))
     shell:

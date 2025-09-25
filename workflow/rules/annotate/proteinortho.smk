@@ -14,7 +14,7 @@ rule annotate__proteinortho:
         mem_mb=esc("mem_mb", "annotate__proteinortho"),
         cpus_per_task=esc("cpus", "annotate__proteinortho"),
         slurm_partition=esc("partition", "annotate__proteinortho"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__proteinortho", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__proteinortho')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__proteinortho"))
     params:

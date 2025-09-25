@@ -19,7 +19,7 @@ rule annotate__camper__annotate:
         mem_mb=esc("mem_mb", "annotate__camper__annotate"),
         cpus_per_task=esc("cpus", "annotate__camper__annotate"),
         slurm_partition=esc("partition", "annotate__camper__annotate"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__camper__annotate", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__camper__annotate')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__camper__annotate"))
     shell:

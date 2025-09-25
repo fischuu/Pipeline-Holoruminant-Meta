@@ -18,7 +18,7 @@ rule annotate__eggnog:
         mem_mb=esc("mem_mb", "annotate__eggnog"),
         cpus_per_task=esc("cpus", "annotate__eggnog"),
         slurm_partition=esc("partition", "annotate__eggnog"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__eggnog", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__eggnog')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__eggnog"))
     shell:

@@ -17,7 +17,7 @@ rule annotate__phylophlan:
         mem_mb=esc("mem_mb", "annotate__phylophlan"),
         cpus_per_task=esc("cpus", "annotate__phylophlan"),
         slurm_partition=esc("partition", "annotate__phylophlan"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__phylophlan", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__phylophlan')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__phylophlan"))
     container:

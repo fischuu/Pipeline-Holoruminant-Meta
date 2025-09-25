@@ -22,7 +22,7 @@ rule annotate__gtdbtk__classify:
         mem_mb=esc("mem_mb", "annotate__gtdbtk__classify"),
         cpus_per_task=esc("cpus", "annotate__gtdbtk__classify"),
         slurm_partition=esc("partition", "annotate__gtdbtk__classify"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__gtdbtk__classify", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__gtdbtk__classify')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__gtdbtk__classify"))
     shell:

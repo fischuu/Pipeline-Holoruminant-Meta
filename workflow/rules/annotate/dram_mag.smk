@@ -25,7 +25,7 @@ rule annotate__dram_mag__annotate:
         mem_mb=esc("mem_mb", "annotate__dram_mag__annotate"),
         cpus_per_task=esc("cpus", "annotate__dram_mag__annotate"),
         slurm_partition=esc("partition", "annotate__dram_mag__annotate"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__dram_mag__annotate", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__dram_mag__annotate')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__dram_mag__annotate"))
     shell:
@@ -84,7 +84,7 @@ rule annotate__dram_mag__distill:
         mem_mb=esc("mem_mb", "annotate__fix_dram_mag_annotations_scaffold"),
         cpus_per_task=esc("cpus", "annotate__fix_dram_mag_annotations_scaffold"),
         slurm_partition=esc("partition", "annotate__fix_dram_mag_annotations_scaffold"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "annotate__fix_dram_mag_annotations_scaffold", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__fix_dram_mag_annotations_scaffold')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("annotate__fix_dram_mag_annotations_scaffold"))
     params:

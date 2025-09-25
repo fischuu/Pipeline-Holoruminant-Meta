@@ -34,7 +34,7 @@ rule preprocess__kraken2__assign:
         mem_mb=esc("mem_mb", "preprocess__kraken2__assign"),
         cpus_per_task=esc("cpus", "preprocess__kraken2__assign"),
         partition=esc("partition", "preprocess__kraken2__assign"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__kraken2__assign", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'preprocess__kraken2__assign')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("preprocess__kraken2__assign")),
     params:
@@ -52,13 +52,25 @@ rule preprocess__kraken2__assign:
         set -eo pipefail
 
         echo "Starting Kraken2 rule attempt {resources.attempt}" > {log}.{resources.attempt}
-
+        
         mkdir --parents {params.out_folder} 2>> {log}.{resources.attempt}
 
+        echo "Assign variables" 2>> {log}.{resources.attempt}
+        echo "DB_SRC" 2>> {log}.{resources.attempt}
         DB_SRC="{input.database}"
+        echo "SHM" 2>> {log}.{resources.attempt}
         SHM="{params.kraken2_shm}"
+        echo "DB_SHM" 2>> {log}.{resources.attempt}
         DB_SHM="{params.kraken_db_shm}"
+        echo "DB_NVME" 2>> {log}.{resources.attempt}
         DB_NVME="{params.kraken_db_nvme}"
+        
+        echo "Catching non-existing variables, if there are any" 2>> {log}.{resources.attempt}
+        
+        : "${{DB_SRC:=}}"
+        : "${{DB_SHM:=}}"
+        : "${{DB_NVME:=}}"
+
         echo "DB_SRC: $DB_SRC, DB_SHM: $DB_SHM, DB_NVME: $DB_NVME" 2>> {log}.{resources.attempt}
 
         DB_SIZE=$(du -sb $DB_SRC | cut -f1)
