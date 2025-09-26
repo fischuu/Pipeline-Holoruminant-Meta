@@ -345,14 +345,14 @@ Usage:
 ```
 bash run_Pipeline-Holoruminant-meta.sh quantify
 ```
-## annotate-module
+## mag_annotate-module
 
-This module is the annotation workhorse, it aligns the mags against various databases and generates the annotation for them.
+This module is the MAG annotation workhorse, it aligns the mags against various databases and generates the annotation for them.
 
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh annotate
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate
 ```
 
 ## contig_annotate-module
