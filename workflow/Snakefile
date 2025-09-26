@@ -120,7 +120,7 @@ include: "rules/reference/__main__.smk"
 include: "rules/preprocess/__main__.smk"
 include: "rules/assemble/__main__.smk"
 include: "rules/quantify/__main__.smk"
-include: "rules/annotate/__main__.smk"
+include: "rules/mag_annotate/__main__.smk"
 include: "rules/contig_annotate/__main__.smk"
 include: "rules/report/__main__.smk"
 
@@ -132,7 +132,7 @@ rule all:
         rules.reads.input,
         rules.preprocess.input,
         rules.assemble.input,
-        rules.annotate.input,
+        rules.mag_annotate.input,
         rules.contig_annotate.input,
         rules.quantify.input,
   #      rules.report.input,

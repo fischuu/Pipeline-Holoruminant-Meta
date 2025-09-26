@@ -1,4 +1,4 @@
-rule annotate__bakta:
+rule mag_annotate__bakta:
     """Run Bakta over the dereplicated mags"""
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",
@@ -8,21 +8,21 @@ rule annotate__bakta:
     log:
         BAKTA / "bakta.log",
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     params:
         out_dir=BAKTA,
         db=features["databases"]["bakta"],
-        options=params["annotate"]["bakta"]["additional_options"],
+        options=params["mag_annotate"]["bakta"]["additional_options"],
         tmpdir=config["tmp_storage"]
-    threads: esc("cpus", "annotate__bakta")
+    threads: esc("cpus", "mag_annotate__bakta")
     resources:
-        runtime=esc("runtime", "annotate__bakta"),
-        mem_mb=esc("mem_mb", "annotate__bakta"),
-        cpus_per_task=esc("cpus", "annotate__bakta"),
-        slurm_partition=esc("partition", "annotate__bakta"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__bakta')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__bakta"),
+        mem_mb=esc("mem_mb", "mag_annotate__bakta"),
+        cpus_per_task=esc("cpus", "mag_annotate__bakta"),
+        slurm_partition=esc("partition", "mag_annotate__bakta"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__bakta')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__bakta"))
+    retries: len(get_escalation_order("mag_annotate__bakta"))
     shell:
         """
         bakta --db {params.db} \
@@ -36,7 +36,7 @@ rule annotate__bakta:
               > {log} 2>&1
         """
 
-rule annotate__bakta_mags_run:
+rule mag_annotate__bakta_mags_run:
     """Run Bakta over the dereplicated mags"""
     input:
         contigs=MAGSCOT / "{assembly_id}.fa.gz",
@@ -46,21 +46,21 @@ rule annotate__bakta_mags_run:
     log:
         BAKTAMAG / "bakta_{assembly_id}.log",
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     params:
         out_dir=BAKTAMAG,
         db=features["databases"]["bakta"],
-        options=params["annotate"]["bakta"]["additional_options"],
+        options=params["mag_annotate"]["bakta"]["additional_options"],
         tmpdir=config["tmp_storage"]
-    threads: esc("cpus", "annotate__bakta_mags_run")
+    threads: esc("cpus", "mag_annotate__bakta_mags_run")
     resources:
-        runtime=esc("runtime", "annotate__bakta_mags_run"),
-        mem_mb=esc("mem_mb", "annotate__bakta_mags_run"),
-        cpus_per_task=esc("cpus", "annotate__bakta_mags_run"),
-        slurm_partition=esc("partition", "annotate__bakta_mags_run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__bakta_mags_run')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__bakta_mags_run"),
+        mem_mb=esc("mem_mb", "mag_annotate__bakta_mags_run"),
+        cpus_per_task=esc("cpus", "mag_annotate__bakta_mags_run"),
+        slurm_partition=esc("partition", "mag_annotate__bakta_mags_run"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__bakta_mags_run')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__bakta_mags_run"))
+    retries: len(get_escalation_order("mag_annotate__bakta_mags_run"))
     shell:
         """
         bakta --db {params.db} \
@@ -74,7 +74,7 @@ rule annotate__bakta_mags_run:
               > {log} 2>&1
         """
 
-rule annotate__bakta_mags:
+rule mag_annotate__bakta_mags:
     """Run Bakta over the dereplicated mags"""
      input:
         expand(BAKTAMAG / "bakta_{assembly_id}.faa", assembly_id=ASSEMBLIES),

@@ -51,7 +51,7 @@ QUANT_BOWTIE2 = QUANT / "bowtie2/"
 COVERM = QUANT / "coverm/"
 
 # dereplicate evaluation
-ANN = Path("results/annotate/")
+ANN = Path("results/mag_annotate/")
 GTDBTK = ANN / "gtdbtk/"
 QUAST = ANN / "quast/"
 CAMPER = ANN / "camper/"

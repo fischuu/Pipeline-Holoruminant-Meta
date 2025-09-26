@@ -1,5 +1,5 @@
-rule annotate__gtdbtk_assembly__classify:
-    """Run GTDB-Tk over the assembly genomes."""
+rule mag_annotate__gtdbtk__classify:
+    """Run GTDB-Tk over the dereplicated genomes."""
     input:
         fasta_folder=DREP / "dereplicated_genomes",
         database=features["databases"]["gtdbtk"],
@@ -10,20 +10,21 @@ rule annotate__gtdbtk_assembly__classify:
         identify=GTDBTK / "identify.tar.gz",
     log:
         GTDBTK / "gtdbtk_classify.log",
-    conda:
-        "gtdbtk.yml"
     container:
         docker["gtdbtk"]
     params:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
         bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
-    threads: config["resources"]["cpus_per_task"]["multi_thread"]
+    threads: esc("cpus", "mag_annotate__gtdbtk__classify")
     resources:
-        cpus_per_task=config["resources"]["cpus_per_task"]["multi_thread"],
-        mem_per_cpu=config["resources"]["mem_per_cpu"]["highmem"] // config["resources"]["cpus_per_task"]["multi_thread"],
-        time =  config["resources"]["time"]["longrun"],
-        attempt=get_attempt
+        runtime=esc("runtime", "mag_annotate__gtdbtk__classify"),
+        mem_mb=esc("mem_mb", "mag_annotate__gtdbtk__classify"),
+        cpus_per_task=esc("cpus", "mag_annotate__gtdbtk__classify"),
+        slurm_partition=esc("partition", "mag_annotate__gtdbtk__classify"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__gtdbtk__classify')['nvme']}",
+        attempt=get_attempt,
+    retries: len(get_escalation_order("mag_annotate__gtdbtk__classify"))
     shell:
         """
         rm \
@@ -78,7 +79,7 @@ rule annotate__gtdbtk_assembly__classify:
         """
 
 
-rule annotate__gtdbtk:
+rule mag_annotate__gtdbtk:
     """Run the gtdbtk subworkflow"""
     input:
-        rules._annotate__gtdbtk__classify.output,
+        rules.mag_annotate__gtdbtk__classify.output,

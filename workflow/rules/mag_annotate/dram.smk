@@ -1,4 +1,4 @@
-rule annotate__dram__annotate:
+rule mag_annotate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes.fa.gz",
@@ -18,15 +18,15 @@ rule annotate__dram__annotate:
         out_dir=DRAM,
         tmp_dir=DRAM / "annotate",
         parallel_retries=5,
-    threads: esc("cpus", "annotate__dram__annotate")
+    threads: esc("cpus", "mag_annotate__dram__annotate")
     resources:
-        runtime=esc("runtime", "annotate__dram__annotate"),
-        mem_mb=esc("mem_mb", "annotate__dram__annotate"),
-        cpus_per_task=esc("cpus", "annotate__dram__annotate"),
-        slurm_partition=esc("partition", "annotate__dram__annotate"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__dram__annotate')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__dram__annotate"),
+        mem_mb=esc("mem_mb", "mag_annotate__dram__annotate"),
+        cpus_per_task=esc("cpus", "mag_annotate__dram__annotate"),
+        slurm_partition=esc("partition", "mag_annotate__dram__annotate"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__dram__annotate')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__dram__annotate"))
+    retries: len(get_escalation_order("mag_annotate__dram__annotate"))
     shell:
         """
         rm -rf {params.tmp_dir}
@@ -44,7 +44,7 @@ rule annotate__dram__annotate:
         2>> {log} 1>&2
     """
 
-rule annotate__fix_dram_annotations_scaffold:
+rule mag_annotate__fix_dram_annotations_scaffold:
     input:
         DRAM / "annotate" / "annotations.tsv",
     output:
@@ -60,7 +60,7 @@ rule annotate__fix_dram_annotations_scaffold:
         python {params.script_folder}/fix_annotations.py {input} {output} 2>> {log} 1>&2
         """
 
-rule annotate__dram__distill:
+rule mag_annotate__dram__distill:
     """Distill DRAM annotations."""
     input:
         annotations=DRAM / "annotate" / "annotations.fixed.tsv",
@@ -76,15 +76,15 @@ rule annotate__dram__distill:
         DRAM / "distill.log2",
     container:
         docker["dram"]
-    threads: esc("cpus", "annotate__dram__distill")
+    threads: esc("cpus", "mag_annotate__dram__distill")
     resources:
-        runtime=esc("runtime", "annotate__dram__distill"),
-        mem_mb=esc("mem_mb", "annotate__dram__distill"),
-        cpus_per_task=esc("cpus", "annotate__dram__distill"),
-        slurm_partition=esc("partition", "annotate__dram__distill"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__dram__distill')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__dram__distill"),
+        mem_mb=esc("mem_mb", "mag_annotate__dram__distill"),
+        cpus_per_task=esc("cpus", "mag_annotate__dram__distill"),
+        slurm_partition=esc("partition", "mag_annotate__dram__distill"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__dram__distill')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__dram__distill"))
+    retries: len(get_escalation_order("mag_annotate__dram__distill"))
     params:
         config=config["dram-config"],
         outdir_tmp=DRAM / "distill",
@@ -103,7 +103,7 @@ rule annotate__dram__distill:
         rmdir {params.outdir_tmp} 2>> {log} 1>&2
         """
 
-rule annotate__dram:
+rule mag_annotate__dram:
     """Run DRAM on dereplicated genomes."""
     input:
-        rules.annotate__dram__distill.output,
+        rules.mag_annotate__dram__distill.output,

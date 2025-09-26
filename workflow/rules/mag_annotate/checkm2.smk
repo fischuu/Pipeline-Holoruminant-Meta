@@ -1,4 +1,4 @@
-rule annotate__checkm2__predict:
+rule mag_annotate__checkm2__predict:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=DREP / "dereplicated_genomes",
@@ -11,14 +11,14 @@ rule annotate__checkm2__predict:
         docker["checkm2"]
     params:
         out_dir=CHECKM / "predict",
-    threads: esc("cpus", "annotate__checkm2__predict")
+    threads: esc("cpus", "mag_annotate__checkm2__predict")
     resources:
-        runtime=esc("runtime", "annotate__checkm2__predict"),
-        mem_mb=esc("mem_mb", "annotate__checkm2__predict"),
-        cpus_per_task=esc("cpus", "annotate__checkm2__predict"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__checkm2__predict')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__checkm2__predict"),
+        mem_mb=esc("mem_mb", "mag_annotate__checkm2__predict"),
+        cpus_per_task=esc("cpus", "mag_annotate__checkm2__predict"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__checkm2__predict')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__checkm2__predict"))
+    retries: len(get_escalation_order("mag_annotate__checkm2__predict"))
     shell:
         """
         rm -rfv {params.out_dir} 2> {log} 1>&2
@@ -37,7 +37,7 @@ rule annotate__checkm2__predict:
         """
 
 
-rule annotate__checkm2:
+rule mag_annotate__checkm2:
     """Run CheckM2"""
     input:
-        rules.annotate__checkm2__predict.output,
+        rules.mag_annotate__checkm2__predict.output,

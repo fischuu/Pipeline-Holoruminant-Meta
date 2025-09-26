@@ -25,7 +25,7 @@ rule preprocess__diamond__assign:
         diamond_db_shm=lambda w: os.path.join(DIAMONDSHM, w.diamond_db),
         diamond_db_path=lambda w: os.path.join(DIAMONDSHM, w.diamond_db, os.path.basename(features["databases"]["diamond"][w.diamond_db])),
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     shell:
         """
         echo Running Diamond in $(hostname) 2>> {log}.{resources.attempt} 1>&2

@@ -59,7 +59,7 @@ checkpoint contig_annotate__cut_prodigal:
         attempt=get_attempt,
     retries: len(get_escalation_order("contig_annotate__cut_prodigal"))
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     shell:"""
        mkdir -p {output}
        {params.folder}/workflow/scripts/cutProdigal.sh {params.split} {params.out} {input} 2>> {log} 1>&2

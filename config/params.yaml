@@ -65,7 +65,7 @@ quantify:
     contig:
       methods:  ["count", "covered_bases", "length", "tpm"]  # https://github.com/wwood/CoverM#calculation-methods
 
-annotate:
+mag_annotate:
   bakta:
     additional_options: " --skip-crispr --skip-plot "
   phylophlan:

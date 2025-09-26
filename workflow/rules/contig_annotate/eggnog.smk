@@ -24,7 +24,7 @@ rule contig_annotate__eggnog_find_homology:
         attempt=get_attempt,
     retries: len(get_escalation_order("contig_annotate__eggnog_find_homology"))
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     shell:""" 
         DATA_DIR="{params.tmp}"
 
@@ -47,7 +47,7 @@ rule contig_annotate__aggregate_assemblies_eggnog:
     log:
         CONTIG_EGGNOG / "{assembly_id}/prodigal.emapper.seed_orthologs.log"
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     shell:"""
        cat {input} > {output} 2> {log}
     """
@@ -76,7 +76,7 @@ rule contig_annotate__eggnog_orthology:
         attempt=get_attempt,
     retries: len(get_escalation_order("contig_annotate__eggnog_orthology"))
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     shell:"""
     # Actually, not sure if that makes any sense, I think the files should not be concatenated here, but treated still here concatenated and then rather be merged afterwards
     # For now it is alright, as we annotated approx 650 per seconds (=run takes around a day), but if you ever rerun this step again, change it that it will be processed on the chunks

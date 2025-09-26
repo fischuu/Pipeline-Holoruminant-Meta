@@ -1,4 +1,4 @@
-rule annotate__phylophlan:
+rule mag_annotate__phylophlan:
     """
     Run phylophlan for the dereplicated genomes
     """
@@ -11,17 +11,17 @@ rule annotate__phylophlan:
         PHYLOPHLAN / "phylophlan_sgb.log",
     benchmark:
         PHYLOPHLAN / "benchmark/phylophlan_sgb.tsv",
-    threads: esc("cpus", "annotate__phylophlan")
+    threads: esc("cpus", "mag_annotate__phylophlan")
     resources:
-        runtime=esc("runtime", "annotate__phylophlan"),
-        mem_mb=esc("mem_mb", "annotate__phylophlan"),
-        cpus_per_task=esc("cpus", "annotate__phylophlan"),
-        slurm_partition=esc("partition", "annotate__phylophlan"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__phylophlan')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__phylophlan"),
+        mem_mb=esc("mem_mb", "mag_annotate__phylophlan"),
+        cpus_per_task=esc("cpus", "mag_annotate__phylophlan"),
+        slurm_partition=esc("partition", "mag_annotate__phylophlan"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__phylophlan')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__phylophlan"))
+    retries: len(get_escalation_order("mag_annotate__phylophlan"))
     container:
-        docker["annotate"]
+        docker["mag_annotate"]
     shell:
         """
             echo Running Phylophlan on $(hostname) 2>> {log} 1>&2

@@ -1,6 +1,6 @@
 # For now, I took the GTDBTK annotation out, as we get the taxonomic assignment also from the globlal run
 
-rule annotate__dram_mag__annotate:
+rule mag_annotate__dram_mag__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         contigs=MAGSCOT / "{assembly_id}.fa.gz",
@@ -19,15 +19,15 @@ rule annotate__dram_mag__annotate:
         min_contig_size=1500,
         out_dir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}",
         tmp_dir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}/annotate",
-    threads: esc("cpus", "annotate__dram_mag__annotate")
+    threads: esc("cpus", "mag_annotate__dram_mag__annotate")
     resources:
-        runtime=esc("runtime", "annotate__dram_mag__annotate"),
-        mem_mb=esc("mem_mb", "annotate__dram_mag__annotate"),
-        cpus_per_task=esc("cpus", "annotate__dram_mag__annotate"),
-        slurm_partition=esc("partition", "annotate__dram_mag__annotate"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__dram_mag__annotate')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__dram_mag__annotate"),
+        mem_mb=esc("mem_mb", "mag_annotate__dram_mag__annotate"),
+        cpus_per_task=esc("cpus", "mag_annotate__dram_mag__annotate"),
+        slurm_partition=esc("partition", "mag_annotate__dram_mag__annotate"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__dram_mag__annotate')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__dram_mag__annotate"))
+    retries: len(get_escalation_order("mag_annotate__dram_mag__annotate"))
     shell:
         """
         rm -rf {params.tmp_dir}
@@ -44,7 +44,7 @@ rule annotate__dram_mag__annotate:
         2>> {log} 1>&2
     """
     
-rule annotate__fix_dram_mag_annotations_scaffold:
+rule mag_annotate__fix_dram_mag_annotations_scaffold:
     input:
         DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
     output:
@@ -62,7 +62,7 @@ rule annotate__fix_dram_mag_annotations_scaffold:
         
     
 
-rule annotate__dram_mag__distill:
+rule mag_annotate__dram_mag__distill:
     """Distill DRAM annotations."""
     input:
         annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.fixed.tsv",
@@ -78,15 +78,15 @@ rule annotate__dram_mag__distill:
         DRAMMAG / "{assembly_id}" / "distill.log2",
     container:
         docker["dram"]
-    threads: esc("cpus", "annotate__fix_dram_mag_annotations_scaffold")
+    threads: esc("cpus", "mag_annotate__fix_dram_mag_annotations_scaffold")
     resources:
-        runtime=esc("runtime", "annotate__fix_dram_mag_annotations_scaffold"),
-        mem_mb=esc("mem_mb", "annotate__fix_dram_mag_annotations_scaffold"),
-        cpus_per_task=esc("cpus", "annotate__fix_dram_mag_annotations_scaffold"),
-        slurm_partition=esc("partition", "annotate__fix_dram_mag_annotations_scaffold"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__fix_dram_mag_annotations_scaffold')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__fix_dram_mag_annotations_scaffold"),
+        mem_mb=esc("mem_mb", "mag_annotate__fix_dram_mag_annotations_scaffold"),
+        cpus_per_task=esc("cpus", "mag_annotate__fix_dram_mag_annotations_scaffold"),
+        slurm_partition=esc("partition", "mag_annotate__fix_dram_mag_annotations_scaffold"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__fix_dram_mag_annotations_scaffold')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__fix_dram_mag_annotations_scaffold"))
+    retries: len(get_escalation_order("mag_annotate__fix_dram_mag_annotations_scaffold"))
     params:
         config=config["dram-config"],
         outdir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}",
@@ -105,7 +105,7 @@ rule annotate__dram_mag__distill:
         rmdir {params.outdir_tmp} 2>> {log} 1>&2
         """
 
-rule annotate__dram_mags:
+rule mag_annotate__dram_mags:
     """Run Bakta over the dereplicated mags"""
      input:
         #expand(DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv", assembly_id=ASSEMBLIES),

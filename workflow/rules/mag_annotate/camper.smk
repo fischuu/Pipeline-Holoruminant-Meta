@@ -1,4 +1,4 @@
-rule annotate__camper__annotate:
+rule mag_annotate__camper__annotate:
     """Annotate dereplicate genomes with CAMPER"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes.fa.gz"
@@ -13,15 +13,15 @@ rule annotate__camper__annotate:
     params:
         out_dir=CAMPER,
         parallel_retries=5,
-    threads: esc("cpus", "annotate__camper__annotate")
+    threads: esc("cpus", "mag_annotate__camper__annotate")
     resources:
-        runtime=esc("runtime", "annotate__camper__annotate"),
-        mem_mb=esc("mem_mb", "annotate__camper__annotate"),
-        cpus_per_task=esc("cpus", "annotate__camper__annotate"),
-        slurm_partition=esc("partition", "annotate__camper__annotate"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__camper__annotate')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__camper__annotate"),
+        mem_mb=esc("mem_mb", "mag_annotate__camper__annotate"),
+        cpus_per_task=esc("cpus", "mag_annotate__camper__annotate"),
+        slurm_partition=esc("partition", "mag_annotate__camper__annotate"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__camper__annotate')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__camper__annotate"))
+    retries: len(get_escalation_order("mag_annotate__camper__annotate"))
     shell:
         """
         camper_annotate -i {input} \
@@ -59,7 +59,7 @@ rule annotate__camper__annotate:
         2>> {log} 1>&2
         """
 
-rule annotate__camper:
+rule mag_annotate__camper:
     """Run CAMPER on dereplicated genomes."""
     input:
-        rules._annotate__camper__annotate,
+        rules.mag_annotate__camper__annotate,

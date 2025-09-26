@@ -1,4 +1,4 @@
-rule annotate__proteinortho:
+rule mag_annotate__proteinortho:
     """Run Proteinortho over all bakta output FAA files together"""
     input:
         faa=expand(BAKTAMAG / "bakta_{assembly_id}.faa", assembly_id=ASSEMBLIES),
@@ -7,16 +7,16 @@ rule annotate__proteinortho:
     log:
         PROTEINORTHO / "proteinortho.log",
     container:
-        docker["annotate"]
-    threads: esc("cpus", "annotate__proteinortho")
+        docker["mag_annotate"]
+    threads: esc("cpus", "mag_annotate__proteinortho")
     resources:
-        runtime=esc("runtime", "annotate__proteinortho"),
-        mem_mb=esc("mem_mb", "annotate__proteinortho"),
-        cpus_per_task=esc("cpus", "annotate__proteinortho"),
-        slurm_partition=esc("partition", "annotate__proteinortho"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'annotate__proteinortho')['nvme']}",
+        runtime=esc("runtime", "mag_annotate__proteinortho"),
+        mem_mb=esc("mem_mb", "mag_annotate__proteinortho"),
+        cpus_per_task=esc("cpus", "mag_annotate__proteinortho"),
+        slurm_partition=esc("partition", "mag_annotate__proteinortho"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__proteinortho')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("annotate__proteinortho"))
+    retries: len(get_escalation_order("mag_annotate__proteinortho"))
     params:
         outdir=PROTEINORTHO
     shell:
