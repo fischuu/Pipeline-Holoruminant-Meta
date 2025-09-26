@@ -16,7 +16,7 @@ rule report__step__reads:
         mem_mb=esc("mem_mb", "report__step__reads"),
         cpus_per_task=esc("cpus", "report__step__reads"),
         slurm_partition=esc("partition", "report__step__reads"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'report__step__reads')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'report__step__reads')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("report__step__reads"))
     shell:

@@ -12,7 +12,7 @@ rule helpers__samtools__index_bam:
         mem_mb=esc("mem_mb", "helpers__samtools__index_bam"),
         cpus_per_task=esc("cpus", "helpers__samtools__index_bam"),
         partition=esc("partition", "helpers__samtools__index_bam"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'helpers__samtools__index_bam')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'helpers__samtools__index_bam')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("helpers__samtools__index_bam"))
     log:

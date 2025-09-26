@@ -30,7 +30,7 @@ rule read_annotate__nonpareil__run:
         mem_mb=esc("mem_mb", "read_annotate__nonpareil__run"),
         cpus_per_task=esc("cpus", "read_annotate__nonpareil__run"),
         slurm_partition=esc("partition", "read_annotate__nonpareil__run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__nonpareil__run')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'read_annotate__nonpareil__run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("read_annotate__nonpareil__run"))
     shell:
@@ -73,7 +73,7 @@ rule read_annotate__nonpareil__aggregate:
         mem_mb=esc("mem_mb", "read_annotate__nonpareil__aggregate"),
         cpus_per_task=esc("cpus", "read_annotate__nonpareil__aggregate"),
         slurm_partition=esc("partition", "read_annotate__nonpareil__aggregate"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__nonpareil__aggregate')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'read_annotate__nonpareil__aggregate')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("read_annotate__nonpareil__aggregate"))
     params:

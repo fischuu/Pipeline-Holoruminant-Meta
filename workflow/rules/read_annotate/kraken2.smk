@@ -32,7 +32,7 @@ rule read_annotate__kraken2__assign:
         mem_mb=esc("mem_mb", "read_annotate__kraken2__assign"),
         cpus_per_task=esc("cpus", "read_annotate__kraken2__assign"),
         partition=esc("partition", "read_annotate__kraken2__assign"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__kraken2__assign')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'read_annotate__kraken2__assign')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("read_annotate__kraken2__assign")),
     params:

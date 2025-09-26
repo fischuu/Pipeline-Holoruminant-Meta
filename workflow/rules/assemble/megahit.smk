@@ -20,7 +20,7 @@ rule assemble__megahit__run:
         mem_mb=esc("mem_mb", "assemble__megahit__run"),
         cpus_per_task=esc("cpus", "assemble__megahit__run"),
         slurm_partition=esc("partition", "assemble__megahit__run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__megahit__run')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__megahit__run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__megahit__run"))
     params:

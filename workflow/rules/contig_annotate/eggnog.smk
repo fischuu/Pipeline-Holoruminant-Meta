@@ -20,7 +20,7 @@ rule contig_annotate__eggnog_find_homology:
         mem_mb=esc("mem_mb", "contig_annotate__eggnog_find_homology"),
         cpus_per_task=esc("cpus", "contig_annotate__eggnog_find_homology"),
         slurm_partition=esc("partition", "contig_annotate__eggnog_find_homology"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'contig_annotate__eggnog_find_homology')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'contig_annotate__eggnog_find_homology')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("contig_annotate__eggnog_find_homology"))
     container:
@@ -72,7 +72,7 @@ rule contig_annotate__eggnog_orthology:
         mem_mb=esc("mem_mb", "contig_annotate__eggnog_orthology"),
         cpus_per_task=esc("cpus", "contig_annotate__eggnog_orthology"),
         slurm_partition=esc("partition", "contig_annotate__eggnog_orthology"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'contig_annotate__eggnog_orthology')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'contig_annotate__eggnog_orthology')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("contig_annotate__eggnog_orthology"))
     container:

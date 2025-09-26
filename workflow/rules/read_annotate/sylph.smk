@@ -16,7 +16,8 @@ rule read_annotate__sylph_profile:
         mem_mb=esc("mem_mb", "read_annotate__sylph_profile"),
         cpus_per_task=esc("cpus", "read_annotate__sylph_profile"),
         slurm_partition=esc("partition", "read_annotate__sylph_profile"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__sylph_profile')['nvme']}",
+        #gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'read_annotate__sylph_profile')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'read_annotate__sylph_profile')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("read_annotate__sylph_profile"))
     shell:

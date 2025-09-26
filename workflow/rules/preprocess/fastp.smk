@@ -32,7 +32,7 @@ rule preprocess__fastp__run:
         mem_mb=esc("mem_mb", "preprocess__fastp__run"),
         cpus_per_task=esc("cpus", "preprocess__fastp__run"),
         partition=esc("partition", "preprocess__fastp__run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'preprocess__fastp__run')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'preprocess__fastp__run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("preprocess__fastp__run")),
     shell: """

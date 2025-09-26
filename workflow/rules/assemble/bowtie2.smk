@@ -17,7 +17,7 @@ rule assemble__bowtie2__build_run:
         mem_mb=esc("mem_mb", "assemble__bowtie2__build"),
         cpus_per_task=esc("cpus", "assemble__bowtie2__build"),
         slurm_partition=esc("partition", "assemble__bowtie2__build"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__bowtie2__build')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__bowtie2__build')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__bowtie2__build"))
     shell:
@@ -64,7 +64,7 @@ rule assemble__bowtie2__map:
         mem_mb=esc("mem_mb", "assemble__bowtie2__map"),
         cpus_per_task=esc("cpus", "assemble__bowtie2__map"),
         slurm_partition=esc("partition", "assemble__bowtie2__map"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__bowtie2__map')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__bowtie2__map')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__bowtie2__map"))
     params:

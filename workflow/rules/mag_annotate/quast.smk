@@ -14,7 +14,7 @@ rule mag_annotate__quast:
         mem_mb=esc("mem_mb", "mag_annotate__quast"),
         cpus_per_task=esc("cpus", "mag_annotate__quast"),
         slurm_partition=esc("partition", "mag_annotate__quast"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__quast')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'mag_annotate__quast')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("mag_annotate__quast"))
     shell:

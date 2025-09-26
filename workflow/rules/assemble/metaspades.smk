@@ -18,7 +18,7 @@ rule assemble__metaspades__run:
         mem_mb=esc("mem_mb", "assemble__metaspades__run"),
         cpus_per_task=esc("cpus", "assemble__metaspades__run"),
         slurm_partition=esc("partition", "assemble__metaspades__run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__metaspades__run')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__metaspades__run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__metaspades__run"))
     params:

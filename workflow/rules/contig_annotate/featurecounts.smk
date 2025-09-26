@@ -14,7 +14,7 @@ rule contig_annotate__cramToBam:
         mem_mb=esc("mem_mb", "contig_annotate__cramToBam"),
         cpus_per_task=esc("cpus", "contig_annotate__cramToBam"),
         slurm_partition=esc("partition", "contig_annotate__cramToBam"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'contig_annotate__cramToBam')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'contig_annotate__cramToBam')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("contig_annotate__cramToBam"))
     shell:
@@ -41,7 +41,7 @@ rule contig_annotate__featurecounts_run:
         mem_mb=esc("mem_mb", "contig_annotate__featurecounts_run"),
         cpus_per_task=esc("cpus", "contig_annotate__featurecounts_run"),
         slurm_partition=esc("partition", "contig_annotate__featurecounts_run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'contig_annotate__featurecounts_run')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'contig_annotate__featurecounts_run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("contig_annotate__featurecounts_run"))
     container: docker["subread"]

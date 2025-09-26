@@ -15,7 +15,7 @@ rule quantify__coverm__genome_run:
         mem_mb=esc("mem_mb", "quantify__coverm__genome_run"),
         cpus_per_task=esc("cpus", "quantify__coverm__genome_run"),
         slurm_partition=esc("partition", "quantify__coverm__genome_run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'quantify__coverm__genome_run')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'quantify__coverm__genome_run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("quantify__coverm__genome_run"))
     log:
@@ -62,7 +62,7 @@ rule quantify__coverm__genome_aggregate:
         mem_mb=esc("mem_mb", "quantify__coverm__genome_aggregate"),
         cpus_per_task=esc("cpus", "quantify__coverm__genome_aggregate"),
         slurm_partition=esc("partition", "quantify__coverm__genome_aggregate"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'quantify__coverm__genome_aggregate')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'quantify__coverm__genome_aggregate')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("quantify__coverm__genome_aggregate"))
     shell:
@@ -101,7 +101,7 @@ rule quantify__coverm__contig_one:
         mem_mb=esc("mem_mb", "quantify__coverm__contig_one"),
         cpus_per_task=esc("cpus", "quantify__coverm__contig_one"),
         slurm_partition=esc("partition", "quantify__coverm__contig_one"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'quantify__coverm__contig_one')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'quantify__coverm__contig_one')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("quantify__coverm__contig_one"))
     log:
@@ -143,7 +143,7 @@ rule quantify__coverm__contig_aggregate:
         mem_mb=esc("mem_mb", "quantify__coverm__contig_aggregate"),
         cpus_per_task=esc("cpus", "quantify__coverm__contig_aggregate"),
         slurm_partition=esc("partition", "quantify__coverm__contig_aggregate"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'quantify__coverm__contig_aggregate')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'quantify__coverm__contig_aggregate')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("quantify__coverm__contig_aggregate"))
     shell:

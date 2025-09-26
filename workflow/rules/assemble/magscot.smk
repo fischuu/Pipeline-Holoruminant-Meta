@@ -17,7 +17,7 @@ rule assemble__magscot__prodigal:
         mem_mb=esc("mem_mb", "assemble__magscot__prodigal"),
         cpus_per_task=esc("cpus", "assemble__magscot__prodigal"),
         slurm_partition=esc("partition", "assemble__magscot__prodigal"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__prodigal')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__prodigal')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__prodigal"))
     shell:
@@ -62,7 +62,7 @@ rule assemble__magscot__hmmsearch_pfam:
         mem_mb=esc("mem_mb", "assemble__magscot__hmmsearch_pfam"),
         cpus_per_task=esc("cpus", "assemble__magscot__hmmsearch_pfam"),
         slurm_partition=esc("partition", "assemble__magscot__hmmsearch_pfam"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__hmmsearch_pfam')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__hmmsearch_pfam')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__hmmsearch_pfam"))
     shell:
@@ -97,7 +97,7 @@ rule assemble__magscot__hmmsearch_tigr:
         mem_mb=esc("mem_mb", "assemble__magscot__hmmsearch_tigr"),
         cpus_per_task=esc("cpus", "assemble__magscot__hmmsearch_tigr"),
         slurm_partition=esc("partition", "assemble__magscot__hmmsearch_tigr"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__hmmsearch_tigr')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__hmmsearch_tigr')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__hmmsearch_tigr"))
     shell:
@@ -135,7 +135,7 @@ rule assemble__magscot__join_hmms:
         mem_mb=esc("mem_mb", "assemble__magscot__join_hmms"),
         cpus_per_task=esc("cpus", "assemble__magscot__join_hmms"),
         slurm_partition=esc("partition", "assemble__magscot__join_hmms"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__join_hmms')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__join_hmms')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__join_hmms"))
     shell:
@@ -172,7 +172,7 @@ rule assemble__magscot__merge_contig_to_bin:
         mem_mb=esc("mem_mb", "assemble__magscot__merge_contig_to_bin"),
         cpus_per_task=esc("cpus", "assemble__magscot__merge_contig_to_bin"),
         slurm_partition=esc("partition", "assemble__magscot__merge_contig_to_bin"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__merge_contig_to_bin')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__merge_contig_to_bin')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__merge_contig_to_bin"))
     shell:
@@ -224,7 +224,7 @@ rule assemble__magscot__run:
         mem_mb=esc("mem_mb", "assemble__magscot__run"),
         cpus_per_task=esc("cpus", "assemble__magscot__run"),
         slurm_partition=esc("partition", "assemble__magscot__run"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__run')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__run')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__run"))
     shell:
@@ -262,7 +262,7 @@ rule assemble__magscot__reformat:
         mem_mb=esc("mem_mb", "assemble__magscot__reformat"),
         cpus_per_task=esc("cpus", "assemble__magscot__reformat"),
         slurm_partition=esc("partition", "assemble__magscot__reformat"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__reformat')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__reformat')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__reformat"))
     params:
@@ -298,7 +298,7 @@ rule assemble__magscot__rename:
         mem_mb=esc("mem_mb", "assemble__magscot__rename"),
         cpus_per_task=esc("cpus", "assemble__magscot__rename"),
         slurm_partition=esc("partition", "assemble__magscot__rename"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'assemble__magscot__rename')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'assemble__magscot__rename')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("assemble__magscot__rename"))
     params:

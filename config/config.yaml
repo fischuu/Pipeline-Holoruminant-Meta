@@ -28,42 +28,42 @@ resource_sets:
     mem_mb: 16000
     cpus: 1
     partition: "small"
-    nvme: 0
+    nvme: "nvme:0"
 
   medium:
     runtime: 4000
     mem_mb: 160000
     cpus: 10
     partition: "small"
-    nvme: 10
+    nvme: "nvme:10"
     
   large:
     runtime: 4000
     mem_mb: 320000
     cpus: 20
     partition: "small"
-    nvme: 50
+    nvme: "nvme:50"
 
   highmem:
     runtime: 4000
     mem_mb: 1400000
     cpus: 20
     partition: "hugemem"
-    nvme: 250
+    nvme: "nvme:250"
 
   longrun:
     runtime: 20000
     mem_mb: 320000
     cpus: 20
     partition: "longrun"
-    nvme: 250
+    nvme: "nvme:250"
 
   highmem_longrun:
     runtime: 20000
     mem_mb: 1400000
     cpus: 20
     partition: "hugemem_longrun"
-    nvme: 250
+    nvme: "nvme:250"
 
  # This node is used for setting up a ramdisc for time-critical tasks. Make sure, that the allocation ensures that the entire node is
  # requested for the job so that there won't be other users on the same node while the job runs. Their jobs might get affected by the
@@ -74,4 +74,4 @@ resource_sets:
     mem_mb: 360000
     cpus: 40
     partition: "small"
-    nvme: 1000
+    nvme: "nvme:1000"

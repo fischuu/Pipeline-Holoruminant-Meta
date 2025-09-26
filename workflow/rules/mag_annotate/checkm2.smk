@@ -16,7 +16,7 @@ rule mag_annotate__checkm2__predict:
         runtime=esc("runtime", "mag_annotate__checkm2__predict"),
         mem_mb=esc("mem_mb", "mag_annotate__checkm2__predict"),
         cpus_per_task=esc("cpus", "mag_annotate__checkm2__predict"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'mag_annotate__checkm2__predict')['nvme']}",
+        gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'mag_annotate__checkm2__predict')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("mag_annotate__checkm2__predict"))
     shell:
