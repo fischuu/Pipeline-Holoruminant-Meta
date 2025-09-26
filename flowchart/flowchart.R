@@ -19,15 +19,17 @@ graph <- grViz("
     pre_bowtie2 [label = 'Bowtie2, v2.5.1 \n Decontamination']
     pre_fastp [label = 'Fastp, v0.23.4 \n QC trimming']
     pre_fastqc [label = 'FastQC, v0.12.1']
-    pre_kraken2 [label = 'Kraken2, v2.1.3 \n RefSeqV205_Complete \n Standard_20240112']
-    pre_humann [label = 'HumanN3, v3.9 \n Chocophlan v201901_v31 \n Uniref uniref90_201901b_full']
-    pre_metaphlan [label = 'MetaPhlAn, v4.1.1 \n mpa_vJun23_CHOCOPhlAnSGB_202307']
-    pre_phyloflash [label = 'PhyloFlash, v3.4.2 \n SILVA_SSU.noLSU 138.1']
-    pre_nonpareil [label = 'Nonpareil, v.3.4.1']
-    pre_singlem [label = 'SingleM, v0.18.0 \n S4.3.0.GTDB_r220.metapackage_20240523']
-    pre_sylph [label = 'Sylph, v0.7.0 \n gtdb-r220-c200-dbv1']
-    pre_diamond [label = 'Diamond, v.2.1.8 \n Cazy 07142024']
-    pre_krona [label = 'Krona, v.x.x.x']
+
+    # Define the read_annotate
+    read_annot_kraken2 [label = 'Kraken2, v2.1.3 \n RefSeqV205_Complete \n Standard_20240112']
+    read_annot_humann [label = 'HumanN3, v3.9 \n Chocophlan v201901_v31 \n Uniref uniref90_201901b_full']
+    read_annot_metaphlan [label = 'MetaPhlAn, v4.1.1 \n mpa_vJun23_CHOCOPhlAnSGB_202307']
+    read_annot_phyloflash [label = 'PhyloFlash, v3.4.2 \n SILVA_SSU.noLSU 138.1']
+    read_annot_nonpareil [label = 'Nonpareil, v.3.4.1']
+    read_annot_singlem [label = 'SingleM, v0.18.0 \n S4.3.0.GTDB_r220.metapackage_20240523']
+    read_annot_sylph [label = 'Sylph, v0.7.0 \n gtdb-r220-c200-dbv1']
+    read_annot_diamond [label = 'Diamond, v.2.1.8 \n Cazy 07142024']
+    read_annot_krona [label = 'Krona, v.x.x.x']
 
     # Define assembly nodes
     ass_bowtie2 [label = 'Bowtie2, v2.5.1']
@@ -82,16 +84,16 @@ graph <- grViz("
     pre_host -> pre_bowtie2
     pre_fastp -> pre_fastqc
     pre_bowtie2 -> pre_fastqc
-    pre_fastp -> pre_kraken2
-    pre_bowtie2 -> pre_humann
-    pre_bowtie2 -> pre_metaphlan
-    pre_bowtie2 -> pre_phyloflash
-    pre_bowtie2 -> pre_nonpareil
-    pre_bowtie2 -> pre_singlem
+    pre_fastp -> read_annot_kraken2
+    pre_bowtie2 -> read_annot_humann
+    pre_bowtie2 -> read_annot_metaphlan
+    pre_bowtie2 -> read_annot_phyloflash
+    pre_bowtie2 -> read_annot_nonpareil
+    pre_bowtie2 -> read_annot_singlem
     pre_bowtie2 -> ass_assembler_rep
-    pre_bowtie2 -> pre_diamond
-    pre_bowtie2 -> pre_sylph
-    pre_kraken2 -> pre_krona
+    pre_bowtie2 -> read_annot_diamond
+    pre_bowtie2 -> read_annot_sylph
+    read_annot_kraken2 -> read_annot_krona
     
     # Define edges for assembly
     ass_assembly -> ass_bowtie2
@@ -152,16 +154,24 @@ graph <- grViz("
       pre_bowtie2
       pre_fastp
       pre_fastqc
-      pre_kraken2
-      pre_krona
-      pre_humann
-      pre_metaphlan
-      pre_phyloflash
-      pre_nonpareil
-      pre_singlem
       pre_host
-      pre_diamond
-      pre_sylph
+    }
+
+    # Define a subgraph to group preprocessing nodes
+    subgraph cluster_read_annot {
+      label = 'Read Annotate'
+      style = dashed
+      color = lightgray
+
+      read_annot_kraken2
+      read_annot_krona
+      read_annot_humann
+      read_annot_metaphlan
+      read_annot_phyloflash
+      read_annot_nonpareil
+      read_annot_singlem
+      read_annot_diamond
+      read_annot_sylph
     }
 
     # Define a subgraph to group assembly nodes
@@ -236,7 +246,7 @@ graph <- grViz("
 
     # Define a subgraph to group annotation nodes
     subgraph cluster_annotate {
-      label = 'Annotate'
+      label = 'MAG Annotate'
       style = dashed
       color = lightgray
 
