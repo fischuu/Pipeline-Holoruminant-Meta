@@ -1,5 +1,5 @@
 rule read_annotate__diamond__assign:
-    """Run Diamond"""
+    """Run Diamond with SHM/NVME staging if possible."""
     input:
         forwards=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
         reverses=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
@@ -9,7 +9,9 @@ rule read_annotate__diamond__assign:
         out_R2=DIAMOND / "{diamond_db}" / "{sample_id}.{library_id}_R2.out",
     log:
         DIAMOND / "{diamond_db}_{sample_id}_{library_id}.log",
-    threads: esc("cpus", "read_annotate__diamond__assign")
+    benchmark:
+        DIAMOND / "benchmark/{diamond_db}_{sample_id}_{library_id}.tsv",
+    threads: esc("cpus", "read_annotate__diamond__assign"),
     resources:
         runtime=esc("runtime", "read_annotate__diamond__assign"),
         mem_mb=esc("mem_mb", "read_annotate__diamond__assign"),
@@ -17,29 +19,77 @@ rule read_annotate__diamond__assign:
         partition=esc("partition", "read_annotate__diamond__assign"),
         gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'read_annotate__diamond__assign')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("read_annotate__diamond__assign"))
+    retries: len(get_escalation_order("read_annotate__diamond__assign")),
     params:
+        retries=len(get_escalation_order("read_annotate__diamond__assign")),
         in_folder=FASTP,
         out_folder=lambda w: DIAMOND / w.diamond_db,
+        diamond_shm=DIAMONDSHM,
+        diamond_nvme=DIAMONDNVME,
         diamond_db_shm=lambda w: os.path.join(DIAMONDSHM, w.diamond_db),
-        diamond_db_path=lambda w: os.path.join(DIAMONDSHM, w.diamond_db, os.path.basename(features["databases"]["diamond"][w.diamond_db])),
+        diamond_path=lambda w: os.path.basename(features["databases"]["diamond"][w.diamond_db]),
+        diamond_db_nvme=lambda w: os.path.join(DIAMONDNVME, w.diamond_db),
     container:
-        docker["mag_annotate"]
+        docker["mag_annotate"],
     shell:
-        """
-        echo Running Diamond in $(hostname) 2>> {log}.{resources.attempt} 1>&2
-        echo Using quick disc space: {params.diamond_db_shm} 2>> {log}.{resources.attempt} 1>&2
+        r"""
+        set +u
+        echo "Starting Diamond rule attempt {resources.attempt}" > {log}.{resources.attempt} 1>&2
 
-        mkdir --parents {params.diamond_db_shm}
-        mkdir --parents {params.out_folder}
+        mkdir --parents {params.out_folder} 2>> {log}.{resources.attempt} 1>&2
 
-        cp {input.database} {params.diamond_db_shm} 2>> {log}.{resources.attempt} 1>&2
+        DB_SRC="{input.database}"
+        SHM="{params.diamond_shm}"
+        NVME="{params.diamond_nvme}"
+        DB_SHM="{params.diamond_db_shm}"
+        DB_NVME="{params.diamond_db_nvme}"
 
-        diamond blastx -d {params.diamond_db_path} -q {input.forwards} -o {output.out_R1} 2> {log}.{resources.attempt} 1>&2
-        diamond blastx -d {params.diamond_db_path} -q {input.reverses} -o {output.out_R2} 2> {log}.{resources.attempt} 1>&2
+        : "${{DB_SRC:=}}"
+        : "${{DB_SHM:=}}"
+        : "${{DB_NVME:=}}"
+        : "${{SHM:=}}"
+        : "${{NVME:=}}"
+
+        echo "DB_SRC: $DB_SRC, DB_SHM: $DB_SHM, DB_NVME: $DB_NVME" 2>> {log}.{resources.attempt} 1>&2
+
+        DB_SIZE=$(du -sb $DB_SRC | cut -f1)
+        SHM_AVAIL=$(timeout 10s df --output=avail -B1 "$SHM" 2>/dev/null | tail -1 || echo 0)
+        NVME_AVAIL=$(timeout 10s df --output=avail -B1 "$NVME" 2>/dev/null | tail -1 || echo 0)
+
+        echo "DB_SIZE: $DB_SIZE, SHM_AVAIL: $SHM_AVAIL, NVME_AVAIL: $NVME_AVAIL" 2>> {log}.{resources.attempt} 1>&2
+
+        if [ "$DB_SIZE" -lt "$SHM_AVAIL" ]; then
+            DB_DST="$DB_SHM"
+        else
+            if [ "$DB_SIZE" -lt "$NVME_AVAIL" ]; then
+                DB_DST="$DB_NVME"
+            else
+                if [ {resources.attempt} -eq {params.retries} ]; then
+                    DB_DST="{input.database}"   # use source directory
+                else
+                    echo "DB too large for available storage, aborting attempt {resources.attempt}" 2>> {log}.{resources.attempt} 1>&2
+                    exit 1
+                fi
+            fi
+        fi
+
+        if [ "$DB_DST" != "{input.database}" ]; then
+            mkdir -p $DB_DST
+            cp $DB_SRC $DB_DST 2>> {log}.{resources.attempt}
+        fi
+
+        echo "Running Diamond using DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
+
+        diamond blastx -d $DB_DST/{params.diamond_path} -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
+        diamond blastx -d $DB_DST/{params.diamond_path} -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
+
+        if [ "$DB_DST" = "$DB_SHM" ]; then
+            rm -rfv $DB_DST 2>> {log}.{resources.attempt}
+        fi
 
         mv {log}.{resources.attempt} {log}
         """
+
 
 rule read_annotate__diamond__summarise:
     """Run R script to summarise Diamond results"""

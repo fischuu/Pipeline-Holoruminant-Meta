@@ -19,7 +19,6 @@ rule read_annotate__humann__run:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
         additional_options=params["read_annotate"]["humann"]["additional_options"],
-        tmp=config["tmp_storage"],
     threads: esc("cpus", "read_annotate__humann__run"),
     resources:
         runtime=esc("runtime", "read_annotate__humann__run"),
@@ -30,8 +29,9 @@ rule read_annotate__humann__run:
         attempt=get_attempt,
     retries: len(get_escalation_order("read_annotate__humann__run")),
     shell: """
-        TMPDIR={params.tmp}
-
+         
+        echo "In case this rule crashes for larger datasets, you need to ensure a proper size of TMPDIR!"
+    
         echo "$(date) **Starting rule read_annotate__humann__run, attempt {resources.attempt}**" > {log}.{resources.attempt}
 
         cat {input.forward_} {input.reverse_} > {output.cat}
