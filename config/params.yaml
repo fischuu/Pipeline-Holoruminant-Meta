@@ -10,6 +10,8 @@ preprocess:
     memory_gb: 64
     samtools:
       mem_per_thread: 1G
+
+read_annotate:
   kraken2:
     memory_gb: 32
   nonpareil:

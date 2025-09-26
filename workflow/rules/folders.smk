@@ -17,17 +17,18 @@ PRE_BOWTIE2 = PRE / "bowtie2"
 NONHOST = PRE / "nonhost/"
 PRE_QUANT = PRE / "quantification/"
 
-# preprocess evaluation
-NONPAREIL = PRE / "nonpareil/"
-METAPHLAN = PRE / "metaphlan/"
-HUMANN = PRE / "humann/"
-PHYLOFLASH = PRE / "phyloflash/"
-SINGLEM = PRE / "singlem/"
-PRE_COVERM = PRE / "coverm/"
-KRAKEN2 = PRE / "kraken2/"
-KRONA = PRE / "krona/"
-DIAMOND = PRE / "diamond/"
-PRE_SYLPH = PRE / "sylph/"
+# read_annotate
+READ_ANNOT = Path("results/read_annotate/")
+NONPAREIL = READ_ANNOT / "nonpareil/"
+METAPHLAN = READ_ANNOT / "metaphlan/"
+HUMANN = READ_ANNOT / "humann/"
+PHYLOFLASH = READ_ANNOT / "phyloflash/"
+SINGLEM = READ_ANNOT / "singlem/"
+PRE_COVERM = READ_ANNOT / "coverm/"
+KRAKEN2 = READ_ANNOT / "kraken2/"
+KRONA = READ_ANNOT / "krona/"
+DIAMOND = READ_ANNOT / "diamond/"
+PRE_SYLPH = READ_ANNOT / "sylph/"
 
 # assemble
 ASSEMBLE = Path("results/assemble/")

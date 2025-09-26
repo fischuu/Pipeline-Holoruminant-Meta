@@ -16,7 +16,7 @@ rule report__step__reads:
         mem_mb=esc("mem_mb", "report__step__reads"),
         cpus_per_task=esc("cpus", "report__step__reads"),
         slurm_partition=esc("partition", "report__step__reads"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "report__step__reads", attempt=1)) + "'",
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'report__step__reads')['nvme']}",
         attempt=get_attempt,
     retries: len(get_escalation_order("report__step__reads"))
     shell:
@@ -37,7 +37,7 @@ rule report__step__preprocess:
         rules.preprocess__fastp.input.json,
         rules.preprocess__fastqc.input,
         rules.preprocess__samtools.input,
-        rules.preprocess__kraken2.input,
+        rules.read_annotate__kraken2.input,
     output:
         html=REPORT_STEP / "preprocess.html",
     log:

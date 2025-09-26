@@ -118,6 +118,7 @@ include: "rules/helpers/__main__.smk"
 include: "rules/reads/__main__.smk"
 include: "rules/reference/__main__.smk"
 include: "rules/preprocess/__main__.smk"
+include: "rules/read_annotate/__main__.smk"
 include: "rules/assemble/__main__.smk"
 include: "rules/quantify/__main__.smk"
 include: "rules/mag_annotate/__main__.smk"
@@ -131,6 +132,7 @@ rule all:
     input:
         rules.reads.input,
         rules.preprocess.input,
+        rules.read_annotate.input,
         rules.assemble.input,
         rules.mag_annotate.input,
         rules.contig_annotate.input,

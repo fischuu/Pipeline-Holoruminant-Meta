@@ -267,7 +267,7 @@ graph <- grViz("
 
 # Convert to SVG and save as PNG
 graph_svg <- export_svg(graph)
-rsvg_png(charToRaw(graph_svg), "flowchart/flowchart.png", width = 2876, height = 872)
+rsvg_png(charToRaw(graph_svg), "flowchart/flowchart.png", width = 2876)
 
 
 # Render the graph

@@ -1,4 +1,4 @@
-rule preprocess__singlem__pipe:
+rule read_annotate__singlem__pipe:
     """Run singlem over one sample
 
     Note: SingleM asks in the documentation for the raw reads. Here we are
@@ -18,15 +18,15 @@ rule preprocess__singlem__pipe:
         SINGLEM / "benchmark/pipe" / "{sample_id}.{library_id}.tsv",
     container:
         docker["preprocess"]
-    threads: esc("cpus", "preprocess__singlem__pipe")
+    threads: esc("cpus", "read_annotate__singlem__pipe")
     resources:
-        runtime=esc("runtime", "preprocess__singlem__pipe"),
-        mem_mb=esc("mem_mb", "preprocess__singlem__pipe"),
-        cpus_per_task=esc("cpus", "preprocess__singlem__pipe"),
-        slurm_partition=esc("partition", "preprocess__singlem__pipe"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__pipe", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__singlem__pipe"),
+        mem_mb=esc("mem_mb", "read_annotate__singlem__pipe"),
+        cpus_per_task=esc("cpus", "read_annotate__singlem__pipe"),
+        slurm_partition=esc("partition", "read_annotate__singlem__pipe"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__singlem__pipe')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__singlem__pipe"))
+    retries: len(get_escalation_order("read_annotate__singlem__pipe"))
     params:
         tmp = config["tmp_storage"]
     shell:
@@ -50,7 +50,7 @@ rule preprocess__singlem__pipe:
         """
 
 
-rule preprocess__singlem__condense:
+rule read_annotate__singlem__condense:
     """Aggregate all the singlem results into a single table"""
     input:
         archive_otu_tables=[
@@ -68,15 +68,15 @@ rule preprocess__singlem__condense:
         docker["preprocess"]
     params:
         input_dir=SINGLEM,
-    threads: esc("cpus", "preprocess__singlem__condense")
+    threads: esc("cpus", "read_annotate__singlem__condense")
     resources:
-        runtime=esc("runtime", "preprocess__singlem__condense"),
-        mem_mb=esc("mem_mb", "preprocess__singlem__condense"),
-        cpus_per_task=esc("cpus", "preprocess__singlem__condense"),
-        slurm_partition=esc("partition", "preprocess__singlem__condense"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__condense", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__singlem__condense"),
+        mem_mb=esc("mem_mb", "read_annotate__singlem__condense"),
+        cpus_per_task=esc("cpus", "read_annotate__singlem__condense"),
+        slurm_partition=esc("partition", "read_annotate__singlem__condense"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__singlem__condense')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__singlem__condense"))
+    retries: len(get_escalation_order("read_annotate__singlem__condense"))
     shell:
         """
         singlem condense \
@@ -87,7 +87,7 @@ rule preprocess__singlem__condense:
         """
 
 
-rule preprocess__singlem__microbial_fraction:
+rule read_annotate__singlem__microbial_fraction:
     """Run singlem microbial_fraction over one sample"""
     input:
         forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
@@ -104,15 +104,15 @@ rule preprocess__singlem__microbial_fraction:
         SINGLEM / "benchmark/microbial_fraction" / "{sample_id}.{library_id}.tsv"
     container:
         docker["preprocess"]
-    threads: esc("cpus", "preprocess__singlem__microbial_fraction")
+    threads: esc("cpus", "read_annotate__singlem__microbial_fraction")
     resources:
-        runtime=esc("runtime", "preprocess__singlem__microbial_fraction"),
-        mem_mb=esc("mem_mb", "preprocess__singlem__microbial_fraction"),
-        cpus_per_task=esc("cpus", "preprocess__singlem__microbial_fraction"),
-        slurm_partition=esc("partition", "preprocess__singlem__microbial_fraction"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__microbial_fraction", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__singlem__microbial_fraction"),
+        mem_mb=esc("mem_mb", "read_annotate__singlem__microbial_fraction"),
+        cpus_per_task=esc("cpus", "read_annotate__singlem__microbial_fraction"),
+        slurm_partition=esc("partition", "read_annotate__singlem__microbial_fraction"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__singlem__microbial_fraction')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__singlem__microbial_fraction"))
+    retries: len(get_escalation_order("read_annotate__singlem__microbial_fraction"))
     shell:
         """
         singlem microbial_fraction \
@@ -125,7 +125,7 @@ rule preprocess__singlem__microbial_fraction:
         """
 
 
-rule preprocess__singlem__aggregate_microbial_fraction:
+rule read_annotate__singlem__aggregate_microbial_fraction:
     """Aggregate all the microbial_fraction files into one tsv"""
     input:
         tsvs=[
@@ -140,15 +140,15 @@ rule preprocess__singlem__aggregate_microbial_fraction:
         SINGLEM / "benchmark/microbial_fraction.tsv"
     container:
         docker["preprocess"]
-    threads: esc("cpus", "preprocess__singlem__aggregate_microbial_fraction")
+    threads: esc("cpus", "read_annotate__singlem__aggregate_microbial_fraction")
     resources:
-        runtime=esc("runtime", "preprocess__singlem__aggregate_microbial_fraction"),
-        mem_mb=esc("mem_mb", "preprocess__singlem__aggregate_microbial_fraction"),
-        cpus_per_task=esc("cpus", "preprocess__singlem__aggregate_microbial_fraction"),
-        slurm_partition=esc("partition", "preprocess__singlem__aggregate_microbial_fraction"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__singlem__aggregate_microbial_fraction", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__singlem__aggregate_microbial_fraction"),
+        mem_mb=esc("mem_mb", "read_annotate__singlem__aggregate_microbial_fraction"),
+        cpus_per_task=esc("cpus", "read_annotate__singlem__aggregate_microbial_fraction"),
+        slurm_partition=esc("partition", "read_annotate__singlem__aggregate_microbial_fraction"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__singlem__aggregate_microbial_fraction')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__singlem__aggregate_microbial_fraction"))
+    retries: len(get_escalation_order("read_annotate__singlem__aggregate_microbial_fraction"))
     shell:
         """
         ( csvstack \
@@ -160,7 +160,7 @@ rule preprocess__singlem__aggregate_microbial_fraction:
         ) 2> {log}
         """
 
-rule preprocess__singlem:
+rule read_annotate__singlem:
     input:
-        rules.preprocess__singlem__condense.output,
-        rules.preprocess__singlem__aggregate_microbial_fraction.output,
+        rules.read_annotate__singlem__condense.output,
+        rules.read_annotate__singlem__aggregate_microbial_fraction.output,

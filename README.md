@@ -304,8 +304,7 @@ bash run_Pipeline-Holoruminant-meta.sh reference
 ```
 
 ## preprocess-module
-This module covers the quality control and triming of the reads as well as the read-based
-analysis and database searches.
+This module covers the quality control and triming of the reads
 
 Usage:
 
@@ -316,11 +315,21 @@ bash run_Pipeline-Holoruminant-meta.sh preprocess
 bash run_Pipeline-Holoruminant-meta.sh report_preprocess
 ```
 
-The command `preprocess` triggers the analysis of the entire preprocess submodule. However, individual tools can be called instead by running
+## read_annotate-module
+
+The command `read_annotate` triggers the analysis of the read-based annotation.
+
+Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh preprocess__diamond
-bash run_Pipeline-Holoruminant-meta.sh preprocess__krona
+bash run_Pipeline-Holoruminant-meta.sh read_annotate
+```
+
+Individual tools can be called instead by running
+
+```
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__diamond
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__krona
 ...
 ```
 

@@ -1,5 +1,4 @@
-# ---------- preprocess__humann__run ----------
-rule preprocess__humann__run:
+rule read_annotate__humann__run:
     """Run HumanN3 over one sample"""
     input:
         forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
@@ -19,21 +18,21 @@ rule preprocess__humann__run:
     params:
         out_folder=HUMANN,
         out_name="{sample_id}.{library_id}",
-        additional_options=params["preprocess"]["humann"]["additional_options"],
+        additional_options=params["read_annotate"]["humann"]["additional_options"],
         tmp=config["tmp_storage"],
-    threads: esc("cpus", "preprocess__humann__run"),
+    threads: esc("cpus", "read_annotate__humann__run"),
     resources:
-        runtime=esc("runtime", "preprocess__humann__run"),
-        mem_mb=esc("mem_mb", "preprocess__humann__run"),
-        cpus_per_task=esc("cpus", "preprocess__humann__run"),
-        partition=esc("partition", "preprocess__humann__run"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__humann__run", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__humann__run"),
+        mem_mb=esc("mem_mb", "read_annotate__humann__run"),
+        cpus_per_task=esc("cpus", "read_annotate__humann__run"),
+        partition=esc("partition", "read_annotate__humann__run"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__humann__run')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__humann__run")),
+    retries: len(get_escalation_order("read_annotate__humann__run")),
     shell: """
         TMPDIR={params.tmp}
 
-        echo "$(date) **Starting rule preprocess__humann__run, attempt {resources.attempt}**" > {log}.{resources.attempt}
+        echo "$(date) **Starting rule read_annotate__humann__run, attempt {resources.attempt}**" > {log}.{resources.attempt}
 
         cat {input.forward_} {input.reverse_} > {output.cat}
         
@@ -46,12 +45,12 @@ rule preprocess__humann__run:
                {params.additional_options} \
         2>> {log}.{resources.attempt} 1>&2
 
-        echo "$(date) **Finished rule preprocess__humann__run, attempt {resources.attempt}**" >> {log}.{resources.attempt}
+        echo "$(date) **Finished rule read_annotate__humann__run, attempt {resources.attempt}**" >> {log}.{resources.attempt}
 
         mv {log}.{resources.attempt} {log}
     """
 
-rule preprocess__humann__condense:
+rule read_annotate__humann__condense:
     """Aggregate all the HumanN results into a single table"""
     input:
         genefamily_data=[
@@ -68,21 +67,21 @@ rule preprocess__humann__condense:
         docker["humann"]
     params:
         input_dir=HUMANN,
-    threads: esc("cpus", "preprocess__humann__condense"),
+    threads: esc("cpus", "read_annotate__humann__condense"),
     resources:
-        runtime=esc("runtime", "preprocess__humann__condense"),
-        mem_mb=esc("mem_mb", "preprocess__humann__condense"),
-        cpus_per_task=esc("cpus", "preprocess__humann__condense"),
-        partition=esc("partition", "preprocess__humann__condense"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__humann__condense", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__humann__condense"),
+        mem_mb=esc("mem_mb", "read_annotate__humann__condense"),
+        cpus_per_task=esc("cpus", "read_annotate__humann__condense"),
+        partition=esc("partition", "read_annotate__humann__condense"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__humann__condense')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__humann__condense")),
+    retries: len(get_escalation_order("read_annotate__humann__condense")),
     shell:
         """
         cat {input.genefamily_data} > {output}
         2> {log} 1>&2
         """
 
-rule preprocess__humann:
+rule read_annotate__humann:
     input:
-        rules.preprocess__humann__condense.output
+        rules.read_annotate__humann__condense.output

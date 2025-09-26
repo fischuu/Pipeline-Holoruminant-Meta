@@ -51,26 +51,9 @@ preprocess__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
 preprocess__bowtie2__extract_nonhost: small,medium,large,highmem,longrun,highmem_longrun
 preprocess__bowtie2__extract_nonhost_run: large,highmem,longrun,highmem_longrun
 preprocess__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
-preprocess__diamond__assign: medium,large,highmem,longrun,highmem_longrun
-preprocess__diamond__summarise: small,medium,large
 preprocess__fastp__run: medium,large
-preprocess__humann__run: medium,large,highmem,longrun,highmem_longrun
-preprocess__humann_condense: small, medium, large
-preprocess__kraken2__assign: full_node      # The full_node setting is for the /dev/shm ramdisc speedup. If you have nvme discs, better pick a set with those
-preprocess__krona__visualize: medium,large
-preprocess__metaphlan__condense: small, medium, large
-preprocess__metaphlan__run: medium,large
-preprocess__nonpareil__aggregate: small, medium,large
-preprocess__nonpareil__run: medium,large
-preprocess__phyloflash__condense: small, medium,large
-preprocess__phyloflash__run: medium,large
 preprocess__samtools__stats_cram: small, medium, large
-preprocess__singlem__condense: small, medium, large
-preprocess__singlem__microbial_fraction: small, medium, large
-preprocess__singlem__pipe: small, medium, large
-preprocess__singlem__aggregate_microbial_fraction: small, medium,large
 preprocess__store_final_fastq: small,medium,large,highmem,longrun,highmem_longrun
-preprocess__sylph_profile: medium, large
 
 quantify__bowtie2__build: small, medium,large
 quantify__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
@@ -79,6 +62,24 @@ quantify__coverm__contig_one: small, medium,large
 quantify__coverm__genome_aggregate: small, medium,large
 quantify__coverm__genome_run: small, medium,large
 quantify__samtools__stats_cram: small, medium,large
+
+read_annotate__diamond__assign: medium,large,highmem,longrun,highmem_longrun
+read_annotate__diamond__summarise: small,medium,large
+read_annotate__humann__run: medium,large,highmem,longrun,highmem_longrun
+read_annotate__humann_condense: small, medium, large
+read_annotate__kraken2__assign: full_node      # The full_node setting is for the /dev/shm ramdisc speedup. If you have nvme discs, better pick a set with those
+read_annotate__krona__visualize: medium,large
+read_annotate__metaphlan__condense: small, medium, large
+read_annotate__metaphlan__run: medium,large
+read_annotate__nonpareil__aggregate: small, medium,large
+read_annotate__nonpareil__run: medium,large
+read_annotate__phyloflash__condense: small, medium,large
+read_annotate__phyloflash__run: medium,large
+read_annotate__singlem__condense: small, medium, large
+read_annotate__singlem__microbial_fraction: small, medium, large
+read_annotate__singlem__pipe: small, medium, large
+read_annotate__singlem__aggregate_microbial_fraction: small, medium,large
+read_annotate__sylph_profile: medium, large
 
 reference__hosts__recompress: small,medium,large
 

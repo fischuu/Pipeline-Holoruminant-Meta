@@ -1,4 +1,4 @@
-rule preprocess__nonpareil__run:
+rule read_annotate__nonpareil__run:
     """Run nonpareil over one sample
 
     Note: Nonpareil only ask for one of the pair-end reads
@@ -22,17 +22,17 @@ rule preprocess__nonpareil__run:
     params:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
         reads=lambda w: NONPAREIL /  f"{w.sample_id}.{w.library_id}_1.fq",
-        X=params["preprocess"]["nonpareil"]["X"],
+        X=params["read_annotate"]["nonpareil"]["X"],
         tmp = config["tmp_storage"]
-    threads: esc("cpus", "preprocess__nonpareil__run")
+    threads: esc("cpus", "read_annotate__nonpareil__run")
     resources:
-        runtime=esc("runtime", "preprocess__nonpareil__run"),
-        mem_mb=esc("mem_mb", "preprocess__nonpareil__run"),
-        cpus_per_task=esc("cpus", "preprocess__nonpareil__run"),
-        slurm_partition=esc("partition", "preprocess__nonpareil__run"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__nonpareil__run", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__nonpareil__run"),
+        mem_mb=esc("mem_mb", "read_annotate__nonpareil__run"),
+        cpus_per_task=esc("cpus", "read_annotate__nonpareil__run"),
+        slurm_partition=esc("partition", "read_annotate__nonpareil__run"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__nonpareil__run')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__nonpareil__run"))
+    retries: len(get_escalation_order("read_annotate__nonpareil__run"))
     shell:
         """
         TMPDIR={params.tmp}
@@ -52,7 +52,7 @@ rule preprocess__nonpareil__run:
         """
 
 
-rule preprocess__nonpareil__aggregate:
+rule read_annotate__nonpareil__aggregate:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
@@ -67,15 +67,15 @@ rule preprocess__nonpareil__aggregate:
         NONPAREIL / "benchmark/nonpareil.tsv",
     container:
         docker["preprocess"]
-    threads: esc("cpus", "preprocess__nonpareil__aggregate")
+    threads: esc("cpus", "read_annotate__nonpareil__aggregate")
     resources:
-        runtime=esc("runtime", "preprocess__nonpareil__aggregate"),
-        mem_mb=esc("mem_mb", "preprocess__nonpareil__aggregate"),
-        cpus_per_task=esc("cpus", "preprocess__nonpareil__aggregate"),
-        slurm_partition=esc("partition", "preprocess__nonpareil__aggregate"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__nonpareil__aggregate", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__nonpareil__aggregate"),
+        mem_mb=esc("mem_mb", "read_annotate__nonpareil__aggregate"),
+        cpus_per_task=esc("cpus", "read_annotate__nonpareil__aggregate"),
+        slurm_partition=esc("partition", "read_annotate__nonpareil__aggregate"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__nonpareil__aggregate')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__nonpareil__aggregate"))
+    retries: len(get_escalation_order("read_annotate__nonpareil__aggregate"))
     params:
         input_dir=NONPAREIL,
         script_folder=SCRIPT_FOLDER,
@@ -88,6 +88,6 @@ rule preprocess__nonpareil__aggregate:
         """
 
 
-rule preprocess__nonpareil:
+rule read_annotate__nonpareil:
     input:
-        rules.preprocess__nonpareil__aggregate.output,
+        rules.read_annotate__nonpareil__aggregate.output,

@@ -1,4 +1,4 @@
-rule preprocess__metaphlan__run:
+rule read_annotate__metaphlan__run:
     """Run metaphlan over one sample
     """
     input:
@@ -14,15 +14,15 @@ rule preprocess__metaphlan__run:
         METAPHLAN / "benchmark" / "{sample_id}.{library_id}.tsv",
     container:
         docker["preprocess"]
-    threads: esc("cpus", "preprocess__metaphlan__run")
+    threads: esc("cpus", "read_annotate__metaphlan__run")
     resources:
-        runtime=esc("runtime", "preprocess__metaphlan__run"),
-        mem_mb=esc("mem_mb", "preprocess__metaphlan__run"),
-        cpus_per_task=esc("cpus", "preprocess__metaphlan__run"),
-        slurm_partition=esc("partition", "preprocess__metaphlan__run"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__metaphlan__run", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__metaphlan__run"),
+        mem_mb=esc("mem_mb", "read_annotate__metaphlan__run"),
+        cpus_per_task=esc("cpus", "read_annotate__metaphlan__run"),
+        slurm_partition=esc("partition", "read_annotate__metaphlan__run"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__metaphlan__run')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__metaphlan__run"))
+    retries: len(get_escalation_order("read_annotate__metaphlan__run"))
     params:
         tmp = config["tmp_storage"]
     shell:
@@ -39,7 +39,7 @@ rule preprocess__metaphlan__run:
         """
 
 
-rule preprocess__metaphlan__condense:
+rule read_annotate__metaphlan__condense:
     """Aggregate all the metaphlan results into a single table"""
     input:
         profiled_data=[
@@ -56,15 +56,15 @@ rule preprocess__metaphlan__condense:
         docker["preprocess"]
     params:
         input_dir=METAPHLAN,
-    threads: esc("cpus", "preprocess__metaphlan__condense")
+    threads: esc("cpus", "read_annotate__metaphlan__condense")
     resources:
-        runtime=esc("runtime", "preprocess__metaphlan__condense"),
-        mem_mb=esc("mem_mb", "preprocess__metaphlan__condense"),
-        cpus_per_task=esc("cpus", "preprocess__metaphlan__condense"),
-        slurm_partition=esc("partition", "preprocess__metaphlan__condense"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__metaphlan__condense", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__metaphlan__condense"),
+        mem_mb=esc("mem_mb", "read_annotate__metaphlan__condense"),
+        cpus_per_task=esc("cpus", "read_annotate__metaphlan__condense"),
+        slurm_partition=esc("partition", "read_annotate__metaphlan__condense"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__metaphlan__condense')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__metaphlan__condense"))
+    retries: len(get_escalation_order("read_annotate__metaphlan__condense"))
     shell:
         """
          merge_metaphlan_tables.py {input.profiled_data} > {output}
@@ -72,6 +72,6 @@ rule preprocess__metaphlan__condense:
         #2> {log} 1>&2
         """
 
-rule preprocess__metaphlan:
+rule read_annotate__metaphlan:
     input:
-        rules.preprocess__metaphlan__condense.output
+        rules.read_annotate__metaphlan__condense.output

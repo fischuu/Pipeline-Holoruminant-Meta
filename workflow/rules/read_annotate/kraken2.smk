@@ -1,6 +1,4 @@
-ESCALATION = ["medium", "full_node"]
-
-rule preprocess__kraken2__assign:
+rule read_annotate__kraken2__assign:
     """
     Run kraken2 over all samples at once using the /dev/shm/ trick.
     NOTE: /dev/shm may be not empty after the job is done.
@@ -28,18 +26,18 @@ rule preprocess__kraken2__assign:
         KRAKEN2 / "{kraken_db}.log",
     benchmark:
         KRAKEN2 / "benchmark/{kraken_db}.tsv",
-    threads: esc("cpus", "preprocess__kraken2__assign"),
+    threads: esc("cpus", "read_annotate__kraken2__assign"),
     resources:
-        runtime=esc("runtime", "preprocess__kraken2__assign"),
-        mem_mb=esc("mem_mb", "preprocess__kraken2__assign"),
-        cpus_per_task=esc("cpus", "preprocess__kraken2__assign"),
-        partition=esc("partition", "preprocess__kraken2__assign"),
-        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'preprocess__kraken2__assign')['nvme']}",
+        runtime=esc("runtime", "read_annotate__kraken2__assign"),
+        mem_mb=esc("mem_mb", "read_annotate__kraken2__assign"),
+        cpus_per_task=esc("cpus", "read_annotate__kraken2__assign"),
+        partition=esc("partition", "read_annotate__kraken2__assign"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__kraken2__assign')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__kraken2__assign")),
+    retries: len(get_escalation_order("read_annotate__kraken2__assign")),
     params:
-        retries=len(get_escalation_order("preprocess__kraken2__assign")),
-        nvme=esc_val("nvme", "preprocess__kraken2__assign"),
+        retries=len(get_escalation_order("read_annotate__kraken2__assign")),
+        nvme=esc_val("nvme", "read_annotate__kraken2__assign"),
         in_folder=FASTP,
         out_folder=lambda w: KRAKEN2 / w.kraken_db,
         kraken2_shm=KRAKEN2SHM,
@@ -126,7 +124,7 @@ rule preprocess__kraken2__assign:
     """
 
 
-rule preprocess__kraken2:
+rule read_annotate__kraken2:
     """Run kraken2 over all samples at once using the /dev/shm/ trick."""
     input:
         [

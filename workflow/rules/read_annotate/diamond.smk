@@ -1,5 +1,4 @@
-# ---------- preprocess__diamond__assign ----------
-rule preprocess__diamond__assign:
+rule read_annotate__diamond__assign:
     """Run Diamond"""
     input:
         forwards=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
@@ -10,15 +9,15 @@ rule preprocess__diamond__assign:
         out_R2=DIAMOND / "{diamond_db}" / "{sample_id}.{library_id}_R2.out",
     log:
         DIAMOND / "{diamond_db}_{sample_id}_{library_id}.log",
-    threads: esc("cpus", "preprocess__diamond__assign")
+    threads: esc("cpus", "read_annotate__diamond__assign")
     resources:
-        runtime=esc("runtime", "preprocess__diamond__assign"),
-        mem_mb=esc("mem_mb", "preprocess__diamond__assign"),
-        cpus_per_task=esc("cpus", "preprocess__diamond__assign"),
-        partition=esc("partition", "preprocess__diamond__assign"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__diamond__assign", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__diamond__assign"),
+        mem_mb=esc("mem_mb", "read_annotate__diamond__assign"),
+        cpus_per_task=esc("cpus", "read_annotate__diamond__assign"),
+        partition=esc("partition", "read_annotate__diamond__assign"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__diamond__assign')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__diamond__assign"))
+    retries: len(get_escalation_order("read_annotate__diamond__assign"))
     params:
         in_folder=FASTP,
         out_folder=lambda w: DIAMOND / w.diamond_db,
@@ -42,8 +41,7 @@ rule preprocess__diamond__assign:
         mv {log}.{resources.attempt} {log}
         """
 
-# ---------- preprocess__diamond__summarise ----------
-rule preprocess__diamond__summarise:
+rule read_annotate__diamond__summarise:
     """Run R script to summarise Diamond results"""
     input:
         lambda w: [
@@ -57,16 +55,16 @@ rule preprocess__diamond__summarise:
         DIAMOND / "{diamond_db}" / "summary_a.tsv",
         DIAMOND / "{diamond_db}" / "summary_b.tsv"
     log:
-        DIAMOND / "{diamond_db}" / "preprocess__diamond__summarise.log"
-    threads: esc("cpus", "preprocess__diamond__summarise")
+        DIAMOND / "{diamond_db}" / "read_annotate__diamond__summarise.log"
+    threads: esc("cpus", "read_annotate__diamond__summarise")
     resources:
-        runtime=esc("runtime", "preprocess__diamond__summarise"),
-        mem_mb=esc("mem_mb", "preprocess__diamond__summarise"),
-        cpus_per_task=esc("cpus", "preprocess__diamond__summarise"),
-        partition=esc("partition", "preprocess__diamond__summarise"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__diamond__summarise", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__diamond__summarise"),
+        mem_mb=esc("mem_mb", "read_annotate__diamond__summarise"),
+        cpus_per_task=esc("cpus", "read_annotate__diamond__summarise"),
+        partition=esc("partition", "read_annotate__diamond__summarise"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__diamond__summarise')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__diamond__summarise"))
+    retries: len(get_escalation_order("read_annotate__diamond__summarise"))
     params:
         script=lambda w: config["pipeline_folder"] + "workflow/scripts/downstream_scripts/create_featuretable_diamond_" + w.diamond_db + ".R",
         project_folder=WD,
@@ -75,11 +73,10 @@ rule preprocess__diamond__summarise:
         docker["r_report"]
     shell:
         """
-        R -e "project_folder <- '{params.project_folder}'; result_folder <- 'results/preprocess/diamond/{params.database}'; source('{params.script}')" &> {log}
+        R -e "project_folder <- '{params.project_folder}'; result_folder <- 'results/read_annotate/diamond/{params.database}'; source('{params.script}')" &> {log}
         """
 
-# ---------- preprocess__diamond ----------
-rule preprocess__diamond:
+rule read_annotate__diamond:
     """Run all Diamond steps"""
     input:
         [

@@ -1,4 +1,4 @@
-rule preprocess__krona__visualize:
+rule read_annotate__krona__visualize:
     """
     Create Krona plots for Kraken2 output.
     """
@@ -10,15 +10,15 @@ rule preprocess__krona__visualize:
         KRONA / "{kraken_db}_{sample_id}.{library_id}.log",
     benchmark:
         KRONA / "benchmark/{kraken_db}_{sample_id}.{library_id}bsk.tsv",
-    threads: esc("cpus", "preprocess__krona__visualize")
+    threads: esc("cpus", "read_annotate__krona__visualize")
     resources:
-        runtime=esc("runtime", "preprocess__krona__visualize"),
-        mem_mb=esc("mem_mb", "preprocess__krona__visualize"),
-        cpus_per_task=esc("cpus", "preprocess__krona__visualize"),
-        slurm_partition=esc("partition", "preprocess__krona__visualize"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__krona__visualize", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__krona__visualize"),
+        mem_mb=esc("mem_mb", "read_annotate__krona__visualize"),
+        cpus_per_task=esc("cpus", "read_annotate__krona__visualize"),
+        slurm_partition=esc("partition", "read_annotate__krona__visualize"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__krona__visualize')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__krona__visualize"))
+    retries: len(get_escalation_order("read_annotate__krona__visualize"))
     container:
         docker["krona"]
     params:
@@ -28,7 +28,7 @@ rule preprocess__krona__visualize:
          ktImportTaxonomy -q 2 -t 3 {input} -o {output} --tax {params.krona_db} 2> {log} 1>&2
         """
 
-rule preprocess__krona:
+rule read_annotate__krona:
     """Run krona for the kraken output"""
     input:
         [

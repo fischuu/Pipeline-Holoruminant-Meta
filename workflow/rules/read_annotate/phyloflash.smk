@@ -1,4 +1,4 @@
-rule preprocess__phyloflash__run:
+rule read_annotate__phyloflash__run:
     """Run PhyloFlash over one sample
     """
     input:
@@ -14,15 +14,15 @@ rule preprocess__phyloflash__run:
         PHYLOFLASH / "benchmark" / "{sample_id}.{library_id}.tsv",
     container:
         docker["phyloflash"]
-    threads: esc("cpus", "preprocess__phyloflash__run")
+    threads: esc("cpus", "read_annotate__phyloflash__run")
     resources:
-        runtime=esc("runtime", "preprocess__phyloflash__run"),
-        mem_mb=esc("mem_mb", "preprocess__phyloflash__run"),
-        cpus_per_task=esc("cpus", "preprocess__phyloflash__run"),
-        slurm_partition=esc("partition", "preprocess__phyloflash__run"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__phyloflash__run", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__phyloflash__run"),
+        mem_mb=esc("mem_mb", "read_annotate__phyloflash__run"),
+        cpus_per_task=esc("cpus", "read_annotate__phyloflash__run"),
+        slurm_partition=esc("partition", "read_annotate__phyloflash__run"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__phyloflash__run')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__phyloflash__run"))
+    retries: len(get_escalation_order("read_annotate__phyloflash__run"))
     params:
         lib="{sample_id}_{library_id}",
         outdir=PHYLOFLASH
@@ -44,7 +44,7 @@ rule preprocess__phyloflash__run:
         """
 
 
-rule preprocess__phyloflash__condense:
+rule read_annotate__phyloflash__condense:
     """Aggregate all the PhyloFlash results into a single table"""
     input:
         genefamily_data=[
@@ -61,21 +61,21 @@ rule preprocess__phyloflash__condense:
         docker["phyloflash"]
     params:
         input_dir=PHYLOFLASH,
-    threads: esc("cpus", "preprocess__phyloflash__condense")
+    threads: esc("cpus", "read_annotate__phyloflash__condense")
     resources:
-        runtime=esc("runtime", "preprocess__phyloflash__condense"),
-        mem_mb=esc("mem_mb", "preprocess__phyloflash__condense"),
-        cpus_per_task=esc("cpus", "preprocess__phyloflash__condense"),
-        slurm_partition=esc("partition", "preprocess__phyloflash__condense"),
-        slurm_extra="'--gres=nvme:" + str(esc_val("nvme", "preprocess__phyloflash__condense", attempt=1)) + "'",
+        runtime=esc("runtime", "read_annotate__phyloflash__condense"),
+        mem_mb=esc("mem_mb", "read_annotate__phyloflash__condense"),
+        cpus_per_task=esc("cpus", "read_annotate__phyloflash__condense"),
+        slurm_partition=esc("partition", "read_annotate__phyloflash__condense"),
+        slurm_extra=lambda wc, attempt: f"--gres=nvme:{get_resources(wc, attempt, 'read_annotate__phyloflash__condense')['nvme']}",
         attempt=get_attempt,
-    retries: len(get_escalation_order("preprocess__phyloflash__condense"))
+    retries: len(get_escalation_order("read_annotate__phyloflash__condense"))
     shell:
         """
         cat {input.genefamily_data} > {output}
         2> {log} 1>&2
         """
 
-rule preprocess__phyloflash:
+rule read_annotate__phyloflash:
     input:
-        rules.preprocess__phyloflash__condense.output
+        rules.read_annotate__phyloflash__condense.output
