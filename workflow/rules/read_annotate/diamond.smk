@@ -18,12 +18,13 @@ rule read_annotate__diamond__assign:
         cpus_per_task=esc("cpus", "read_annotate__diamond__assign"),
         partition=esc("partition", "read_annotate__diamond__assign"),
         gres=lambda wc, attempt: f"{get_resources(wc, attempt, 'read_annotate__diamond__assign')['nvme']}",
-        attempt=get_attempt,
-    retries: len(get_escalation_order("read_annotate__diamond__assign")),
+        attempt=lambda wildcards, attempt: attempt,
+    retries: len(get_escalation_order("read_annotate__diamond__assign")) - 1,
     params:
-        retries=len(get_escalation_order("read_annotate__diamond__assign")),
+        retries=len(get_escalation_order("read_annotate__diamond__assign")) - 1,
         in_folder=FASTP,
         out_folder=lambda w: DIAMOND / w.diamond_db,
+        run_in_shm=config["diamond_shm"],
         diamond_shm=DIAMONDSHM,
         diamond_nvme=DIAMONDNVME,
         diamond_db_shm=lambda w: os.path.join(DIAMONDSHM, w.diamond_db),
@@ -44,11 +45,20 @@ rule read_annotate__diamond__assign:
         DB_SHM="{params.diamond_db_shm}"
         DB_NVME="{params.diamond_db_nvme}"
 
+        if [ "{params.run_in_shm}" != "True" ]; then
+            echo "In config/config.yaml is set not to use /dev/shm for this rule" 2>> {log}.{resources.attempt} 1>&2
+            SHM=""
+            DB_SHM=""
+        fi
+        
+
         : "${{DB_SRC:=}}"
         : "${{DB_SHM:=}}"
         : "${{DB_NVME:=}}"
         : "${{SHM:=}}"
         : "${{NVME:=}}"
+
+        set -u
 
         echo "DB_SRC: $DB_SRC, DB_SHM: $DB_SHM, DB_NVME: $DB_NVME" 2>> {log}.{resources.attempt} 1>&2
 
@@ -59,13 +69,16 @@ rule read_annotate__diamond__assign:
         echo "DB_SIZE: $DB_SIZE, SHM_AVAIL: $SHM_AVAIL, NVME_AVAIL: $NVME_AVAIL" 2>> {log}.{resources.attempt} 1>&2
 
         if [ "$DB_SIZE" -lt "$SHM_AVAIL" ]; then
-            DB_DST="$DB_SHM"
+            DB_DST="$DB_SHM"/{params.diamond_path}
+            echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
         else
             if [ "$DB_SIZE" -lt "$NVME_AVAIL" ]; then
-                DB_DST="$DB_NVME"
+                DB_DST="$DB_NVME"/{params.diamond_path}
+                echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
             else
                 if [ {resources.attempt} -eq {params.retries} ]; then
                     DB_DST="{input.database}"   # use source directory
+                    echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
                 else
                     echo "DB too large for available storage, aborting attempt {resources.attempt}" 2>> {log}.{resources.attempt} 1>&2
                     exit 1
@@ -76,12 +89,13 @@ rule read_annotate__diamond__assign:
         if [ "$DB_DST" != "{input.database}" ]; then
             mkdir -p $DB_DST
             cp $DB_SRC $DB_DST 2>> {log}.{resources.attempt}
+            echo "Database copied to DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
         fi
 
         echo "Running Diamond using DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
 
-        diamond blastx -d $DB_DST/{params.diamond_path} -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
-        diamond blastx -d $DB_DST/{params.diamond_path} -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
+        diamond blastx -d $DB_DST -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
+        diamond blastx -d $DB_DST -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
 
         if [ "$DB_DST" = "$DB_SHM" ]; then
             rm -rfv $DB_DST 2>> {log}.{resources.attempt}

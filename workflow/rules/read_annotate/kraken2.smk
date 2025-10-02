@@ -59,13 +59,16 @@ rule read_annotate__kraken2__assign:
         DB_SRC="{input.database}"
         SHM="{params.kraken2_shm}"
         NVME="{params.kraken2_nvme}"
+        DB_SHM="{params.kraken_db_shm}"
         DB_NVME={params.kraken_db_nvme}
         
         : "${{DB_SRC:=}}"
+        : "${{SHM:=}}"
+        : "${{NVME:=}}"
         : "${{DB_SHM:=}}"
         : "${{DB_NVME:=}}"
 
-        echo "DB_SRC: $DB_SRC, DB_SHM: $DB_SHM, DB_NVME: $DB_NVME" 2>> {log}.{resources.attempt} 1>&2
+        echo "DB_SRC: $DB_SRC, DB_SHM: $DB_SHM, DB_NVME: $DB_NVME, SHM: $SHM, NVME: $NVME" 2>> {log}.{resources.attempt} 1>&2
 
         DB_SIZE=$(du -sb $DB_SRC | cut -f1)
         SHM_AVAIL=$(timeout 10s df --output=avail -B1 "$SHM" 2>/dev/null | tail -1 || echo 0)
@@ -74,12 +77,15 @@ rule read_annotate__kraken2__assign:
 
         if [ "$DB_SIZE" -lt "$SHM_AVAIL" ]; then
             DB_DST="$DB_SHM"
+            echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
         else
             if [ "$DB_SIZE" -lt "$NVME_AVAIL" ]; then
                 DB_DST="$DB_NVME"
+                echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
             else
                 if [ {resources.attempt} -eq {params.retries} ]; then
                     DB_DST="{input.database}"
+                    echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
                 else
                     echo "DB too large for available storage, aborting attempt {resources.attempt}" 2>> {log}.{resources.attempt} 1>&2
                     exit 1
@@ -88,6 +94,7 @@ rule read_annotate__kraken2__assign:
         fi
 
         if [ "$DB_DST" != "{input.database}" ]; then
+            echo "Copy input database to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
             mkdir -p $DB_DST
             rsync --archive --progress --recursive --times --verbose {input.database}/*.k2d $DB_DST 2>> {log}.{resources.attempt}
         fi

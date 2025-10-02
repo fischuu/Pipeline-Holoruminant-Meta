@@ -22,7 +22,18 @@ rule read_annotate__sylph_profile:
     retries: len(get_escalation_order("read_annotate__sylph_profile"))
     shell:
         """
-        sylph profile {input.db} -1 {input.forwards} -2 {input.reverses} -t {threads} > {output} 2> {log}
+        
+        echo "Starting Sylph rule attempt {resources.attempt}" > {log}.{resources.attempt}
+        
+        # Below this line is a dev part for testing the resubmission and escalation 
+        # if [ {resources.attempt} -le 2 ]; then
+        #    echo "Failing intentionally on attempt {resources.attempt}" >> {log}.{resources.attempt}
+        #    ls --nonexistentflag
+        #fi
+        
+        sylph profile {input.db} -1 {input.forwards} -2 {input.reverses} -t {threads} > {output} 2>> {log}.{resources.attempt}
+        
+        mv {log}.{resources.attempt} {log}
         """
 
 

@@ -16,6 +16,9 @@ tmp_storage: "$TMP"
 nvme_storage: "$LOCAL_SCRATCH"
 shm_storage: "/dev/shm"      # If shm is not available, set to a fast disc (same as nvme_storage), if that is not available, point it to a regular disc (like tmp_storage)
 
+diamond_shm: "True"       # Set here, if shm space should be used for diamond, otherwise nvme will be used as fall back
+kraken2_shm: "True"       # Set here, if shm space should be used for diamond, otherwise nvme will be used as fall back
+
 assembler: "metaspades"  # "metaspades" or "megahit". Megahit serves as fall-back in case metaspades cannot create the assemblies
 
 #################################

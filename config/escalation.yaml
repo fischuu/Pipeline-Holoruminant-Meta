@@ -90,3 +90,5 @@ report__step__reads: small,medium,large
 report__step__preprocess: small,medium,large
 report__step__assemble: small,medium,large
 report__step__quantify: small,medium,large
+
+test_error: small,medium,large

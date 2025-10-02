@@ -125,6 +125,7 @@ include: "rules/quantify/__main__.smk"
 include: "rules/mag_annotate/__main__.smk"
 include: "rules/contig_annotate/__main__.smk"
 include: "rules/report/__main__.smk"
+include: "rules/devel/throw_error.smk"
 
 debug("Subworkflows included. Ready to run.")
 
