@@ -93,7 +93,7 @@ rule read_annotate__diamond__assign:
         fi
 
         echo "Remove file extension from DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
-        DB_DST_BASE="${DB_DST%.dmnd}"
+        DB_DST_BASE="${{DB_DST%.dmnd}}"
 
         echo "Running Diamond using DB_DST_BASE=$DB_DST_BASE" 2>> {log}.{resources.attempt} 1>&2
 
