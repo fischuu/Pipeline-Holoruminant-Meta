@@ -1,23 +1,34 @@
 # Overview
-This Snakemake pipeline dedicated to Metagenomic data analysis consists out of several modules that cover a) read-based b) contig-based and c) MAG-based analyses as well as quantification, quality checks and a reporting module. Naturally, it runs seamlessly on HPC systems and all required software tools are bundled in docker container and/or conda environments. Further, all required databases are pre-configured and ready to be downloaded from a central place.
+This Snakemake pipeline dedicated to Metagenomic data analysis consists out of several modules that
+cover a) read-based b) contig-based and c) MAG-based analyses as well as quantification, quality
+checks and a reporting module (which is currently under development). Naturally, it runs seamlessly
+on HPC systems and all required software tools are bundled in docker container and/or conda
+environments. Further, all required databases are pre-configured and ready to be downloaded from a
+central place.
 
-![alt text](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/flowchart/flowchart.png?raw=true)
+This makes it straight forward and as user-friendly as it can get.
 
-(Red marked rules have currently still unsolved issues)
+The pipeline is organised in modules, which can run one-by-one. Further, the user can also choose to
+run individual tools, giving full flexibility on how to use and run the pipeline.
+
+![Flow diagram of the pipeline](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/flowchart/flowchart.png?raw=true)
+
 
 # Requirements
-The pipeline requires version 9. Further, it is currently tested with the slurm executor and as such this one is also required to be installed. 
+The pipeline requires Snakemake version 9. Further, it is currently tested with the slurm executor and
+as such this one is also required to be installed. 
 
-In essence, it can also run with smaller Snakemake versions, but it might cause some troubles with the slurm executor and the escalation part
-of the resource allocation. 
+In essence, it can also run with smaller Snakemake versions, but it might cause some troubles with the
+slurm executor and the escalation part of the resource allocation, version >8.11 were also running successfully. 
 
 Supports:
 SLURM executor / local execution
-conda environment (not tested)
 docker/singularity/apptainer support
 
 ## Python dependencies
-Since Snakemake 8, it is required to install an executor plugin to submit jobs to a queueing system of a HPC system. Please ensure you have installed the corresponding Snakemake plugins installed in case you want to submit your jobs to a queueing system
+Since Snakemake 8, it is required to install an executor plugin to submit jobs to a queueing system of a
+HPC system. Please ensure you have installed the corresponding Snakemake plugins installed in case you want
+to submit your jobs to a queueing system
 
 ```
 pip install snakemake-executor-plugin-cluster-generic
@@ -25,9 +36,12 @@ pip install snakemake-executor-plugin-slurm
 
 ```
 
-Of course you can also install other, specific executor plugins, but this might need more adjustments to the existing files.
+Of course you can also install other, specific executor plugins, but this might need more adjustments to the
+existing files.
 
-Depending on your Python version, you need to install a Pandas version > 2.1, there were errors when newer Python versions met older Pandas version. In case you run into obscure Pandas error, please make sure to install a newer pandas, e.g.
+Depending on your Python version, you need to install a Pandas version > 2.1, there were errors when newer
+Python versions met older Pandas version. In case you run into obscure Pandas error, please make sure to
+install a newer pandas, e.g.
 
 ```
 pip install pandas==2.2.3
@@ -37,9 +51,11 @@ pip install pandas==2.2.3
 
 You can install the pipeline by cloning this repository
 
-The recommended setup is to have a dedicated pipeline folder (the cloned repository), that carries the functionality and which should not require any changes. 
+The recommended setup is to have a dedicated pipeline folder (the cloned repository), that carries the
+functionality and which should not require any changes. 
 
-Then the project should have somewhere an own folder and the required configuration files are copied to it. The steps to perform are
+Then your project should have somewhere an own folder and the required configuration files are copied to it.
+The steps to perform are
 
 ```
 # Go to the folder, to where you would like to clone the pipeline, e.g. 
@@ -50,10 +66,13 @@ Then the project should have somewhere an own folder and the required configurat
 
 # In case the previous steps fails with an error that contains
 # git@github.com: Permission denied (publickey)
-# it indicates that you do not have a ssh key exchanged with GitHub and you could clone the repository then instead like this
+# it indicates that you do not have a ssh key exchanged with GitHub
+# and you could clone the repository then instead like this
+#
 # git clone https://github.com/fischuu/Pipeline-Holoruminant-Meta.git
   
-# Setting ENV variable to get downstream code more generic (so, this is the directory to where you cloned the pipeline)
+# Setting ENV variable to get downstream code more generic (so, this is the
+# directory to where you cloned the pipeline)
   cd Pipeline-Holoruminant-Meta
   PIPELINEFOLDER=$(pwd)
   
@@ -74,14 +93,14 @@ Next, we setup a project folder in our scratch space of the HPC, here we will ru
 # For convenience, we set again a ENV variable, so that the code will be more generic
   PROJECTFOLDER=$(pwd)
   
-# Or manually the same thing:  
+# Or manually the same thing again, in case the $(pwd) did not work for you:  
   PROJECTFOLDER="/scratch/project_2009831/My_holor_project"
 ```
 
 Then we need to download the precompiled databases and reference genomes.
-Be prepared that this step will take some time (3 days) and disc space (3TB).
-In case you have quick, local nvme discs, it is advisable to use them for
-unpacking the files, as this will significantly increase the speed.
+Be prepared that this step will take some time (3 days, depending on you connection)
+and disc space (3TB). In case you have quick, local nvme discs, it is advisable to
+use them for unpacking the files, as this will significantly increase the speed.
 
 ```
 # Change to the project folder and prepare folders
@@ -125,7 +144,7 @@ unpacking the files, as this will significantly increase the speed.
   tar -xvf 2025.04.04.singlem.tar.gz
   tar -xvf 2025.04.04.sylph.tar.gz
 
-# Get the reference genomes relevant for Holorumiant for host contamination removal
+# Get the reference genomes (relevant for Holoruminant) for host contamination removal
 # Obviously, you can also use your own set of reference genomes here instead
   cd $PROJECTFOLDER/resources
   wget https://a3s.fi/Holoruminant-data/2025.04.04.reference.tar.gz
@@ -142,7 +161,8 @@ unpacking the files, as this will significantly increase the speed.
   tar -xvf 2025.09.19.reads.tar.gz
 ```
 
-If you have downloaded the resources already into another project, you can share the resources also to a new project, e.g. by creating a symbolic link
+If you have downloaded the resources already into another project, you can share
+the resources also to a new project, e.g. by creating a symbolic link
 
 ```
 cd $PROJECTFOLDER
@@ -150,7 +170,8 @@ ln -s /project/with/existing/resources resources
 
 ```
 
-Now we copy the configuration files from the pipeline folder to the project folder, to adjust the configurations to the project specifics
+Now we copy the configuration files from the pipeline folder to the project folder,
+to adjust the configurations to the project specifics
 
 ```
 cd $PIPELINEFOLDER
@@ -161,26 +182,53 @@ cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 # Setting up the pipeline
 
 ## run_Pipeline-Holoruminant-meta.sh
-This is the pipeline starting wrapper script. It takes care of enabling Snakemake (e.g. in case you have it as a module on your server) and also wraps the Snakemake options nicely. Furthermore, it handles to setup the environment variables for tmp and cache folders of apptainer or singularity and also can be used to prepare the rulegraph.
+This is the pipeline starting wrapper script. It takes care of enabling Snakemake (e.g. in case you
+have it as a module on your server) and also wraps the Snakemake options nicely. Furthermore, it
+handles to setup the environment variables for tmp and cache folders of apptainer or singularity
+and also can be used to prepare the rulegraph.
 
 Enter the required values and paths according to the comments in the file.
 
 ## config/config.yaml
-Here are the paths to the different configuration files stored, which might not need any adjustments from the user (e.g. for Holoruminant users). 
+Here are the paths to the different configuration files stored, which might not need any adjustments
+from the user (e.g. for Holoruminant users). 
 
-In addition, the specs for the resource set allocations are provided here. The defaults are currently not calibrated and need still some closer evaluation. Adjust the values to your needs and names from your hpc (like queue names)
+In addition, the specs for the resource set allocations are provided here. The defaults are currently
+not calibrated and need still some closer evaluation. Adjust the values to your needs and names from
+your hpc (like queue names).
+
 Please, check also the escalation.yaml file, which organises the escalation levels for all rules.
+
+## config/escalation.yaml
+
+In the escalation.yaml file are the different rules and their order of esclation. In case a rule
+fails, the slurm executor resubmits the rule with the next resource set defined in this file. In case that
+you cannot use the slurm exeutor you need to check if resubmission is possible with your choice of
+executor. If this is not possible, you can shorten here the entries to single resource sets to work.
+
+## config/features.yaml
+Here we can adjust the reference genomes and databases that should be used from the pipeline. The
+current defaults are for the Holoruminant project and have as such a very specific set of reference
+genomes that are used for filtering and checking contaminations. Adjust yours in the `hosts:` section.
+
+Take care of the order of the decontamination and bear in mind that each step are reads filtered out for the
+next phase. Hence, the order matters in case you want to analyse latter the level of different contaminations!
+
+Here, you can just use a own name, followed by colon and the path to it. Reference genomes are expected
+to be gzipped.
+
+In the `databases:` section the paths to the corresponding databases are used. The default paths meet
+the folder structure you will obtain, when you download the databases from our server. The main adjustments
+to do are a) the kraken path and b) phylophlan. Here, sub-databases can be given and the tools run one
+after another the searches against these databases. In case of kraken, we provide a small standard
+database as well as a rather large one called `refseq500`. Just comment out the ones you do not want to use.
+
 
 ## config/profiles/
 Here are the HPC profiles stored. The current default configuration is adjusted to our system called Puhti and is located in the subfolder `Puhti/` in the file `config.yaml`. For your own system, create a new subfolder with the name of your system and copy the config file from `Puhti/` there to adjust. Please do not rename the yaml file, it needs to be `config.yaml`. 
 
 Here, set your typical default resources and check what requriements your generic slurm (or whatever executor you use) command has. In essence, the `cluster-generic-submit-cmd` needs to match the requirements of your system, e.g. the `slurm_account` option might be very specific on our system Puhti and might not be accepted or required on your system.
 
-## config/features.yaml
-Here we can adjust the reference genomes and databases that should be used from the pipeline. The
-current defaults are for the Holoruminant project and have as such a very specific set of reference genomes that are used for filtering and checking contaminations. Adjust yours in the `hosts:` section. Here, you can just use a own name, followed by collon and the path to it. Reference genomes are expected to be gzipped.
-
-In the `databases:` section the paths to the corresponding databases are used. The default paths meet the folder structure you will obtain, when you download the databases from our server. The main adjustments to do are a) the kraken path and b) phylophlan. Here, sub-databases can be given and the tools run one after another the searches against these databases. In case of kraken, we provide a small standard database as well as a rather large one called `refseq500`. Just comment out the ones you do not want to use.
 
 ## config/params.yaml
 This file contains the tuning parameters of the different tools. This file is far from being complete and is currently not calibrated. So, please check if the tools use the parameters you want them to use and add if needed the parameters to the rule and the params file.
@@ -260,13 +308,6 @@ reverse_file="${fastq_path}$(basename "${file/_1_subset.fastq/_2_subset.fastq}")
 and rerun the script (`bash createSampleSheet.sh`). Then the sample.tsv should be created successfully. 
 (The additional fastq part in the renaming is added to avoid confusions with other potential '_1' parts in the fie name)
 In case you have several lanes for samples, you can concatenate them prior to creating the samples.tsv script with the script `concatenateFiles.sh`which is in the pipeline folder `workflow/scripts`. Currently, you would need to run the script inside the same folder where the fastq files are located.
-
-## config/escalation.yaml
-
-In the escalation.yaml file are the different rules and their order of esclation. In case a rule
-fails, the slurm executor resubmits the rule with the next set defined in this file. In case that
-you cannot use the slurm exeutor you need to check if resubmission is possible with your choice of
-executor. If this is not possible, you can shorten here the entries to single resource sets.
 
 # Usage
 The pipeline can run the entire workflow at once. However, normally it is recommended to run different modules from the pipeline separated to get better control over the results and also to be able to react quicker to possible errors.

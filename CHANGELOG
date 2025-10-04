@@ -1,6 +1,14 @@
 # CHANGELOG
 ##############
 
+Version 0.5.*:
+--------------
+2: Critical bugfix for read_annotate__diamond
+1: Developer version started, similar to 0.4
+
+Version 0.4: Release on 3.10.2025
+------------
+
 Version 0.3.*:
 --------------
 65: annotate modue renamed to mag_annotate

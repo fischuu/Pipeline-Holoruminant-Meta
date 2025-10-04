@@ -68,13 +68,14 @@ resource_sets:
     partition: "hugemem_longrun"
     nvme: "nvme:250"
 
- # This node is used for setting up a ramdisc for time-critical tasks. Make sure, that the allocation ensures that the entire node is
- # requested for the job so that there won't be other users on the same node while the job runs. Their jobs might get affected by the
- # /dev/shm access that is happening for rules using this resource_set!
- # In case you do not want to (or cannot) use /dev/shm please define a different file path in config/config.yaml under "shm_storage"
   full_node:
     runtime: 4000
     mem_mb: 360000
     cpus: 40
     partition: "small"
     nvme: "nvme:1000"
+    
+ # The previous node is used for setting up a ramdisc for time-critical tasks. Make sure, that the allocation ensures that the entire node is
+ # requested for the job so that there won't be other users on the same node while the job runs. Their jobs might get affected by the
+ # /dev/shm access that is happening for rules using this resource_set!
+ # In case you do not want to (or cannot) use /dev/shm please define a different file path in config/config.yaml under "shm_storage"

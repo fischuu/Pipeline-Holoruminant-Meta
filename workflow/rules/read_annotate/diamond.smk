@@ -92,10 +92,13 @@ rule read_annotate__diamond__assign:
             echo "Database copied to DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
         fi
 
-        echo "Running Diamond using DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
+        echo "Remove file extension from DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
+        DB_DST_BASE="${{DB_DST%.dmnd}}"
 
-        diamond blastx -d $DB_DST -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
-        diamond blastx -d $DB_DST -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
+        echo "Running Diamond using DB_DST_BASE=$DB_DST_BASE" 2>> {log}.{resources.attempt} 1>&2
+
+        diamond blastx -d $DB_DST_BASE -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
+        diamond blastx -d $DB_DST_BASE -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
 
         if [ "$DB_DST" = "$DB_SHM" ]; then
             rm -rfv $DB_DST 2>> {log}.{resources.attempt}
