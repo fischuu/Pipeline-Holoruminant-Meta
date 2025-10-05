@@ -40,6 +40,7 @@ rule read_annotate__kraken2__assign:
         nvme=esc_val("nvme", "read_annotate__kraken2__assign"),
         in_folder=FASTP,
         out_folder=lambda w: KRAKEN2 / w.kraken_db,
+        run_in_shm=config["kraken2_shm"],
         kraken2_shm=KRAKEN2SHM,
         kraken2_nvme=KRAKEN2NVME,
         kraken2_db=lambda w: w.kraken_db,
@@ -61,6 +62,12 @@ rule read_annotate__kraken2__assign:
         NVME="{params.kraken2_nvme}"
         DB_SHM="{params.kraken_db_shm}"
         DB_NVME={params.kraken_db_nvme}
+        
+        if [ "{params.run_in_shm}" != "True" ]; then
+            echo "In config/config.yaml is set not to use /dev/shm for this rule" 2>> {log}.{resources.attempt} 1>&2
+            SHM=""
+            DB_SHM=""
+        fi
         
         : "${{DB_SRC:=}}"
         : "${{SHM:=}}"

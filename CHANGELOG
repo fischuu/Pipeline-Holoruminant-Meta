@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+4: Flag to turn on/off shm storage for kraken2 added
 3: Summary scripts for Diamond runs adjusted
 2: Problem with dnmd file ending solved
 1: Critical bugfix for read_annotate__diamond
