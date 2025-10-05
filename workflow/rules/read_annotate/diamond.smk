@@ -69,11 +69,11 @@ rule read_annotate__diamond__assign:
         echo "DB_SIZE: $DB_SIZE, SHM_AVAIL: $SHM_AVAIL, NVME_AVAIL: $NVME_AVAIL" 2>> {log}.{resources.attempt} 1>&2
 
         if [ "$DB_SIZE" -lt "$SHM_AVAIL" ]; then
-            DB_DST="$DB_SHM"/{params.diamond_path}
+            DB_DST="$DB_SHM"
             echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
         else
             if [ "$DB_SIZE" -lt "$NVME_AVAIL" ]; then
-                DB_DST="$DB_NVME"/{params.diamond_path}
+                DB_DST="$DB_NVME"
                 echo "Set DB_DST to " $DB_DST 2>> {log}.{resources.attempt} 1>&2
             else
                 if [ {resources.attempt} -eq {params.retries} ]; then
@@ -86,19 +86,20 @@ rule read_annotate__diamond__assign:
             fi
         fi
 
-        if [ "$DB_DST" != "{input.database}" ]; then
+        if [ "$DB_DST"/{params.diamond_path} != "{input.database}" ]; then
             mkdir -p $DB_DST
             cp $DB_SRC $DB_DST 2>> {log}.{resources.attempt}
             echo "Database copied to DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
         fi
 
-        echo "Remove file extension from DB_DST=$DB_DST" 2>> {log}.{resources.attempt} 1>&2
-        DB_DST_BASE="${{DB_DST%.dmnd}}"
+        echo "Remove file extension from {params.diamond_path}" 2>> {log}.{resources.attempt} 1>&2
+        DB="{params.diamond_path}"
+        DB_BASE="${{DB%.dmnd}}"
 
-        echo "Running Diamond using DB_DST_BASE=$DB_DST_BASE" 2>> {log}.{resources.attempt} 1>&2
+        echo "Running Diamond using DB_BASE=$DB_BASE" 2>> {log}.{resources.attempt} 1>&2
 
-        diamond blastx -d $DB_DST_BASE -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
-        diamond blastx -d $DB_DST_BASE -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
+        diamond blastx -d $DB_DST/$DB_BASE -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
+        diamond blastx -d $DB_DST/$DB_BASE -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
 
         if [ "$DB_DST" = "$DB_SHM" ]; then
             rm -rfv $DB_DST 2>> {log}.{resources.attempt}
