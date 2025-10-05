@@ -1,12 +1,13 @@
-args <- commandArgs(trailingOnly = TRUE)
-project_folder <- args[1]
+#args <- commandArgs(trailingOnly = TRUE)
+#project_folder <- args[1]
+#result_folder <- args[2]
 
 # Load the required library
 library("data.table")
 
 # Set the paths (set those for manual execution)
 # project_folder <- "/scratch/project_2010176/metaG_groupAssembly/"
- result_folder <- "results/preprocess/diamond/funcgenes"
+# result_folder <- "results/read_annotate/diamond/funcgenes"
 
 # Get the available result files
 result_files <- list.files(file.path(project_folder, result_folder), pattern="*.out")

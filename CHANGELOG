@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+3: Summary scripts for Diamond runs adjusted
 2: Problem with dnmd file ending solved
 1: Critical bugfix for read_annotate__diamond
 
