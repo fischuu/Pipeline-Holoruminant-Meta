@@ -38,6 +38,7 @@ rule assemble__metaspades__run:
         
         metaspades.py \
             -t {threads} \
+            --memory {resources.mem_mb} \
             -k {params.kmer_size} \
             {params.additional_options} \
             -1 {output.concatenated_forwards} \
