@@ -3,7 +3,7 @@
 hosts:  # Add more in case of multi-host, remove entries in case of environmental sample
   bovine: resources/reference/Bos_taurus.ARS-UCD1.3.dna.toplevel.fa.gz
   human: resources/reference/Homo_sapiens.GRCh38.dna.toplevel.fa.gz
-  ciliates: resources/reference/Ciliates_20240528.fa.gz
+  #ciliates: resources/reference/Ciliates_20240528.fa.gz
   ryegrass: resources/reference/Lolium_perenne.MPB_Lper_Kyuss_1697.dna.toplevel.fa.gz
   sheep: resources/reference/Ovis_aries.Oar_v3.1.dna_rm.toplevel.fa.gz
   wheat: resources/reference/Triticum_aestivum.IWGSC.dna_rm.toplevel.fa.gz
