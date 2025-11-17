@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+8: Output bugfix in Phyophlan (two arguments, unnamed)
 7: Bugfix that prevented Kraken2 from copying db files to faster disc spaces
 6: Removed a non-public referene database (ciliates) from features.yaml (issue: 17)
 5: Added --memory {resources.mem_mb}  to the metaspades rule (issue: #15)
