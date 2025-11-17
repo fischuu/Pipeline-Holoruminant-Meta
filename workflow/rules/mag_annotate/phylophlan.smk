@@ -5,7 +5,7 @@ rule mag_annotate__phylophlan:
     input:
         DREP / "dereplicated_genomes",
     output:
-        directory(PHYLOPHLAN / "SGB"),
+        folder=directory(PHYLOPHLAN / "SGB"),
         result= PHYLOPHLAN / "SGB" / "SGB.tsv",
     log:
         PHYLOPHLAN / "phylophlan_sgb.log",
@@ -26,13 +26,13 @@ rule mag_annotate__phylophlan:
         """
             echo Running Phylophlan on $(hostname) 2>> {log} 1>&2
 
-            mkdir -p {output}
+            mkdir -p {output.folder}
 
             phylophlan_assign_sgbs -i {input} \
                                    -d SGB.Jun23 \
                                    --database_folder resources/databases/phylophlan/ \
                                    -e fa.gz \
-                                   -o {output} \
+                                   -o {output.results} \
                                    --nproc {threads} \
                                    --verbose \
                                    --overwrite \
