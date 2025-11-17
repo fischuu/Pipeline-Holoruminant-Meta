@@ -43,6 +43,7 @@ mkdir -p $APPTAINER_CACHEDIR
 # --singularity-args, are the important folders and paths bound to the containers? If you are unsure, go with the defaults and check for errors
 ################################################################################
 mkdir -p slurm_out
+mkdir -p $projectFolder/tmp
 
 # I removed this part:
 #           --resources high_io_intense_parallel=20 \
@@ -53,7 +54,7 @@ snakemake -s $pipelineFolder/workflow/Snakefile \
           --use-singularity \
           --configfile $projectFolder/config/config.yaml \
           --profile $Profile \
-          --singularity-args "-B /scratch,/projappl,/users,/dev/shm:/dev/shm,/run,/tmp" \
+          --singularity-args "-B /scratch,/projappl,/users,/dev/shm:/dev/shm,/run,$projectFolder/tmp:/tmp" \
           --singularity-prefix $projectFolder/docker_images/ \
           --latency-wait 60 \
           --scheduler greedy \

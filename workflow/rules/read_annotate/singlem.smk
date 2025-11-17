@@ -46,7 +46,7 @@ rule read_annotate__singlem__pipe:
             --metapackage {input.data} \
             --threads {threads} \
             --assignment-threads {threads} \
-        2>> {log} 1>&2 || true
+        2>> {log} 1>&2
         """
 
 
