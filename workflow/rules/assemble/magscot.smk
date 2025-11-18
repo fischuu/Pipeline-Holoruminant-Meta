@@ -204,9 +204,7 @@ rule assemble__magscot__run:
     output:
         ar53=MAGSCOT / "{assembly_id}" / "magscot.gtdb_rel207_ar53.out",
         bac120=MAGSCOT / "{assembly_id}" / "magscot.gtdb_rel207_bac120.out",
-        refined_contig_to_bin=MAGSCOT
-        / "{assembly_id}"
-        / "magscot.refined.contig_to_bin.out",
+        refined_contig_to_bin=MAGSCOT / "{assembly_id}" / "magscot.refined.contig_to_bin.out",
         refined_out=MAGSCOT / "{assembly_id}" / "magscot.refined.out",
         scores=MAGSCOT / "{assembly_id}" / "magscot.scores.out",
     log:
@@ -230,15 +228,17 @@ rule assemble__magscot__run:
     shell:
         """
         set -e
-        
+        {{
         Rscript --vanilla {params.script_folder}/MAGScoT/MAGScoT.R \
             --input {input.contigs_to_bin} \
             --hmm {input.hmm} \
             --out {params.out_prefix} \
             {params.extra} \
             --threshold {params.th} \
-         2> {log} 1>&2 
-         
+         2> {log} 1>&2 || echo "No result but proceeding."
+         }}
+        touch {output.ar53} {output.bac120} {output.refined_contig_to_bin} {output.refined_out} {output.scores};
+        
         echo $? >> {log}
         
         """
@@ -247,9 +247,7 @@ rule assemble__magscot__run:
 rule assemble__magscot__reformat:
     """Reformat the results from MAGSCOT"""
     input:
-        refined_contig_to_bin=MAGSCOT
-        / "{assembly_id}"
-        / "magscot.refined.contig_to_bin.out",
+        refined_contig_to_bin=MAGSCOT / "{assembly_id}" / "magscot.refined.contig_to_bin.out",
     output:
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     log:
@@ -271,10 +269,15 @@ rule assemble__magscot__reformat:
         """
         set -e
         
-        Rscript --vanilla {params.script_folder}/clean_magscot_bin_to_contig.R \
-            --input-file {input.refined_contig_to_bin} \
-            --output-file {output.clean} \
-        2> {log} 1>&2
+        if [ -s {input.refined_contig_to_bin} ]; then
+            Rscript --vanilla {params.script_folder}/clean_magscot_bin_to_contig.R \
+                --input-file {input.refined_contig_to_bin} \
+               --output-file {output.clean} \
+            2> {log} 1>&2
+        else
+            echo "Input file is empty or missing. Skipping reformat step." > {log}
+            touch {output.clean}  # Create empty output file
+        fi
         """
 
 
@@ -305,13 +308,17 @@ rule assemble__magscot__rename:
         script_folder=SCRIPT_FOLDER,
     shell:
         """
-        ( python {params.script_folder}/reformat_fasta_magscot.py \
+        if [ -s {input.clean} ]; then
+            python {params.script_folder}/reformat_fasta_magscot.py \
             <(gzip -dc {input.assembly}) \
             {input.clean} \
         | pigz \
             --best \
-        > {output.fasta} \
-        ) 2> {log}
+            > {output.fasta} 2>> {log}  # Ajoute les erreurs au log
+        else
+            echo "No data found, skipping renaming step." > {log}
+            touch {output.fasta}  # Create an empty output file to avoid job failure
+        fi
         """
 
 

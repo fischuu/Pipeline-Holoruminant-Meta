@@ -63,7 +63,7 @@ quantify__coverm__genome_aggregate: small, medium,large
 quantify__coverm__genome_run: small, medium,large
 quantify__samtools__stats_cram: small, medium,large
 
-read_annotate__diamond__assign: medium,large,highmem,longrun,highmem_longrun
+read_annotate__diamond__assign: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
 read_annotate__diamond__summarise: small,medium,large
 read_annotate__humann__run: medium,large,highmem,longrun,highmem_longrun
 read_annotate__humann_condense: small, medium, large
