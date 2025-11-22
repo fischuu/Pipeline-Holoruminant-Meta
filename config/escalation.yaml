@@ -1,24 +1,24 @@
-mag_annotate__bakta: medium,large,highmem,longrun,highmem_longrun
-mag_annotate__bakta_mags_run: medium,large,highmem,longrun,highmem_longrun
-mag_annotate__camper__annotate: medium,large,highmem,longrun,highmem_longrun
-mag_annotate__checkm2__predict: medium,large,highmem,longrun,highmem_longrun
-mag_annotate__dram__annotate: large,highmem,longrun,highmem_longrun
+mag_annotate__bakta: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
+mag_annotate__bakta_mags_run: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
+mag_annotate__camper__annotate: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
+mag_annotate__checkm2__predict: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
+mag_annotate__dram__annotate: large_nvme,highmem,longrun,highmem_longrun
 mag_annotate__dram__distill: small, medium, large
-mag_annotate__dram_mag__annotate: large,highmem,longrun,highmem_longrun
-mag_annotate__eggnog: large,highmem,longrun,highmem_longrun
+mag_annotate__dram_mag__annotate: large_nvme,highmem,longrun,highmem_longrun
+mag_annotate__eggnog: large_nvme,highmem,longrun,highmem_longrun
 mag_annotate__fix_dram_mag_annotations_scaffold: small, medium, large
 mag_annotate__gtdbtk__classify: large,highmem,longrun,highmem_longrun
-mag_annotate__phylophlan: medium,large
+mag_annotate__phylophlan: medium_nvme,large_nvme
 mag_annotate__proteinortho: medium,large
 mag_annotate__quast: medium,large
 
 assemble__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
 assemble__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
 assemble__concoct_run: large,highmem,longrun,highmem_longrun
-assemble__drep__join_genomes: medium,large
-assemble__drep__run: medium,large,highmem,longrun,highmem_longrun
+assemble__drep__join_genomes: medium_nvme,large_nvme
+assemble__drep__run: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
 assemble__drep__separate_bins: small, medium, large
-assemble__magscot__prodigal: medium,large,highmem,longrun,highmem_longrun
+assemble__magscot__prodigal: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
 assemble__magscot__hmmsearch_pfam: medium,large,highmem,longrun,highmem_longrun
 assemble__magscot__hmmsearch_tigr: medium,large,highmem,longrun,highmem_longrun
 assemble__magscot__join_hmms: small,medium,large,highmem,longrun,highmem_longrun
@@ -31,9 +31,9 @@ assemble__metabat2__run: large,highmem,longrun,highmem_longrun
 assemble__megahit__run: large,highmem,longrun,highmem_longrun
 assemble__metaspades__run: large,highmem,longrun,highmem_longrun
 
-contig_annotate__camper__annotate: medium,large
-contig_annotate__eggnog_find_homology: medium,large,highmem,longrun,highmem_longrun
-contig_annotate__eggnog_orthology: large,highmem,longrun,highmem_longrun
+contig_annotate__camper__annotate: medium_nvme,large_nvme
+contig_annotate__eggnog_find_homology: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
+contig_annotate__eggnog_orthology: large_nvme,highmem_nvme,longrun,highmem_longrun
 contig_annotate__cramToBam: small, medium, large
 contig_annotate__featurecounts_run: medium,large
 contig_annotate__prodigal_run: medium,large,highmem,longrun,highmem_longrun
@@ -49,7 +49,7 @@ helpers__samtools__index_cram: small,medium,large
 
 preprocess__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
 preprocess__bowtie2__extract_nonhost: small,medium,large,highmem,longrun,highmem_longrun
-preprocess__bowtie2__extract_nonhost_run: large,highmem,longrun,highmem_longrun
+preprocess__bowtie2__extract_nonhost_run: large_nvme,highmem,longrun,highmem_longrun
 preprocess__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
 preprocess__fastp__run: medium,large
 preprocess__samtools__stats_cram: small, medium, large
@@ -74,12 +74,12 @@ read_annotate__metaphlan__run: medium,large
 read_annotate__nonpareil__aggregate: small, medium,large
 read_annotate__nonpareil__run: medium,large
 read_annotate__phyloflash__condense: small, medium,large
-read_annotate__phyloflash__run: medium,large
+read_annotate__phyloflash__run: medium_nvme,large_nvme
 read_annotate__singlem__condense: small, medium, large
 read_annotate__singlem__microbial_fraction: small, medium, large
-read_annotate__singlem__pipe: small, medium, large
+read_annotate__singlem__pipe:  medium_nvme, large_nvme
 read_annotate__singlem__aggregate_microbial_fraction: small, medium,large
-read_annotate__sylph_profile: medium, large
+read_annotate__sylph_profile: medium_nvme, large_nvme
 
 reference__hosts__recompress: small,medium,large
 

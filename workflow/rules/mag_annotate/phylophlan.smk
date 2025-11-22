@@ -32,7 +32,7 @@ rule mag_annotate__phylophlan:
                                    -d SGB.Jun23 \
                                    --database_folder resources/databases/phylophlan/ \
                                    -e fa.gz \
-                                   -o {output.results} \
+                                   -o {output.result} \
                                    --nproc {threads} \
                                    --verbose \
                                    --overwrite \

@@ -306,6 +306,7 @@ rule assemble__magscot__rename:
     retries: len(get_escalation_order("assemble__magscot__rename"))
     params:
         script_folder=SCRIPT_FOLDER,
+        fasta=lambda wildcards: MAGSCOT / f"{wildcards.assembly_id}.fa",
     shell:
         """
         if [ -s {input.clean} ]; then
@@ -317,7 +318,9 @@ rule assemble__magscot__rename:
             > {output.fasta} 2>> {log}  # Ajoute les erreurs au log
         else
             echo "No data found, skipping renaming step." > {log}
-            touch {output.fasta}  # Create an empty output file to avoid job failure
+
+            touch {params.fasta}
+            gzip {params.fasta}
         fi
         """
 

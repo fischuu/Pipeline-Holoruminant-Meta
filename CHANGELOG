@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+10: Critial typo fixed in mag_annotate__phylophlan (issue #23)
 9: Changed magscot rules so that also empty output is taken now into consideration and does not throw an error anymore (issue: #22)
 8: Output bugfix in Phyophlan (two arguments, unnamed)
 7: Bugfix that prevented Kraken2 from copying db files to faster disc spaces
