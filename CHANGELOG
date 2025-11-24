@@ -4,16 +4,17 @@
 
 Version 0.4.*: 
 ------------
+15: Accidental overwriting of camper results and db fixed (copying removed for now, issue #18)
 14: Added camper to mag_annotate fro dram output
 13: Output path bug in dram_mag fixed
 12: Output path adjusted for phylophlan result (phylophlan.tsv.tsv -> phylophlan.tsv)
 11: A few remaining proteinortho output files are now copied also the proteinortho output folde
 10: Critial typo fixed in mag_annotate__phylophlan (issue #23)
-9: Changed magscot rules so that also empty output is taken now into consideration and does not throw an error anymore (issue: #22)
+9: Changed magscot rules so that also empty output is taken now into consideration and does not throw an error anymore (issue #22)
 8: Output bugfix in Phyophlan (two arguments, unnamed)
 7: Bugfix that prevented Kraken2 from copying db files to faster disc spaces
-6: Removed a non-public referene database (ciliates) from features.yaml (issue: #17)
-5: Added --memory {resources.mem_mb}  to the metaspades rule (issue: #15)
+6: Removed a non-public referene database (ciliates) from features.yaml (issue #17)
+5: Added --memory {resources.mem_mb}  to the metaspades rule (issue #15)
 4: Flag to turn on/off shm storage for kraken2 added
 3: Summary scripts for Diamond runs adjusted
 2: Problem with dnmd file ending solved
