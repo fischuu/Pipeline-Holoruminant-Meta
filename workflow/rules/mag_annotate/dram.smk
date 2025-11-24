@@ -8,6 +8,7 @@ rule mag_annotate__dram__annotate:
         annotation=DRAM / "annotate" / "annotations.tsv",
         trnas=DRAM / "annotate" / "trnas.tsv",
         rrnas=DRAM / "annotate" / "rrnas.tsv",
+        genes=DRAM / "annotate" / "genes.faa",
     log:
         DRAM / "annotate.log",
     container:

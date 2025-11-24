@@ -5,7 +5,7 @@
 Version 0.4.*: 
 ------------
 15: Accidental overwriting of camper results and db fixed (copying removed for now, issue #18)
-14: Added camper to mag_annotate fro dram output
+14: Added camper to mag_annotate from dram output
 13: Output path bug in dram_mag fixed
 12: Output path adjusted for phylophlan result (phylophlan.tsv.tsv -> phylophlan.tsv)
 11: A few remaining proteinortho output files are now copied also the proteinortho output folde

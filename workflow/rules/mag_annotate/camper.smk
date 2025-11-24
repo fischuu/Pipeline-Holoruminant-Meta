@@ -1,14 +1,13 @@
 rule mag_annotate__camper__annotate:
     """Annotate dereplicate genomes with CAMPER"""
     input:
-        dereplicated_genomes=DREP / "dereplicated_genomes.fa.gz",
+        genes=DRAM / "annotate" / "genes.faa",
         annotation=DRAM / "annotate" / "annotations.tsv",
     output:
         annotation=CAMPER / "annotations.tsv",
         distill=CAMPER / "distill.tsv"        
     log:
-        annot = CAMPER / "annotate.log",
-        distill = CAMPER / "distill.log",
+        CAMPER / "camper.log",
     conda:
         "__environment__.yml"
     container:
@@ -41,15 +40,14 @@ rule mag_annotate__camper__annotate:
         mkdir -p $tmpdir
         rm -rf $tmpdir
 
-        camper_annotate -i {input.dereplicated_genomes} \
-                        -a {input.annotation} \
+        camper_annotate -i {input.genes} \
                         -o $tmpdir \
                         --threads {threads} \
                         --camper_fa_db_loc {params.camper_db}/CAMPER_blast.faa \
 	                      --camper_fa_db_cutoffs_loc {params.camper_db}/CAMPER_blast_scores.tsv \
 	                      --camper_hmm_loc {params.camper_db}/CAMPER.hmm  \
                         --camper_hmm_cutoffs_loc {params.camper_db}/CAMPER_hmm_scores.tsv \
-                        2>> {log.annot} 1>&2
+                        2>> {log} 1>&2
         
         camper_distill  -a $tmpdir/annotations.tsv \
                         -o {output.distill} \
