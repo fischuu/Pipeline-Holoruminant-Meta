@@ -7,9 +7,9 @@ rule mag_annotate__dram_mag__annotate:
         #gtdbtk_summary=GTDBTK / "gtdbtk.summary.tsv",
         dram_db=features["databases"]["dram"],
     output:
-        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
-        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_trnas.tsv",
-        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_rrnas.tsv",
+        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "annotations.tsv",
+        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "trnas.tsv",
+        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "rrnas.tsv",
     log:
         DRAM / "{assembly_id}" / "annotate_{assembly_id}.log",
     container:
@@ -46,9 +46,9 @@ rule mag_annotate__dram_mag__annotate:
     
 rule mag_annotate__fix_dram_mag_annotations_scaffold:
     input:
-        DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv",
+        DRAMMAG / "{assembly_id}" / "annotate"  / "annotations.tsv",
     output:
-        DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.fixed.tsv",
+        DRAMMAG / "{assembly_id}" / "annotate"  / "annotations.fixed.tsv",
     log:
         DRAMMAG / "{assembly_id}_fix_annotation.log",
     container:
@@ -65,9 +65,9 @@ rule mag_annotate__fix_dram_mag_annotations_scaffold:
 rule mag_annotate__dram_mag__distill:
     """Distill DRAM annotations."""
     input:
-        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.fixed.tsv",
-        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_trnas.tsv",
-        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "{assembly_id}_rrnas.tsv",
+        annotation=DRAMMAG / "{assembly_id}" / "annotate"  / "annotations.fixed.tsv",
+        trnas=DRAMMAG / "{assembly_id}" / "annotate" / "trnas.tsv",
+        rrnas=DRAMMAG / "{assembly_id}" / "annotate" / "rrnas.tsv",
         dram_db=features["databases"]["dram"],
     output:
         genome=DRAMMAG / "{assembly_id}" / "genome_stats.tsv",
@@ -108,5 +108,5 @@ rule mag_annotate__dram_mag__distill:
 rule mag_annotate__dram_mags:
     """Run Bakta over the dereplicated mags"""
      input:
-        #expand(DRAMMAG / "{assembly_id}" / "annotate"  / "{assembly_id}_annotations.tsv", assembly_id=ASSEMBLIES),
+        #expand(DRAMMAG / "{assembly_id}" / "annotate"  / "annotations.tsv", assembly_id=ASSEMBLIES),
         expand(DRAMMAG / "{assembly_id}" / "genome_stats.tsv", assembly_id=ASSEMBLIES),

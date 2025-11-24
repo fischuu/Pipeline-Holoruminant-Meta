@@ -1,4 +1,5 @@
 include: "bakta.smk"
+include: "camper.smk"
 include: "quast.smk"
 include: "gtdbtk.smk"
 include: "dram.smk"
@@ -14,6 +15,7 @@ rule mag_annotate:
     input:
         rules.mag_annotate__bakta.output,
         rules.mag_annotate__bakta_mags.input,
+        rules.mag_annotate__camper.input,
         rules.mag_annotate__eggnog.output,
         rules.mag_annotate__quast.output,
         rules.mag_annotate__checkm2__predict.output,

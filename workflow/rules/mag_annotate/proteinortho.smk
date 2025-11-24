@@ -33,4 +33,6 @@ rule mag_annotate__proteinortho:
         mv proteinortho.blast-graph {params.outdir}
         mv proteinortho.info {params.outdir}
         mv proteinortho.proteinortho-graph {params.outdir}
+        mv proteinortho.proteinortho-graph.summary {params.outdir}
+        mv proteinortho.proteinortho.html {params.outdir}
         """

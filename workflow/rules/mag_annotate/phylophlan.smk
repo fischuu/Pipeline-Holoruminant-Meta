@@ -22,6 +22,8 @@ rule mag_annotate__phylophlan:
     retries: len(get_escalation_order("mag_annotate__phylophlan"))
     container:
         docker["mag_annotate"]
+    params:
+        result= PHYLOPHLAN / "SGB" / "SGB",
     shell:
         """
             echo Running Phylophlan on $(hostname) 2>> {log} 1>&2
@@ -32,7 +34,7 @@ rule mag_annotate__phylophlan:
                                    -d SGB.Jun23 \
                                    --database_folder resources/databases/phylophlan/ \
                                    -e fa.gz \
-                                   -o {output.result} \
+                                   -o {params.result} \
                                    --nproc {threads} \
                                    --verbose \
                                    --overwrite \

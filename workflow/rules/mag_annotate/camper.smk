@@ -1,18 +1,22 @@
 rule mag_annotate__camper__annotate:
     """Annotate dereplicate genomes with CAMPER"""
     input:
-        dereplicated_genomes=DREP / "dereplicated_genomes.fa.gz"
+        dereplicated_genomes=DREP / "dereplicated_genomes.fa.gz",
+        annotation=DRAM / "annotate" / "annotations.tsv",
     output:
-        annotation=CAMPER / "annotations.tsv"
+        annotation=CAMPER / "annotations.tsv",
+        distill=CAMPER / "distill.tsv"        
     log:
-        CAMPER / "annotate.log",
+        annot = CAMPER / "annotate.log",
+        distill = CAMPER / "distill.log",
     conda:
         "__environment__.yml"
     container:
         docker["camper"]
     params:
-        out_dir=CAMPER,
-        parallel_retries=5,
+        camper_dir = CAMPER,
+        camper_db=features["databases"]["camper"],
+        nvme=config["nvme_storage"],
     threads: esc("cpus", "mag_annotate__camper__annotate")
     resources:
         runtime=esc("runtime", "mag_annotate__camper__annotate"),
@@ -24,42 +28,30 @@ rule mag_annotate__camper__annotate:
     retries: len(get_escalation_order("mag_annotate__camper__annotate"))
     shell:
         """
-        camper_annotate -i {input} \
-                        -o {output} \
+        cp {params.camper_db}/* {params.nvme} 2>> {log} 1>&2
+        
+        tmpdir={params.camper_dir}/tmp
+        
+        camper_annotate -i {input.dereplicated_genomes} \
+                        -a {input.annotation} \
+                        -o $tmpdir \
                         --threads {threads} \
-
-        camper_distill  -a <path to annotations.tsv> -o <name of output.tsv>
-
-        DRAM.py annotate \
-                --config_loc {params.config} \
-                --input_fasta {input.dereplicated_genomes} \
-                --output_dir {params.tmp_dir} \
-                --threads {threads} \
-                --gtdb_taxonomy {input.gtdbtk_summary} \
-        2>> {log} 1>&2
-
-        for file in annotations trnas rrnas ; do
-            ( csvstack \
-                --tabs \
-                {params.tmp_dir}/*/$file.tsv \
-            | csvformat \
-                --out-tabs \
-            > {params.out_dir}/$file.tsv \
-            ) 2>> {log}
-        done
-
-        tar \
-            --create \
-            --directory {params.out_dir} \
-            --file {output.tarball} \
-            --remove-files \
-            --use-compress-program="pigz --processes {threads}" \
-            --verbose \
-            annotate \
-        2>> {log} 1>&2
+                        --camper_fa_db_loc {params.nvme}/CAMPER_blast.faa \
+	                      --camper_fa_db_cutoffs_loc {params.nvme}/CAMPER_blast_scores.tsv \
+	                      --camper_hmm_loc {params.nvme}/CAMPER.hmm  \
+                        --camper_hmm_cutoffs_loc {params.nvme}/CAMPER_hmm_scores.tsv \
+                        2>> {log.annot} 1>&2
+        
+        camper_distill  -a $tmpdir/annotations.tsv \
+                        -o {output.distill} \
+	                      --camper_distillate {params.nvme}/CAMPER_distillate.tsv \
+	      2>> {log} 1>&2
+	      
+	      # Move all tmp files one level up
+        mv "$tmpdir"/* {params.camper_dir}/
         """
 
 rule mag_annotate__camper:
     """Run CAMPER on dereplicated genomes."""
     input:
-        rules.mag_annotate__camper__annotate,
+        rules.mag_annotate__camper__annotate.output,
