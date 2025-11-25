@@ -119,10 +119,11 @@ use them for unpacking the files, as this will significantly increase the speed.
   wget https://a3s.fi/Holoruminant-data/2025.04.04.eggnog.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.gtdbtk.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.humann.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.11.25.hyddb.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.kraken2.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.krona.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.metaphlan4.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2025.04.04.phyloflash.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.11.25.phyloflash.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.phylophlan.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.singlem.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.sylph.tar.gz
@@ -131,16 +132,17 @@ use them for unpacking the files, as this will significantly increase the speed.
   tar -xvf 2025.04.04.bakta.tar.gz
   tar -xvf 2025.04.04.camper.tar.gz
   tar -xvf 2025.04.04.checkm2.tar.gz
-  tar -xvf 2025.04.04.diamond.tar.gz
+  tar -xvf 2025.11.25.diamond.tar.gz
   tar -xvf 2025.04.04.dram.tar.gz
   tar -xvf 2025.04.04.eggnog.tar.gz
   tar -xvf 2025.04.04.gtdbtk.tar.gz  
   tar -xvf 2025.04.04.humann.tar.gz
+  tar -xvf 2025.11.25.hyddb.tar.gz
   tar -xvf 2025.04.04.kraken2.tar.gz
   tar -xvf 2025.04.04.krona.tar.gz
   tar -xvf 2025.04.04.metaphlan4.tar.gz
   tar -xvf 2025.04.04.phylophlan.tar.gz
-  tar -xvf 2025.04.04.phyloflash.tar.gz
+  tar -xvf 2025.11.25.phyloflash.tar.gz
   tar -xvf 2025.04.04.singlem.tar.gz
   tar -xvf 2025.04.04.sylph.tar.gz
 
@@ -157,8 +159,8 @@ use them for unpacking the files, as this will significantly increase the speed.
 
 # Get the example read data
   cd $PROJECTFOLDER
-  wget https://a3s.fi/Holoruminant-data/2025.09.19.reads.tar.gz
-  tar -xvf 2025.09.19.reads.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.11.25.reads.tar.gz
+  tar -xvf 2025.11.25.reads.tar.gz
 ```
 
 If you have downloaded the resources already into another project, you can share
