@@ -185,6 +185,7 @@ The tar-balls were created with this command (here example for diamond)
 
 ```
 tar -czf "$(date +%Y.%m.%d).diamond.tar.gz" -C resources/databases diamond
+tar -czf "$(date +%Y.%m.%d).reads.tar.gz" reads
 ```
 
 
