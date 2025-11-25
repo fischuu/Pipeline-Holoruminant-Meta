@@ -114,7 +114,7 @@ use them for unpacking the files, as this will significantly increase the speed.
   wget https://a3s.fi/Holoruminant-data/2025.04.04.bakta.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.camper.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.checkm2.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2025.04.04.diamond.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.11.25.diamond.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.dram.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.eggnog.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.gtdbtk.tar.gz
