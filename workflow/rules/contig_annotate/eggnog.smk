@@ -97,4 +97,4 @@ rule contig_annotate__eggnog_orthology:
 rule contig_annotate__eggnog:
     """Run eggnog on all assemblies"""
     input:
-        [CONTIG_EGGNOG / "{assembly_id}/eggnog_output.emapper.annotations" for assembly_id in ASSEMBLIES],
+        [CONTIG_EGGNOG / f"{assembly_id}/eggnog_output.emapper.annotations" for assembly_id in ASSEMBLIES],
