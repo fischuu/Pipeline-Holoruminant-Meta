@@ -179,6 +179,13 @@ cp -r config $PROJECTFOLDER
 cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 ```
 
+The tar-balls were created with this command (here example for diamond)
+
+```
+tar -czf "$(date +%Y.%m.%d).diamond.tar.gz" -C resources/databases diamond
+```
+
+
 # Setting up the pipeline
 
 ## run_Pipeline-Holoruminant-meta.sh
