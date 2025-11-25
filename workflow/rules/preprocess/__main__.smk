@@ -10,3 +10,4 @@ rule preprocess:
         rules.preprocess__bowtie2.input,
         rules.preprocess__fastp.input,
         rules.preprocess__samtools.input,
+      #  rules.preprocess__fastqc.input,

@@ -29,7 +29,7 @@ databases:
     standard: resources/databases/kraken2/kraken2_Standard_20240112  # This db requires about 140GB of RAM
   krona: resources/databases/krona
   metaphlan4: resources/databases/metaphlan4/
-  phyloflash: resources/databases/phyloflash/138.1
+  phyloflash: resources/databases/phyloflash/138.2
   phylophlan: # add entries as necessary, intended by two spaces
     amphora2: resources/databases/phylophlan/amphora2
     phylophlan: resources/databases/phylophlan/phylophlan
