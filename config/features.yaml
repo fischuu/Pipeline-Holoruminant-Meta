@@ -19,6 +19,7 @@ databases:
   checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
   diamond: # add entries as necessary, intended by two spaces
     cazy: resources/databases/diamond/CAZyDB.07142024.dmnd
+   # hyddb: resources/databases/diamond/hyddb.20251125.dmnd 
   dram: resources/databases/dram/20240524/
   eggnog: resources/databases/eggnog/
   gtdbtk: resources/databases/gtdbtk/release220
