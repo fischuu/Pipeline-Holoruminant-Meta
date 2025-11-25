@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+18: Included the FastQC module for the preprocess fastqs
 17: Updated the default database for Phyloflash to Silva 138.2
 16: Updated the read_annotate/phyloflash docker image (downgrade spades 3.15.* to 3.14.1, spades froze often in 3.15.*)
 15: Accidental overwriting of camper results and db fixed (copying removed for now, issue #18)
