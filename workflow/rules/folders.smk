@@ -69,6 +69,8 @@ SYLPH = ANN / "sylph"
 # contig annotation
 CONTIG = Path("results/contig_annotate/")
 CONTIG_CAMPER = CONTIG / "camper"
+CONTIG_DIAMOND = CONTIG / "diamond"
+CONTIG_HMMER = CONTIG / "hmmer"
 CONTIG_PRODIGAL = CONTIG / "prodigal"
 CONTIG_EGGNOG = CONTIG / "eggnog"
 CONTIG_SYLPH = CONTIG / "sylph"

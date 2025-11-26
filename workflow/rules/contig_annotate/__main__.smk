@@ -1,7 +1,9 @@
 include: "__functions__.smk"
 include: "camper.smk"
-include: "featurecounts.smk"
+include: "diamond.smk"
 include: "eggnog.smk"
+include: "featurecounts.smk"
+include: "hmmer.smk"
 include: "prodigal.smk"
 
 rule contig_annotate:
@@ -16,5 +18,7 @@ rule contig_annotate:
             CONTIG_FEATURECOUNTS / f"{assembly_id}/{assembly_id}_{sample_id}.{library_id}.prodigal_fc.txt"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
+        rules.contig_annotate__diamond.input,
+        rules.contig_annotate__hmmer.input,
         
 

@@ -76,3 +76,9 @@ mag_annotate:
 contig_annotate:
   prodigal:
     split: 1000000   # For quicker data processing is the prodigal output processed in chunks of this size
+  hmmer:
+    domt:
+      fefe: 15.9
+      nife: 34.5
+      fe: 54.4
+      fallback: 10.0   # fallback value for unknown databases

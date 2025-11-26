@@ -19,10 +19,16 @@ databases:
   checkm2: resources/databases/checkm2/CheckM2_database/uniref100.KO.1.dmnd
   diamond: # add entries as necessary, intended by two spaces
     cazy: resources/databases/diamond/CAZyDB.07142024.dmnd
-   # hyddb: resources/databases/diamond/hyddb.20251125.dmnd 
+  diamond_contig_protein:
+    hyddb: resources/databases/diamond/hyddb.20251125.dmnd 
   dram: resources/databases/dram/20240524/
   eggnog: resources/databases/eggnog/
   gtdbtk: resources/databases/gtdbtk/release220
+  hmmer:
+    #hyddb: resources/databases/hyddb/HydDB_all_MM2022.hmm
+    fe: resources/databases/hyddb/Fe_only-HydDB_MM2022.hmm
+    fefe: resources/databases/hyddb/FeFe-HydDB_MM2022.hmm
+    nife: resources/databases/hyddb/NiFe-HydDB_MM2022.hmm
   humann_nt_dbs: resources/databases/humann/chocophlan
   humann_prot_dbs: resources/databases/humann/uniref
   kraken2:  # add entries as necessary, intended by two spaces

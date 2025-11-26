@@ -32,8 +32,11 @@ assemble__megahit__run: large,highmem,longrun,highmem_longrun
 assemble__metaspades__run: large,highmem,longrun,highmem_longrun
 
 contig_annotate__camper__annotate: medium_nvme,large_nvme
+contig_annotate__diamond__assign: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
+contig_annotate__diamond__summarise: small,medium,large
 contig_annotate__eggnog_find_homology: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
 contig_annotate__eggnog_orthology: large_nvme,highmem_nvme,longrun,highmem_longrun
+contig_annotate__hmmer__assign: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
 contig_annotate__cramToBam: small, medium, large
 contig_annotate__featurecounts_run: medium,large
 contig_annotate__prodigal_run: medium,large,highmem,longrun,highmem_longrun
