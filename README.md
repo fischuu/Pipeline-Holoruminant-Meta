@@ -119,7 +119,7 @@ use them for unpacking the files, as this will significantly increase the speed.
   wget https://a3s.fi/Holoruminant-data/2025.04.04.eggnog.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.gtdbtk.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.humann.tar.gz
-  wget https://a3s.fi/Holoruminant-data/2025.11.25.hyddb.tar.gz
+  wget https://a3s.fi/Holoruminant-data/2025.11.26.hyddb.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.kraken2.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.krona.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.metaphlan4.tar.gz
@@ -137,7 +137,7 @@ use them for unpacking the files, as this will significantly increase the speed.
   tar -xvf 2025.04.04.eggnog.tar.gz
   tar -xvf 2025.04.04.gtdbtk.tar.gz  
   tar -xvf 2025.04.04.humann.tar.gz
-  tar -xvf 2025.11.25.hyddb.tar.gz
+  tar -xvf 2025.11.26.hyddb.tar.gz
   tar -xvf 2025.04.04.kraken2.tar.gz
   tar -xvf 2025.04.04.krona.tar.gz
   tar -xvf 2025.04.04.metaphlan4.tar.gz
