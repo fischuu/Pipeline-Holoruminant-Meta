@@ -59,7 +59,6 @@ rule contig_annotate__camper__annotate:
 	      
 	      # Move all tmp files one level up
         mv "$tmpdir"/* {params.out_dir}/
-
         """
 
 
