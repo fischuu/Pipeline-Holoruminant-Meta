@@ -27,31 +27,28 @@ rule mag_annotate__camper__annotate:
     retries: len(get_escalation_order("mag_annotate__camper__annotate"))
     shell:
         """
-        # Previously we copied the camper database to a faster disc space, but as
-        # it is rather small db, we maybe even can keep it in the original place
-        # I'll test it to keep it there, in case the step is getting too I/O intense
-        # or it takes too long to complete, we can copy the db again to a faster
-        # disc space
-        # cp {params.camper_db}/* {params.nvme} 2>> {log} 1>&2
+        tmp_db_dir={params.nvme}/camper_db
+        mkdir -p $tmp_db_dir
+        cp {params.camper_db}/* $tmp_db_dir 2>> {log} 1>&2
         
         tmpdir={params.camper_dir}/tmp
         
-        # THis is a strange camper requiredment, when it runs in snakemake and folders might be created...
+        # This is a strange camper requiredment, when it runs in snakemake and folders might be created...
         mkdir -p $tmpdir
         rm -rf $tmpdir
 
         camper_annotate -i {input.genes} \
                         -o $tmpdir \
                         --threads {threads} \
-                        --camper_fa_db_loc {params.camper_db}/CAMPER_blast.faa \
-	                      --camper_fa_db_cutoffs_loc {params.camper_db}/CAMPER_blast_scores.tsv \
-	                      --camper_hmm_loc {params.camper_db}/CAMPER.hmm  \
-                        --camper_hmm_cutoffs_loc {params.camper_db}/CAMPER_hmm_scores.tsv \
+                        --camper_fa_db_loc $tmp_db_dir/CAMPER_blast.faa \
+	                      --camper_fa_db_cutoffs_loc $tmp_db_dir/CAMPER_blast_scores.tsv \
+	                      --camper_hmm_loc $tmp_db_dir/CAMPER.hmm  \
+                        --camper_hmm_cutoffs_loc $tmp_db_dir/CAMPER_hmm_scores.tsv \
                         2>> {log} 1>&2
         
         camper_distill  -a $tmpdir/annotations.tsv \
                         -o {output.distill} \
-	                      --camper_distillate {params.camper_db}/CAMPER_distillate.tsv \
+	                      --camper_distillate $tmp_db_dir/CAMPER_distillate.tsv \
 	      2>> {log} 1>&2
 	      
 	      # Move all tmp files one level up
