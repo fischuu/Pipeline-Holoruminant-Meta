@@ -1,0 +1,18 @@
+## HydDB
+################################################################################
+
+@article{Søndergaard_2016,
+    author={Søndergaard, Dan and Pedersen, Christian N. S. and Greening, Chris},
+    title={HydDB: A web tool for hydrogenase classification and analysis},
+    year={2016},
+    journal={Scientific Reports},
+    DOI={10.1038/srep34212},
+    }
+
+@article{Greening_2015,
+    author={Greening, Chris and Biswas, Ambarish and Carere, Carlo R and Jackson, Colin J and Taylor, Matthew C and Stott, Matthew B and Cook, Gregory M and Morales, Sergio E},
+    title={Genomic and metagenomic surveys of hydrogenase distribution indicate H2 is a widely utilised energy source for microbial growth and survival}, 
+    year={2015},
+    journal={The ISME Journal},
+    DOI={10.1038/ismej.2015.153},
+}

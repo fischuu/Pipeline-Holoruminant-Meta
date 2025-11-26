@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+21: Database files are now copied to avoid accidental overwriting during parallele execution (issue #18)
 20: Added HydDB option as additional standard Diamond search database (issue #19)
 19: Stand-alone contig_annotate__eggnog throws an error, due to an missing f-string (issue #24) 
 18: Included the FastQC module for the preprocess fastqs
