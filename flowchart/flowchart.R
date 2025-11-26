@@ -24,7 +24,7 @@ graph <- grViz("
     read_annot_kraken2 [label = 'Kraken2, v2.1.3 \n RefSeqV205_Complete \n Standard_20240112']
     read_annot_humann [label = 'HumanN3, v3.9 \n Chocophlan v201901_v31 \n Uniref uniref90_201901b_full']
     read_annot_metaphlan [label = 'MetaPhlAn, v4.1.1 \n mpa_vJun23_CHOCOPhlAnSGB_202307']
-    read_annot_phyloflash [label = 'PhyloFlash, v3.4.2 \n SILVA_SSU.noLSU 138.1']
+    read_annot_phyloflash [label = 'PhyloFlash, v3.4.2 \n SILVA_SSU.noLSU 138.2']
     read_annot_nonpareil [label = 'Nonpareil, v.3.4.1']
     read_annot_singlem [label = 'SingleM, v0.18.0 \n S4.3.0.GTDB_r220.metapackage_20240523']
     read_annot_sylph [label = 'Sylph, v0.7.0 \n gtdb-r220-c200-dbv1']
@@ -59,6 +59,8 @@ graph <- grViz("
     contig_annotate_eggnog [label = 'Eggnog, v2.1.12 \n emapperdb-5.0.2']
     contig_annotate_bowtie [label = 'Bowtie, v2.5.1']
     contig_annotate_camper [label = 'Camper, v1.0.0']
+    contig_annotate_hmmer [label = 'HMMER, v3.3.2 \n HydDB 20251126 (2022)']
+    contig_annotate_diamond [label = 'Diamond, v.2.1.8 \n HydDB 20251126 (2022)']
     contig_annotate_feature [label = 'FeatureCounts, v2.0.1']
     
     # Define quantify nodes
@@ -138,6 +140,8 @@ graph <- grViz("
     contig_annotate_prodigal -> contig_annotate_eggnog
     contig_annotate_prodigal -> contig_annotate_bowtie
     contig_annotate_prodigal -> contig_annotate_camper
+    contig_annotate_prodigal -> contig_annotate_hmmer
+    contig_annotate_prodigal -> contig_annotate_diamond
     ass_assembly -> contig_annotate_bowtie
     contig_annotate_bowtie -> contig_annotate_feature
     
@@ -242,6 +246,8 @@ graph <- grViz("
       contig_annotate_eggnog
       contig_annotate_bowtie
       contig_annotate_feature
+      contig_annotate_hmmer
+      contig_annotate_diamond
     }
 
     # Define a subgraph to group annotation nodes
