@@ -51,8 +51,8 @@ helpers__samtools__index_bam: medium,large
 helpers__samtools__index_cram: small,medium,large
 
 preprocess__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
-preprocess__bowtie2__extract_nonhost: small,medium,large,highmem,longrun,highmem_longrun
-preprocess__bowtie2__extract_nonhost_run: large_nvme,highmem,longrun,highmem_longrun
+preprocess__bowtie2__extract_nonhost: medium,large,highmem,longrun,highmem_longrun
+preprocess__bowtie2__extract_nonhost_run: small, medium, large,highmem,longrun,highmem_longrun
 preprocess__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
 preprocess__fastp__run: medium,large
 preprocess__samtools__stats_cram: small, medium, large

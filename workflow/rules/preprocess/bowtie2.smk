@@ -88,6 +88,7 @@ rule preprocess__bowtie2__extract_nonhost_run:
     output:
         forward_=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_1.fq.gz"),
         reverse_=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz"),
+        singletons=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_singleton.fq.gz"),
     log:
         PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -96,6 +97,7 @@ rule preprocess__bowtie2__extract_nonhost_run:
         docker["bowtie2"]
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
+        tmpdir="./samtools_sort_tmp/"
     threads: esc("cpus", "preprocess__bowtie2__extract_nonhost_run")
     resources:
         runtime=esc("runtime", "preprocess__bowtie2__extract_nonhost_run"),
@@ -107,10 +109,30 @@ rule preprocess__bowtie2__extract_nonhost_run:
     retries: len(get_escalation_order("preprocess__bowtie2__extract_nonhost_run"))
     shell:
         """
-        ( samtools view --reference {input.reference} --threads {threads} -u -o /dev/stdout -f 12 {input.cram} \
-        | samtools collate -O -u -f --reference {input.reference} -@ {threads} - \
-        | samtools fastq -1 >(pigz > {output.forward_}) -2 >(pigz > {output.reverse_}) \
-            -0 /dev/null -c 9 --threads {threads} ) 2> {log} 1>&2
+        mkdir -p {params.tmpdir}
+        
+        samtools view -u -f 12 --reference {input.reference} {input.cram} \
+        | samtools sort -n -l 0 -m 500M -@ {threads} -T {params.tmpdir} \
+        | samtools fastq -N \
+            -1 >(pigz -p {threads} > {output.forward_}) \
+            -2 >(pigz -p {threads} > {output.reverse_}) \
+            -0 >(pigz -p {threads} > {output.singletons}) \
+            -c 9 --threads {threads} \
+        2> {log}
+
+        # This seems to loose singletons
+        #samtools view --reference {input.reference} --threads {threads} -u -f 12 {input.cram} \
+        #| samtools fastq -N \
+        #    -1 >(pigz > {output.forward_}) \
+        #    -2 >(pigz > {output.reverse_}) \
+        #    -0 /dev/null -c 9 --threads {threads} \
+        #    2> {log}
+
+        
+        #( samtools view --reference {input.reference} --threads {threads} -u -o /dev/stdout -f 12 {input.cram} \
+        #| samtools collate -O -u -f --reference {input.reference} -@ {threads} - \
+        #| samtools fastq -1 >(pigz > {output.forward_}) -2 >(pigz > {output.reverse_}) \
+        #    -0 /dev/null -c 9 --threads {threads} ) 2> {log} 1>&2
         """
 
 # ---------- preprocess__store_final_fastq ----------
