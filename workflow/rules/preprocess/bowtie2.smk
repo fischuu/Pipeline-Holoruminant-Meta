@@ -88,7 +88,6 @@ rule preprocess__bowtie2__extract_nonhost_run:
     output:
         forward_=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_1.fq.gz"),
         reverse_=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz"),
-        singletons=temp(PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_singleton.fq.gz"),
     log:
         PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -116,8 +115,7 @@ rule preprocess__bowtie2__extract_nonhost_run:
         | samtools fastq -N \
             -1 >(pigz -p {threads} > {output.forward_}) \
             -2 >(pigz -p {threads} > {output.reverse_}) \
-            -0 >(pigz -p {threads} > {output.singletons}) \
-            -c 9 --threads {threads} \
+            -0 /dev/nul -c 9 --threads {threads} \
         2> {log}
 
         # This seems to loose singletons

@@ -113,6 +113,10 @@ export_b <- t(merged_counts_b)
 export_a <- data.frame(Feature = row.names(export_a), export_a)
 export_b <- data.frame(Feature = row.names(export_b), export_b)
 
+write.table(export_a, file=file.path(project_folder, result_folder, "summary_a.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+write.table(export_b, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+
+
 # Now merge the pathway names into orthologs
 
 procaryotes <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/PROKARYOTES.DAT")

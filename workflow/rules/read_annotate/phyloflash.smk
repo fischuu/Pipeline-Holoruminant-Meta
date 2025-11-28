@@ -24,7 +24,7 @@ rule read_annotate__phyloflash__run:
         attempt=get_attempt,
     retries: len(get_escalation_order("read_annotate__phyloflash__run"))
     params:
-        lib="{sample_id}_{library_id}",
+        lib="{sample_id}_{library_id}_phyloFlash",
         outdir=PHYLOFLASH
     shell:
         """
