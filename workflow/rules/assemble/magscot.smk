@@ -2,8 +2,9 @@ rule assemble__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
         assembly=lambda wildcards: (
-            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
-            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else 
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
+            PROVIDED / f"{wildcards.assembly_id}.fa.gz"
         ),
     output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -285,8 +286,9 @@ rule assemble__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
         assembly=lambda wildcards: (
-            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
-            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else 
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
+            PROVIDED / f"{wildcards.assembly_id}.fa.gz"
         ),
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:

@@ -4,8 +4,9 @@ rule assemble__metabat2__run:
         crams=get_crams_from_assembly_id,
         crais=get_crais_from_assembly_id,
         assembly=lambda wildcards: (
-            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
-            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else 
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
+            PROVIDED / f"{wildcards.assembly_id}.fa.gz"
         ),
     output:
         bins=directory(METABAT2 / "{assembly_id}"),

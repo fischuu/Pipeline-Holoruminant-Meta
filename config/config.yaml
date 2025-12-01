@@ -20,7 +20,7 @@ copy_dbs: "True"          # If "True", dbs will be copied to faster discspaces, 
 diamond_shm: "True"       # Set here, if shm space should be used for diamond, otherwise nvme will be used as fall back
 kraken2_shm: "True"       # Set here, if shm space should be used for diamond, otherwise nvme will be used as fall back
 
-assembler: "metaspades"  # "metaspades" or "megahit". Megahit serves as fall-back in case metaspades cannot create the assemblies
+assembler: "metaspades"  # "metaspades", "megahit" or "provided". Megahit serves as fall-back in case metaspades cannot create the assemblies, provided for self-provided genomes.
 
 #################################
 ##
