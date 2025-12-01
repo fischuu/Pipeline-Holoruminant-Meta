@@ -209,6 +209,23 @@ your hpc (like queue names).
 
 Please, check also the escalation.yaml file, which organises the escalation levels for all rules.
 
+### Self-provided assemblies
+Starting from version 0.4.25 you can also provide already assembled genomes to the pipeline. For that,
+you need to chose 'provided' in the assembler section of the `config.yaml` file. Further, you would need
+to create a folder called `provided` in the `assemble` folder, e.g. like this
+
+```
+mkdir -p $PROJECTFOLDER/results/assemble/provided
+```
+
+Then, you can provide the assemblies as gezipped fasta files, in the format
+
+```
+{assembly_id}.fa.gz
+```
+
+where `{assembly_id}` refers to the assembly_id provided in the `sample.tsv` file.
+
 ## config/escalation.yaml
 
 In the escalation.yaml file are the different rules and their order of esclation. In case a rule

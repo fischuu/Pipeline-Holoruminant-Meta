@@ -40,6 +40,7 @@ graph <- grViz("
     ass_megahit [label = 'MEGAHIT, v1.2.9']
     ass_metabat2 [label = 'MetaBAT2, v2.15']
     ass_metaspades [label = 'MetaSPAdes, v4.0.0']
+    ass_provided [label = 'Self-provided']
 
     # Define annotation nodes
     annotate_bakta [label = 'Bakta, v1.9.3']
@@ -200,6 +201,7 @@ graph <- grViz("
 
         ass_megahit
         ass_metaspades
+        ass_provided
       }
       
        # Define a subgraph to group binner nodes

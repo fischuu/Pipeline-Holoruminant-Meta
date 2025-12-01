@@ -1,8 +1,9 @@
 rule assemble__concoct_run:
     input:
         assembly=lambda wildcards: (
-            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
-            METASPADES / f"{wildcards.assembly_id}.fa.gz"
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else 
+            METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
+            PROVIDED / f"{wildcards.assembly_id}.fa.gz"
         ),
         crams=get_crams_from_assembly_id,
     output:

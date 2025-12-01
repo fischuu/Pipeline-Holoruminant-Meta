@@ -44,6 +44,7 @@ MAXBIN2 = ASSEMBLE / "maxbin2/"
 MAGSCOT = ASSEMBLE / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
 DREP = ASSEMBLE / "drep/"
+PROVIDED = ASSEMBLE / "provided"
 
 # quantify
 QUANT = Path("results/quantify/")
