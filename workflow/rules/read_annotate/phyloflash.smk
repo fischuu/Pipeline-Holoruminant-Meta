@@ -6,8 +6,8 @@ rule read_annotate__phyloflash__run:
         reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
         phyloflash_dbs=PHYLOFLASH_DBS,
     output:
-        phyloflash_out=PHYLOFLASH / "{sample_id}_{library_id}.phyloFlash.html",
-        phyloflash_log=PHYLOFLASH / "{sample_id}_{library_id}.phyloFlash.log",
+        phyloflash_out=PHYLOFLASH / "{sample_id}_{library_id}_phyloFlash.html",
+        phyloflash_log=PHYLOFLASH / "{sample_id}_{library_id}_phyloFlash.log",
     log:
         PHYLOFLASH / "log" / "{sample_id}.{library_id}.log",
     benchmark:
@@ -48,7 +48,7 @@ rule read_annotate__phyloflash__condense:
     """Aggregate all the PhyloFlash results into a single table"""
     input:
         genefamily_data=[
-            PHYLOFLASH / f"{sample_id}_{library_id}.phyloFlash.log"
+            PHYLOFLASH / f"{sample_id}_{library_id}_phyloFlash.log"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
     output:
