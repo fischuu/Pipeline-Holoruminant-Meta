@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+25: Option to provide an own, existing assembly added to the Assembler module
 24: Added 'phyloflash' to Phyloflash output file, to avoid potential temp file mixups between tools
 23: Improved decontamination avoiding misclassified singletons
 22: Added HMMER to contig_annotate and set HydDB as starting db (issue #19)
