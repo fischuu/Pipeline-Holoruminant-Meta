@@ -115,7 +115,7 @@ rule preprocess__bowtie2__extract_nonhost_run:
         | samtools fastq -N \
             -1 >(pigz -p {threads} > {output.forward_}) \
             -2 >(pigz -p {threads} > {output.reverse_}) \
-            -0 /dev/nul -c 9 --threads {threads} \
+            -0 /dev/null -c 9 --threads {threads} \
         2> {log}
 
         # This seems to loose singletons
