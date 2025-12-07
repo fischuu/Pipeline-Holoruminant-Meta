@@ -96,7 +96,7 @@ rule preprocess__bowtie2__extract_nonhost_run:
         docker["bowtie2"]
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
-        tmpdir="./samtools_sort_tmp/"
+        tmpdir = lambda wc: f"./samtools_sort_tmp/{wc.sample_id}.{wc.library_id}"
     threads: esc("cpus", "preprocess__bowtie2__extract_nonhost_run")
     resources:
         runtime=esc("runtime", "preprocess__bowtie2__extract_nonhost_run"),
@@ -117,20 +117,6 @@ rule preprocess__bowtie2__extract_nonhost_run:
             -2 >(pigz -p {threads} > {output.reverse_}) \
             -0 /dev/null -c 9 --threads {threads} \
         2> {log}
-
-        # This seems to loose singletons
-        #samtools view --reference {input.reference} --threads {threads} -u -f 12 {input.cram} \
-        #| samtools fastq -N \
-        #    -1 >(pigz > {output.forward_}) \
-        #    -2 >(pigz > {output.reverse_}) \
-        #    -0 /dev/null -c 9 --threads {threads} \
-        #    2> {log}
-
-        
-        #( samtools view --reference {input.reference} --threads {threads} -u -o /dev/stdout -f 12 {input.cram} \
-        #| samtools collate -O -u -f --reference {input.reference} -@ {threads} - \
-        #| samtools fastq -1 >(pigz > {output.forward_}) -2 >(pigz > {output.reverse_}) \
-        #    -0 /dev/null -c 9 --threads {threads} ) 2> {log} 1>&2
         """
 
 # ---------- preprocess__store_final_fastq ----------

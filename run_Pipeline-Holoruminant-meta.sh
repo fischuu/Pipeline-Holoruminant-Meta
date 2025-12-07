@@ -58,5 +58,4 @@ snakemake -s $pipelineFolder/workflow/Snakefile \
           --singularity-prefix $projectFolder/docker_images/ \
           --latency-wait 60 \
           --scheduler greedy \
-          --keep-going \
           $@
