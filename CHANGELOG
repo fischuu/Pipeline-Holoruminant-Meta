@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+30: Added option to provide arbitrary named self-provided assemblies.
 29: tmp folder for samtools sort adjusted to add sample_id and library_id
 28: --keep-going removed from default run script
 27: Critical bugfix in preprocess__bowtie2__extract_nonhost_run (crashed workflow)

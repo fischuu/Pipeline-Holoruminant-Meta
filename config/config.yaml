@@ -20,7 +20,8 @@ copy_dbs: "True"          # If "True", dbs will be copied to faster discspaces, 
 diamond_shm: "True"       # Set here, if shm space should be used for diamond, otherwise nvme will be used as fall back
 kraken2_shm: "True"       # Set here, if shm space should be used for diamond, otherwise nvme will be used as fall back
 
-assembler: "metaspades"  # "metaspades", "megahit" or "provided". Megahit serves as fall-back in case metaspades cannot create the assemblies, provided for self-provided genomes.
+assembler: "metaspades"  # "metaspades", "megahit" or e.g. "provided". Megahit serves as fall-back in case metaspades cannot create the assemblies. With any other folder name the pipeline expects self-provided assemblies in results/assemble/<name>/<assembly>.fa.gz .
+
 
 #################################
 ##

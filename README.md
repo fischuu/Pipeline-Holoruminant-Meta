@@ -210,12 +210,15 @@ your hpc (like queue names).
 Please, check also the escalation.yaml file, which organises the escalation levels for all rules.
 
 ### Self-provided assemblies
-Starting from version 0.4.25 you can also provide already assembled genomes to the pipeline. For that,
-you need to chose 'provided' in the assembler section of the `config.yaml` file. Further, you would need
-to create a folder called `provided` in the `assemble` folder, e.g. like this
+Starting from version 0.4.30 you can also provide already assembled genomes to the pipeline. For that,
+you can choose any other name than "metaspades" or "megahit" in assembler. Further you would need to
+create a folder in `results/assemble/<name>` where `<name>` corresponds to the same entry you picked
+in the config file. For example, you created assemblies with some long-read pipeline (e.g. this one
+here: https://github.com/fischuu/Snakebite-Long_metaG) you could put into the config under assembler
+`assembler: "long_reads"` and then you would prepare the folder
 
 ```
-mkdir -p $PROJECTFOLDER/results/assemble/provided
+mkdir -p $PROJECTFOLDER/results/assemble/long_reads
 ```
 
 Then, you can provide the assemblies as gezipped fasta files, in the format
@@ -225,6 +228,7 @@ Then, you can provide the assemblies as gezipped fasta files, in the format
 ```
 
 where `{assembly_id}` refers to the assembly_id provided in the `sample.tsv` file.
+
 
 ## config/escalation.yaml
 

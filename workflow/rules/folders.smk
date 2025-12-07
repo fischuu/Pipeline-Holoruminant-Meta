@@ -44,7 +44,10 @@ MAXBIN2 = ASSEMBLE / "maxbin2/"
 MAGSCOT = ASSEMBLE / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
 DREP = ASSEMBLE / "drep/"
-PROVIDED = ASSEMBLE / "provided"
+
+#PROVIDED = ASSEMBLE / config["assembler"]
+
+PROVIDED = ASSEMBLE / "long_reads"
 
 # quantify
 QUANT = Path("results/quantify/")
