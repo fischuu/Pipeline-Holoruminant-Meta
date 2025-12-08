@@ -152,7 +152,7 @@ rule read_annotate__diamond__summarise:
         docker["r_report"]
     shell:
         """
-        R -e "project_folder <- '{params.project_folder}'; result_folder <- 'results/read_annotate/diamond/{params.database}'; max_target_seqs <- {params.max_target_seqs}; database <- {params.database};  source('{params.script}')" &> {log}
+        R -e "project_folder <- '{params.project_folder}'; result_folder <- 'results/read_annotate/diamond/{params.database}'; max_target_seqs <- {params.max_target_seqs}; database <- '{params.database}';  source('{params.script}')" &> {log}
         """
 
 rule read_annotate__diamond:
