@@ -12,6 +12,8 @@ preprocess:
       mem_per_thread: 1G
 
 read_annotate:
+  diamond:
+    max-target-seqs: 1    # Max. number of hits per query
   kraken2:
     memory_gb: 32
   nonpareil:

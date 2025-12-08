@@ -21,6 +21,7 @@ rule read_annotate__diamond__assign:
         attempt=lambda wildcards, attempt: attempt,
     retries: len(get_escalation_order("read_annotate__diamond__assign")) - 1,
     params:
+        max_target_seqs=params["read_annotate"]["diamond"]["max-target-seqs"],
         retries=len(get_escalation_order("read_annotate__diamond__assign")) - 1,
         in_folder=FASTP,
         out_folder=lambda w: DIAMOND / w.diamond_db,
@@ -107,8 +108,8 @@ rule read_annotate__diamond__assign:
 
         echo "Running Diamond using DB_LOC=$DB_LOC" 2>> {log}.{resources.attempt} 1>&2
 
-        diamond blastx -d "$DB_LOC" -q {input.forwards} -o {output.out_R1} -p {threads} 2>> {log}.{resources.attempt}
-        diamond blastx -d "$DB_LOC" -q {input.reverses} -o {output.out_R2} -p {threads} 2>> {log}.{resources.attempt}
+        diamond blastx -d "$DB_LOC" -q {input.forwards} -o {output.out_R1} -p {threads} --max-target-seqs {params.max_target_seqs} 2>> {log}.{resources.attempt}
+        diamond blastx -d "$DB_LOC" -q {input.reverses} -o {output.out_R2} -p {threads} --max-target-seqs {params.max_target_seqs} 2>> {log}.{resources.attempt}
 
         if [ "{params.run_in_shm}" = "True" ] && [ "$DB_DST" = "$DB_SHM" ]; then
             rm -rfv "$DB_DST" 2>> {log}.{resources.attempt}
@@ -146,11 +147,12 @@ rule read_annotate__diamond__summarise:
         script=lambda w: config["pipeline_folder"] + "workflow/scripts/downstream_scripts/create_featuretable_diamond_" + w.diamond_db + ".R",
         project_folder=WD,
         database=lambda w: w.diamond_db,
+        max_target_seqs=params["read_annotate"]["diamond"]["max-target-seqs"],
     container:
         docker["r_report"]
     shell:
         """
-        R -e "project_folder <- '{params.project_folder}'; result_folder <- 'results/read_annotate/diamond/{params.database}'; source('{params.script}')" &> {log}
+        R -e "project_folder <- '{params.project_folder}'; result_folder <- 'results/read_annotate/diamond/{params.database}'; max_target_seqs <- {params.max_target_seqs}; database <- {params.database};  source('{params.script}')" &> {log}
         """
 
 rule read_annotate__diamond:

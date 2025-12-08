@@ -23,12 +23,12 @@ export APPTAINER_CACHEDIR="/scratch/project_2009831/tmp"
 mkdir -p $APPTAINER_TMPDIR
 mkdir -p $APPTAINER_CACHEDIR
 
-# For use with Singularity, set these variables
+# Snakemake cache
+# Per default, snakemake writes caches to <home>/.cache/snakemake/... which can
+# be rather limited on HPC and could lead to unexpected out-of-discspace errors.
+# You can set this variable to adjust the path for the cache
 ################################################################################
-# export SINGULARITY_TMPDIR="/scratch/project_2009831/tmp"
-# export SINGULARITY_CACHEDIR="/scratch/project_2009831/tmp"
-# mkdir -p $SINGULARITY_TMPDIR
-# mkdir -p $SINGULARITY_CACHEDIR
+# export XDG_CACHE_HOME="<filepath>"
 
 # Create the rulegraph
 ################################################################################

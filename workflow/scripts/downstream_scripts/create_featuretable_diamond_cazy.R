@@ -29,7 +29,11 @@
     data <- fread(file.path(project_folder, result_folder, current_file), header = FALSE, sep = "\t", stringsAsFactors = FALSE, showProgress = FALSE)
     
     # Filter the top hits only (first row for each read)
-    top_hits <- data[!duplicated(data$V1), ]
+    if(max_target_seqs) {
+      top_hits <- data[!duplicated(data$V1), ]
+    } else {
+      top_hits <- data
+    }
     
     # Extract CAZy families after the first pipe symbol
     cazy_families <- sub("^[^|]*\\|(.*)", "\\1", top_hits$V2)

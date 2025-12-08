@@ -4,6 +4,8 @@
 
 Version 0.4.*: 
 ------------
+32: Diamond reports now per default only the top result
+31: Harded-coded paths removed from the kegg summary R script
 30: Added option to provide arbitrary named self-provided assemblies.
 29: tmp folder for samtools sort adjusted to add sample_id and library_id
 28: --keep-going removed from default run script

@@ -25,44 +25,31 @@ for (sample_run in 1:length(result_files)) {
   current_file <- result_files[sample_run]
   
   # Import the data
-  data <- fread(file.path(project_folder, result_folder, current_file), header = FALSE, sep = "\t", stringsAsFactors = FALSE, showProgress = FALSE)
+  data <- fread(file.path(project_folder, result_folder, current_file), header = FALSE, sep = "\t", stringsAsFactors = FALSE, showProgress = TRUE)
   
   # Filter the top hits only (first row for each read)
-  top_hits <- data[!duplicated(data$V1), ]
-  
-  # Extract CAZy families after the first pipe symbol
-  cazy_families <- sub("^[^|]*\\|(.*)", "\\1", top_hits$V2)
-  
-  # Split entries by "|"
-  split_labels <- unlist(strsplit(cazy_families, "\\|"))
-  
-  # Create table for counts (table_counts_a)
-  table_counts_a_tmp <- table(split_labels)
-  table_counts_a <- table_counts_a_tmp[!grepl(".fasta", names(table_counts_a_tmp))]
-  
-  # Remove ".fasta" entries from split list
-  clean_fasta_entries <- function(lst) {
-    lapply(lst, function(x) x[!grepl(".fasta", x)])
+  if(max_target_seqs) {
+    top_hits <- data[!duplicated(data$V1), ]
+  } else {
+    top_hits <- data
   }
   
-  # Weighted count (table_counts_b)
-  split_list <- strsplit(cazy_families, "\\|")
-  cleaned_split_list <- clean_fasta_entries(split_list)
-  weighted_counts <- unlist(lapply(cleaned_split_list, function(x) rep(1 / length(x), length(x)) * 1))
-  names(weighted_counts) <- unlist(cleaned_split_list)
-  table_counts_b <- tapply(weighted_counts, names(weighted_counts), sum)
+  # Extract keggs (in case the leading part in front of : is needed, turn it off here...)
+  keggs <- sub("^[^:]*:(.*)", "\\1", top_hits$V2)
+  # keggs <- top_hits$V2
   
+  # Create table for counts (table_counts_a)
+  table_counts_a <- table(keggs)
+
   # Store in list
   all_counts_a[[current_file]] <- table_counts_a
-  all_counts_b[[current_file]] <- table_counts_b
-  
+
   # Feedback of the function
   cat("done!\n")
 }
 
 # Create a list of all names across the vectors
 all_names_a <- unique(unlist(lapply(all_counts_a, names)))
-all_names_b <- unique(unlist(lapply(all_counts_b, names)))
 
 # Function to align each vector to the common set of names, filling with NA where necessary
 align_to_names <- function(x, all_names) {
@@ -80,78 +67,64 @@ filtered_counts_a <- lapply(all_counts_a, function(x) {
   x <- x[nzchar(names(x))]  # Keep only elements with non-empty names
   return(x)
 })
-filtered_counts_b <- lapply(all_counts_b, function(x) {
-  x <- x[nzchar(names(x))]  # Keep only elements with non-empty names
-  return(x)
-})
 
 # Now align only the filtered vectors
 aligned_counts_a <- lapply(filtered_counts_a, align_to_names, all_names = all_names_a)
-aligned_counts_b <- lapply(filtered_counts_b, align_to_names, all_names = all_names_b)
 
 cat("aligned_counts ready!\n")
 
 # Combine the aligned vectors into a data frame
 merged_counts_a <- rbind(aligned_counts_a[[1]], aligned_counts_a[[2]])
-merged_counts_b <- rbind(aligned_counts_b[[1]], aligned_counts_b[[2]])
 for(i in 3:length(aligned_counts_a)) merged_counts_a <- rbind(merged_counts_a, aligned_counts_a[[i]])
-for(i in 3:length(aligned_counts_b)) merged_counts_b <- rbind(merged_counts_b, aligned_counts_b[[i]])
 
 rownames(merged_counts_a) <- result_files
-rownames(merged_counts_b) <- result_files
 
 cat("rownames added ready!\n")
 
-#export_a <- data.frame(sample_id=rownames(merged_counts_a), merged_counts_a)
-#export_b <- data.frame(sample_id=rownames(merged_counts_b), merged_counts_b)
-#colnames(export_a) <- c("sample_id", colnames(merged_counts_a))
-#colnames(export_b) <- c("sample_id", colnames(merged_counts_b))
-
 export_a <- t(merged_counts_a)
-export_b <- t(merged_counts_b)
 
 export_a <- data.frame(Feature = row.names(export_a), export_a)
-export_b <- data.frame(Feature = row.names(export_b), export_b)
 
 write.table(export_a, file=file.path(project_folder, result_folder, "summary_a.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
-write.table(export_b, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+# We do not need the b output, but to fulfill the output requirements from snakeamke we writean identical file out
+write.table(export_a, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
 
-
-# Now merge the pathway names into orthologs
-
-procaryotes <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/PROKARYOTES.DAT")
-
-cat("procaryotes reading ready!\n")
-
-# Ensure both are data.tables
-setDT(procaryotes)
-setDT(export_a)
-
-# Merge KO into export based on Feature = gene
-export_merged <- merge(export_a, procaryotes, by.x = "Feature", by.y = "gene", all.x = TRUE)
-
-cat("export_merged ready!\n")
-
-# Remove Feature column (optional, if no longer needed)
- export_merged[, Feature := NULL]
-
-# Group by KO and sum all sample columns
-summary_by_KO <- export_merged[, lapply(.SD, sum, na.rm = TRUE), by = KO]
-
-ko_info_1 <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/KO00000")
-ko_info_2 <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/KO00002")
-
-cat("ko information read ready!\n")
-
-export_merged_1 <- merge(ko_info_1, summary_by_KO, by.x = "KO", by.y = "KO", all = TRUE)
-export_merged_final <- merge(ko_info_2, export_merged_1, by.x = "KO", by.y = "KO", all = TRUE)
-
-cat("last merging ready!\n")
-
-export_merged_final[is.na(export_merged_final)] <- 0
-
-# Export the data
-write.table(export_merged_final, file=file.path(project_folder, result_folder, "summary.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
-#write.table(export_b, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
-
-cat("Complete!\n")
+# 
+# # Now merge the pathway names into orthologs
+# 
+# procaryotes <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/PROKARYOTES.DAT")
+# 
+# cat("procaryotes reading ready!\n")
+# 
+# # Ensure both are data.tables
+# setDT(procaryotes)
+# setDT(export_a)
+# 
+# # Merge KO into export based on Feature = gene
+# export_merged <- merge(export_a, procaryotes, by.x = "Feature", by.y = "gene", all.x = TRUE)
+# 
+# cat("export_merged ready!\n")
+# 
+# # Remove Feature column (optional, if no longer needed)
+#  export_merged[, Feature := NULL]
+# 
+# # Group by KO and sum all sample columns
+# summary_by_KO <- export_merged[, lapply(.SD, sum, na.rm = TRUE), by = KO]
+# 
+# ko_info_1 <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/KO00000")
+# ko_info_2 <- fread("/scratch/project_2010176/Tommi_Databases/KEGG/KO00002")
+# 
+# cat("ko information read ready!\n")
+# 
+# export_merged_1 <- merge(ko_info_1, summary_by_KO, by.x = "KO", by.y = "KO", all = TRUE)
+# export_merged_final <- merge(ko_info_2, export_merged_1, by.x = "KO", by.y = "KO", all = TRUE)
+# 
+# cat("last merging ready!\n")
+# 
+# export_merged_final[is.na(export_merged_final)] <- 0
+# 
+# # Export the data
+# write.table(export_merged_final, file=file.path(project_folder, result_folder, "summary.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+# #write.table(export_b, file=file.path(project_folder, result_folder, "summary_b.tsv"), sep="\t", quote=FALSE, row.names=FALSE)
+# 
+# cat("Complete!\n")
