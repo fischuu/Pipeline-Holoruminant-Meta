@@ -746,6 +746,25 @@ https://github.com/WrightonLabCSU/DRAM/issues/26#issuecomment-685212290
 The bakta database I downloaded is 5.1:
 https://zenodo.org/records/10522951
 
+# Reports and other output
+
+## Benchmark
+
+There is a benchmark output in some (and hopefully soon in all) rules, that uses the snakemake `benchmark` directive, which in turn uses the `psutils` tool and that generates a tab-separated output file with the follwoing content regarding memory and time consumption as well as I/O pressure:
+
+| Column      | Type (Unit)        | Description                                                                                                                                           |
+|-------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `s`         | float (seconds)     | Running time in seconds                                                                                                                               |
+| `h:m:s`     | string (-)          | Running time in hour, minutes, seconds format                                                                                                         |
+| `max_rss`   | float (MB)          | Maximum *Resident Set Size* — the non-swapped physical memory a process has used                                                                      |
+| `max_vms`   | float (MB)          | Maximum *Virtual Memory Size* — the total amount of virtual memory used by the process                                                                |
+| `max_uss`   | float (MB)          | *Unique Set Size* — memory unique to a process, which would be freed if the process terminated                                                        |
+| `max_pss`   | float (MB)          | *Proportional Set Size* — shared memory divided proportionally among processes that share it (Linux only)                                             |
+| `io_in`     | float (MB)          | Number of MB read (cumulative)                                                                                                                        |
+| `io_out`    | float (MB)          | Number of MB written (cumulative)                                                                                                                     |
+| `mean_load` | float (-)           | CPU usage over time, divided by the total running time (first row)                                                                                    |
+| `cpu_time`  | float (-)           | CPU time summed for user and system                                                                                                                   |
+
 
 ## References
 
