@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+33: Log output for hmmsearch added for contig annotate output
 32: Diamond reports now per default only the top result
 31: Harded-coded paths removed from the kegg summary R script
 30: Added option to provide arbitrary named self-provided assemblies.
