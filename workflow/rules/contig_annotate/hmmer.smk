@@ -29,6 +29,9 @@ rule contig_annotate__hmmer__assign:
         docker["assemble"],
     shell:
         """
+           echo "=== Running hmmsearch for assembly {wildcards.assembly_id} on database {wildcards.hmmer_db} ===" > {log}
+           echo "Start time: $(date)" >> {log}
+        
            hmmsearch \
             -o {output.out} \
             -A {output.aln} \
@@ -39,6 +42,9 @@ rule contig_annotate__hmmer__assign:
             --domT {params.domt} \
             {input.database} \
             {input.fa} 2>> {log} 1>&2
+            
+            echo "End time: $(date)" >> {log}
+            echo "=== hmmsearch finished for assembly {wildcards.assembly_id} ===" >> {log}
         """
 
 rule contig_annotate__hmmer:
