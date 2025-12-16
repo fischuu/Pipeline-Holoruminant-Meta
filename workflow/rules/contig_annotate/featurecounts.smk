@@ -19,14 +19,14 @@ rule contig_annotate__cramToBam:
     retries: len(get_escalation_order("contig_annotate__cramToBam"))
     shell:
         """
-        echo "=== Running cramToBam for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library.id} ===" > {log}
+        echo "=== Running cramToBam for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library_id} ===" > {log}
         echo "Start time: $(date)" >> {log}
         
         samtools index {input} 2> {log} 1>&2
         samtools view -b -o {output} {input} 2> {log} 1>&2
         
         echo "End time: $(date)" >> {log}
-        echo "=== Finished running cramToBam for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library.id} ===" >> {log}
+        echo "=== Finished running cramToBam for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library_id} ===" >> {log}
         """
 
 
