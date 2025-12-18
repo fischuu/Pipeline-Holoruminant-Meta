@@ -76,11 +76,13 @@ rule assemble__bowtie2__map:
         rg_extra=compose_rg_extra,
     shell:
         """
+        echo "=== Running assemble__bowtie2__map for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library_id} ===" > {log}.{resources.attempt} 1>&2
+
         find \
             $(dirname {output.cram}) \
             -name "$(basename {output.cram}).tmp.*.bam" \
             -delete \
-        2> {log}.{resources.attempt} 1>&2
+        2>> {log}.{resources.attempt} 1>&2
 
         ( bowtie2 \
             -x {input.mock} \
@@ -96,6 +98,8 @@ rule assemble__bowtie2__map:
             --reference {input.reference} \
             --threads {threads} \
         ) 2>> {log}.{resources.attempt} 1>&2
+
+        echo "=== Finished assemble__bowtie2__map for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library_id} ===" > {log}.{resources.attempt} 1>&2
 
         mv {log}.{resources.attempt} {log}
         """
