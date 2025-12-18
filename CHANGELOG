@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+35: Bugfix in assemble__bowtie2__map (missing fai index)
 34: Log output added for cramToBam
 33: Log output for hmmsearch added for contig annotate output
 32: Diamond reports now per default only the top result

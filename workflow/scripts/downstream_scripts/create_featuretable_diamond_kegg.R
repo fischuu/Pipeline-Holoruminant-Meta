@@ -35,8 +35,10 @@ for (sample_run in 1:length(result_files)) {
   }
   
   # Extract keggs (in case the leading part in front of : is needed, turn it off here...)
-  keggs <- sub("^[^:]*:(.*)", "\\1", top_hits$V2)
-  # keggs <- top_hits$V2
+  # keggs <- sub("^[^:]*:(.*)", "\\1", top_hits$V2)
+  
+  # Extract keggs (including the leading part in front of : is not needed, turn it off here...)
+  keggs <- top_hits$V2
   
   # Create table for counts (table_counts_a)
   table_counts_a <- table(keggs)

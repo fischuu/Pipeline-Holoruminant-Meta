@@ -51,9 +51,9 @@ rule assemble__bowtie2__map:
             PROVIDED / f"{wildcards.assembly_id}.fa.gz"
         ),
         fai=lambda wildcards: (
-            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else 
-            METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
-            PROVIDED / f"{wildcards.assembly_id}.fa.gz"
+            MEGAHIT / f"{wildcards.assembly_id}.fa.gz.fai" if config["assembler"] == "megahit" else 
+            METASPADES / f"{wildcards.assembly_id}.fa.gz.fai"if config["assembler"] == "metaspades" else 
+            PROVIDED / f"{wildcards.assembly_id}.fa.gz.fai"
         ),
     output:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
