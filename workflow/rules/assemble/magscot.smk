@@ -68,6 +68,8 @@ rule assemble__magscot__hmmsearch_pfam:
     retries: len(get_escalation_order("assemble__magscot__hmmsearch_pfam"))
     shell:
         """
+        echo "=== Running assemble__magscot__hmmsearch_pfam for assembly {wildcards.assembly_id} ===" > {log} 1>&2
+
         hmmsearch \
             -o /dev/null \
             --tblout >(pigz --best --processes {threads} > {output.tblout}) \
@@ -77,7 +79,10 @@ rule assemble__magscot__hmmsearch_pfam:
             --cpu {threads} \
             {input.hmm} \
             {input.proteins} \
-        2> {log} 1>&2
+        2>> {log} 1>&2
+
+        echo "=== Finished running assemble__magscot__hmmsearch_tigr for assembly {wildcards.assembly_id} ===" >> {log} 1>&2
+
         """
 
 
@@ -103,6 +108,8 @@ rule assemble__magscot__hmmsearch_tigr:
     retries: len(get_escalation_order("assemble__magscot__hmmsearch_tigr"))
     shell:
         """
+        echo "=== Running assemble__magscot__hmmsearch_tigr for assembly {wildcards.assembly_id} ===" > {log} 1>&2
+
         hmmsearch \
             -o /dev/null \
             --tblout >(pigz --best --processes {threads} > {output.tblout}) \
@@ -112,7 +119,9 @@ rule assemble__magscot__hmmsearch_tigr:
             --cpu {threads} \
             {input.hmm} \
             {input.proteins} \
-        2> {log} 1>&2
+        2>> {log} 1>&2
+        
+        echo "=== Finished running assemble__magscot__hmmsearch_tigr for assembly {wildcards.assembly_id} ===" >> {log} 1>&2
         """
 
 
@@ -141,13 +150,17 @@ rule assemble__magscot__join_hmms:
     retries: len(get_escalation_order("assemble__magscot__join_hmms"))
     shell:
         """
+        echo "=== Running assemble__magscot__join_hmms for assembly {wildcards.assembly_id} ===" > {log} 1>&2
+
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
         | awk '{{print $1 "\\t" $3 "\\t" $5}}' ) \
-        >  {output.merged} 2>  {log}
+        >  {output.merged} 2>>  {log}
 
         ( (zgrep -v "^#" {input.pfam_tblout} || true) \
         | awk '{{print $1 "\\t" $4 "\\t" $5}}' ) \
         >> {output.merged} 2>> {log}
+        
+        echo "=== Finished running assemble__magscot__hmmsearch_pfam for assembly {wildcards.assembly_id} ===" >> {log} 1>&2
         """
 
 
@@ -178,11 +191,13 @@ rule assemble__magscot__merge_contig_to_bin:
     retries: len(get_escalation_order("assemble__magscot__merge_contig_to_bin"))
     shell:
         """
+        echo "=== Running assemble__magscot__merge_contig_to_bin for assembly {wildcards.assembly_id} ===" > {log} 1>&2
+        
         for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
             zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tconcoct"}}'
-        done > {output} 2> {log}
+        done > {output} 2>> {log}
 
         for file in $(find {input.maxbin2} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
@@ -195,6 +210,8 @@ rule assemble__magscot__merge_contig_to_bin:
             zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmetabat2"}}'
         done >> {output} 2>> {log}
+        
+        echo "=== Finished running assemble__magscot__merge_contig_to_bin for assembly {wildcards.assembly_id} ===" >> {log} 1>&2
         """
 
 rule assemble__magscot__run:
@@ -238,6 +255,7 @@ rule assemble__magscot__run:
             --threshold {params.th} \
          2> {log} 1>&2 || echo "No result but proceeding."
          }}
+         
         touch {output.ar53} {output.bac120} {output.refined_contig_to_bin} {output.refined_out} {output.scores};
         
         echo $? >> {log}

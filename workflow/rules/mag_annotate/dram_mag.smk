@@ -72,7 +72,6 @@ rule mag_annotate__dram_mag__distill:
     output:
         genome=DRAMMAG / "{assembly_id}" / "genome_stats.tsv",
         metabolism=DRAMMAG / "{assembly_id}" / "metabolism_summary.xlsx",
-        product_html=DRAMMAG / "{assembly_id}" / "product.html",
         product_tsv=DRAMMAG / "{assembly_id}" / "product.tsv",
     log:
         DRAMMAG / "{assembly_id}" / "distill.log2",

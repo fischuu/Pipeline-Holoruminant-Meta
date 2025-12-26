@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+37: Removed product.html output from mag_annotate__dram_mag_distill as it is not always created
 36: Added more echo messages to the logfile of assemble__bowtie2__map
 35: Bugfix in assemble__bowtie2__map (missing fai index)
 34: Log output added for cramToBam

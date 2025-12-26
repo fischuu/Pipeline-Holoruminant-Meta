@@ -48,6 +48,7 @@ rule assemble__maxbin2__run:
             's/\\.fasta$/.fa/' \
             {output.workdir}/*.fasta \
         2>> {log}
+        
 
         fa_files=$(find {output.workdir} -name "*.fa")
         for fa in $fa_files; do
