@@ -28,11 +28,6 @@ rule read_annotate__phyloflash__run:
         outdir=PHYLOFLASH
     shell:
         """
-        echo "Using temporary directory: $TMPDIR" 2> {log} 1>&2
-        df -h $TMPDIR 2>> {log} 1>&2
-        ls -lah $TMPDIR 2>> {log} 1>&2
-
-        
         phyloFlash.pl -dbhome {input.phyloflash_dbs} \
                       -lib {params.lib} -CPUs {threads} \
                       -read1 {input.forward_} \

@@ -45,9 +45,9 @@ MAGSCOT = ASSEMBLE / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
 DREP = ASSEMBLE / "drep/"
 
-#PROVIDED = ASSEMBLE / config["assembler"]
+PROVIDED = ASSEMBLE / config["assembler"]
 
-PROVIDED = ASSEMBLE / "long_reads"
+#PROVIDED = ASSEMBLE / "long_reads"
 
 # quantify
 QUANT = Path("results/quantify/")

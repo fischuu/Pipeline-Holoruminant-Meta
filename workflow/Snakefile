@@ -7,7 +7,7 @@ import yaml
 import os
 
 DEBUG = True
-version = "0.4.37"
+version = "0.4.38"
 
 def debug(msg):
     if DEBUG:
