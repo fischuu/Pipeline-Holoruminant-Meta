@@ -4,6 +4,9 @@
 
 Version 0.4.*: 
 ------------
+41: Reverted update 40, cram stays standard, but introduced a new parameter in params where cram/bam can be chosen
+40: Changed the default from cram to bam, as sometimes the header did not work
+39: Removed the piping in rule assemble__bowtie2__map and split it rather in two separate steps, within the same rule though
 38: Removed $TMPDIR echo from rule read_annotate__phyloflash__run
 37: Removed product.html output from mag_annotate__dram_mag_distill as it is not always created
 36: Added more echo messages to the logfile of assemble__bowtie2__map

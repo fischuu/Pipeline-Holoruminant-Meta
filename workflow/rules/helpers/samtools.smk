@@ -19,9 +19,12 @@ rule helpers__samtools__index_bam:
         "{prefix}.bam.bai.log"
     benchmark:
         "benchmark/{prefix}.bam.bai.tsv"
-    shell:
-        "samtools index {input} 2> {log} 1>&2"
-
+    shell:"""
+        echo "=== Running helpers__samtools__index_bam ===" > {log} 1>&2
+        samtools index {input} 2>> {log} 1>&2
+        echo "=== Finished helpers__samtools__index_bam ===" > {log} 1>&2
+    """
+  
 
 rule helpers__samtools__index_cram:
     """Index a cram file"""

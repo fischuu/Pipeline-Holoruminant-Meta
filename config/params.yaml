@@ -43,6 +43,7 @@ assemble:
     memory_gb: 32
   samtools:
     mem: 8G   # Take care that there is enough memory reserved for the bowtie map rule, the memory is per thread! Or reduce that value
+    out_type: "cram"  # Change this to 'bam' in case the rule assemble__bowtie2__map throws an error that the cram header is too long
   drep:
     completeness: 50  # Default: 50
     contamination: 50 # Default: 50

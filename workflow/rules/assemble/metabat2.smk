@@ -1,8 +1,8 @@
 rule assemble__metabat2__run:
     """Run metabat2 end-to-end on a single assembly"""
     input:
-        crams=get_crams_from_assembly_id,
-        crais=get_crais_from_assembly_id,
+        alignments=get_alignments_from_assembly_id,
+        crais=get_alignment_indexes_from_assembly_id,
         assembly=lambda wildcards: (
             MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else 
             METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
@@ -32,20 +32,25 @@ rule assemble__metabat2__run:
     retries: len(get_escalation_order("assemble__metabat2__run"))
     shell:
         """
-        for cram in {input.crams} ; do
+        for aln in {input.alignments}; do
 
-            bam={params.workdir}/$(basename $cram .cram).bam
+            # Remove extension: .bam or .cram
+            base=$(basename "$aln")
+            base=${{base%.cram}}
+            base=${{base%.bam}}
 
+            bam={params.workdir}/$base.bam
+        
             samtools view \
                 --exclude-flags 4 \
                 --fast \
                 --output $bam \
                 --output-fmt BAM \
-                --reference {input.assembly} \
                 --threads {threads} \
-                $cram
-
+                $aln
+        
         done 2> {log} 1>&2
+
 
         jgi_summarize_bam_contig_depths \
             --outputDepth {params.depth} \

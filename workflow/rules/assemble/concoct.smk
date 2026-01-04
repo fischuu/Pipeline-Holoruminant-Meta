@@ -5,7 +5,7 @@ rule assemble__concoct_run:
             METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
             PROVIDED / f"{wildcards.assembly_id}.fa.gz"
         ),
-        crams=get_crams_from_assembly_id,
+        alignments=get_alignments_from_assembly_id,
     output:
         directory(CONCOCT / "{assembly_id}"),
     log:
@@ -36,22 +36,23 @@ rule assemble__concoct_run:
         > {params.workdir}/cut.fa \
         2>> {log}
 
-        for cram in {input.crams} ; do
-
-            bam={params.workdir}/$(basename $cram .cram).bam
-
+        for aln in {input.alignments}; do
+        
+            base=$(basename "$aln" .{ALIGN_EXT})
+            bam={params.workdir}/$base.bam
+        
             samtools view \
                 --exclude-flags 4 \
                 --fast \
                 --output $bam \
                 --output-fmt BAM \
-                --reference {input.assembly} \
                 --threads {threads} \
-                $cram
-
+                $aln
+        
             samtools index $bam
+  
+  done 2>> {log} 1>&2
 
-        done 2>> {log} 1>&2
 
         concoct_coverage_table.py \
             {params.workdir}/cut.bed \

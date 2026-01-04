@@ -38,25 +38,25 @@ rule assemble__bowtie2__build:
     input:
         [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
+# Test the samtools output type and set some env variables
+SAMTOOLS_OUTTYPE = params["assemble"]["samtools"]["out_type"].upper()
+assert SAMTOOLS_OUTTYPE in {"BAM", "CRAM"}, "samtools.out_type must be BAM or CRAM"
+ALIGN_EXT = "cram" if SAMTOOLS_OUTTYPE == "CRAM" else "bam"
 
 rule assemble__bowtie2__map:
-    """Map one sample to one megahit assembly"""
+    """Map one sample to one megahit assembly with intermediate BAM"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
         forward_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_BOWTIE2 / "decontaminated_reads" / "{sample_id}.{library_id}_2.fq.gz",
-        reference=lambda wildcards: (
-            MEGAHIT / f"{wildcards.assembly_id}.fa.gz" if config["assembler"] == "megahit" else 
-            METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
-            PROVIDED / f"{wildcards.assembly_id}.fa.gz"
-        ),
-        fai=lambda wildcards: (
-            MEGAHIT / f"{wildcards.assembly_id}.fa.gz.fai" if config["assembler"] == "megahit" else 
-            METASPADES / f"{wildcards.assembly_id}.fa.gz.fai"if config["assembler"] == "metaspades" else 
-            PROVIDED / f"{wildcards.assembly_id}.fa.gz.fai"
+        reference=lambda wc: (
+            MEGAHIT / f"{wc.assembly_id}.fa.gz" if config["assembler"] == "megahit" else
+            METASPADES / f"{wc.assembly_id}.fa.gz" if config["assembler"] == "metaspades" else
+            PROVIDED / f"{wc.assembly_id}.fa.gz"
         ),
     output:
-        cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        file=Path(str(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.") + ALIGN_EXT),
+        tmp_bam=temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.tmp.bam"),
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     container:
@@ -72,37 +72,37 @@ rule assemble__bowtie2__map:
     retries: len(get_escalation_order("assemble__bowtie2__map"))
     params:
         samtools_mem=params["assemble"]["samtools"]["mem"],
+        samtools_outtype=params["assemble"]["samtools"]["out_type"].upper(),
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     shell:
         """
         echo "=== Running assemble__bowtie2__map for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library_id} ===" > {log}.{resources.attempt} 1>&2
 
-        find \
-            $(dirname {output.cram}) \
-            -name "$(basename {output.cram}).tmp.*.bam" \
-            -delete \
-        2>> {log}.{resources.attempt} 1>&2
-
-        ( bowtie2 \
+        # Step 1: Bowtie2 mapping
+        bowtie2 \
             -x {input.mock} \
             -1 {input.forward_} \
             -2 {input.reverse_} \
             --threads {threads} \
             --rg-id '{params.rg_id}' \
             --rg '{params.rg_extra}' \
-        | samtools sort \
+        2>> {log}.{resources.attempt} | samtools view -b -o {output.tmp_bam} - 2>> {log}.{resources.attempt}
+
+        # Step 2: Sort and convert
+        samtools sort \
             -l 9 \
             -m {params.samtools_mem} \
-            -o {output.cram} \
-            --reference {input.reference} \
+            -O {params.samtools_outtype} \
+            -o {output.file} \
             --threads {threads} \
-        ) 2>> {log}.{resources.attempt} 1>&2
-
+            {output.tmp_bam} 2>> {log}.{resources.attempt}
+        
         echo "=== Finished assemble__bowtie2__map for assembly {wildcards.assembly_id}, sample {wildcards.sample_id} and library {wildcards.library_id} ===" > {log}.{resources.attempt} 1>&2
 
         mv {log}.{resources.attempt} {log}
         """
+
 
 
 rule assemble__bowtie2:

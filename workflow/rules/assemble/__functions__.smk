@@ -71,21 +71,39 @@ def aggregate_reverses_for_metaspades(wildcards):
     return " ".join(reverses)
 
 
+# # Concoct, metabat2 and maxbin2
+#def get_crams_from_assembly_id(wildcards):
+#    """Given an assembly_id, get all the cram files for that assembly."""
+#    assembly_id = wildcards.assembly_id
+#    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+#    cram_files = [
+#        ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+#        for sample_id, library_id in samples_in_assembly
+#    ]
+#    return cram_files
+
 # Concoct, metabat2 and maxbin2
-def get_crams_from_assembly_id(wildcards):
-    """Given an assembly_id, get all the cram files for that assembly."""
+def get_alignments_from_assembly_id(wildcards):
+    """Return BAM or CRAM files depending on config."""
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    cram_files = [
-        ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+
+    return [
+        ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{ALIGN_EXT}"
         for sample_id, library_id in samples_in_assembly
     ]
-    return cram_files
 
 
-def get_crais_from_assembly_id(wildcards):
-    """Given an assembly_id, get all the cram files for that assembly."""
-    return [f"{cram}.crai" for cram in get_crams_from_assembly_id(wildcards)]
+#def get_crais_from_assembly_id(wildcards):
+#    """Given an assembly_id, get all the cram files for that assembly."""
+#    return [f"{cram}.crai" for cram in get_crams_from_assembly_id(wildcards)]
+
+def get_alignment_indexes_from_assembly_id(wildcards):
+    exts = {
+        "bam": ".bai",
+        "cram": ".crai",
+    }
+    return [f"{f}{exts[ALIGN_EXT]}" for f in get_alignments_from_assembly_id(wildcards)]
 
 
 def compose_bams_for_metabat2_run(wildcards):
@@ -97,3 +115,6 @@ def compose_bams_for_metabat2_run(wildcards):
         for sample_id, library_id in samples_in_assembly
     ]
     return bam_files
+
+def samtools_ext():
+    return "cram" if params["assemble"]["samtools"]["out_type"].upper() == "CRAM" else "bam"

@@ -6,7 +6,7 @@ rule assemble__maxbin2__run:
             METASPADES / f"{wildcards.assembly_id}.fa.gz"if config["assembler"] == "metaspades" else 
             PROVIDED / f"{wildcards.assembly_id}.fa.gz"
         ),
-        crams=get_crams_from_assembly_id,
+        alignments=get_alignments_from_assembly_id,
     output:
         workdir=directory(MAXBIN2 / "{assembly_id}"),
     log:
@@ -30,11 +30,12 @@ rule assemble__maxbin2__run:
         """
         mkdir --parents {output.workdir}
 
-        ( samtools coverage {input.crams} \
-        | awk '{{print $1"\\t"$5}}' \
-        | grep -v '^#' \
-        ) > {params.coverage} \
-        2> {log}
+        ( samtools coverage {input.alignments} \
+          | awk '{{print $1"\t"$5}}' \
+          | grep -v '^#' \
+          ) > {params.coverage} \
+          2> {log}
+
 
         run_MaxBin.pl \
             -thread {threads} \

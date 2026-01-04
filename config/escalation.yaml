@@ -1,98 +1,98 @@
-mag_annotate__bakta: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-mag_annotate__bakta_mags_run: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-mag_annotate__camper__annotate: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-mag_annotate__checkm2__predict: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-mag_annotate__dram__annotate: large_nvme,highmem,longrun,highmem_longrun
-mag_annotate__dram__distill: small, medium, large
-mag_annotate__dram_mag__annotate: large_nvme,highmem,longrun,highmem_longrun
+mag_annotate__bakta: medium_nvme
+mag_annotate__bakta_mags_run: medium_nvme
+mag_annotate__camper__annotate: medium_nvme
+mag_annotate__checkm2__predict: medium_nvme
+mag_annotate__dram__annotate: large_nvme
+mag_annotate__dram__distill: small
+mag_annotate__dram_mag__annotate: large_nvme
 mag_annotate__dram_mag__distill: medium
-mag_annotate__eggnog: large_nvme,highmem,longrun,highmem_longrun
-mag_annotate__fix_dram_mag_annotations_scaffold: small, medium, large
-mag_annotate__gtdbtk__classify: large,highmem,longrun,highmem_longrun
-mag_annotate__phylophlan: medium_nvme,large_nvme
-mag_annotate__proteinortho: medium,large
-mag_annotate__quast: medium,large
+mag_annotate__eggnog: large_nvme
+mag_annotate__fix_dram_mag_annotations_scaffold: small
+mag_annotate__gtdbtk__classify: large
+mag_annotate__phylophlan: medium_nvme
+mag_annotate__proteinortho: medium
+mag_annotate__quast: medium
 
-assemble__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
-assemble__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
-assemble__concoct_run: large,highmem,longrun,highmem_longrun
-assemble__drep__join_genomes: medium_nvme,large_nvme
-assemble__drep__run: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-assemble__drep__separate_bins: small, medium, large
-assemble__magscot__prodigal: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-assemble__magscot__hmmsearch_pfam: medium,large,highmem,longrun,highmem_longrun
-assemble__magscot__hmmsearch_tigr: medium,large,highmem,longrun,highmem_longrun
-assemble__magscot__join_hmms: small,medium,large,highmem,longrun,highmem_longrun
-assemble__magscot__merge_contig_to_bin: small,medium,large,highmem,longrun,highmem_longrun
-assemble__magscot__run: small,medium,large,highmem,longrun,highmem_longrun
-assemble__magscot__reformat: small,medium,large,highmem,longrun,highmem_longrun
-assemble__magscot__rename: small,medium,large,highmem,longrun,highmem_longrun
-assemble__maxbin2__run: large,highmem,longrun,highmem_longrun
-assemble__metabat2__run: large,highmem,longrun,highmem_longrun
-assemble__megahit__run: large,highmem,longrun,highmem_longrun
-assemble__metaspades__run: large,highmem,longrun,highmem_longrun
+assemble__bowtie2__build: medium
+assemble__bowtie2__map: medium
+assemble__concoct_run: large
+assemble__drep__join_genomes: medium_nvme
+assemble__drep__run: medium_nvme
+assemble__drep__separate_bins: small
+assemble__magscot__prodigal: medium_nvme
+assemble__magscot__hmmsearch_pfam: medium
+assemble__magscot__hmmsearch_tigr: medium
+assemble__magscot__join_hmms: small
+assemble__magscot__merge_contig_to_bin: small
+assemble__magscot__run: small
+assemble__magscot__reformat: small
+assemble__magscot__rename: small
+assemble__maxbin2__run: large
+assemble__metabat2__run: large
+assemble__megahit__run: large
+assemble__metaspades__run: large
 
-contig_annotate__camper__annotate: medium_nvme,large_nvme
-contig_annotate__diamond__assign: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-contig_annotate__diamond__summarise: small,medium,large
-contig_annotate__eggnog_find_homology: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-contig_annotate__eggnog_orthology: large_nvme,highmem_nvme,longrun,highmem_longrun
-contig_annotate__hmmer__assign: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-contig_annotate__cramToBam: small, medium, large
-contig_annotate__featurecounts_run: medium,large
-contig_annotate__prodigal_run: medium,large,highmem,longrun,highmem_longrun
-contig_annotate__cut_prodigal: medium,large,highmem,longrun,highmem_longrun
+contig_annotate__camper__annotate: medium_nvme
+contig_annotate__diamond__assign: medium_nvme
+contig_annotate__diamond__summarise: small
+contig_annotate__eggnog_find_homology: medium_nvme
+contig_annotate__eggnog_orthology: large_nvme
+contig_annotate__hmmer__assign: medium_nvme
+contig_annotate__cramToBam: small
+contig_annotate__featurecounts_run: medium
+contig_annotate__prodigal_run: medium
+contig_annotate__cut_prodigal: medium
 
-helpers__fastqc: small, medium, large
-helpers__samtools__faidx_fa: small,medium,large
-helpers__samtools__faidx_fagz: small,medium,large
-helpers__samtools__flagstats_cram: small,medium,large
-helpers__samtools__idxstats_cram: small,medium,large
-helpers__samtools__index_bam: medium,large
-helpers__samtools__index_cram: small,medium,large
+helpers__fastqc: small
+helpers__samtools__faidx_fa: small
+helpers__samtools__faidx_fagz: small
+helpers__samtools__flagstats_cram: small
+helpers__samtools__idxstats_cram: small
+helpers__samtools__index_bam: medium
+helpers__samtools__index_cram: small
 
-preprocess__bowtie2__build: medium,large,highmem,longrun,highmem_longrun
-preprocess__bowtie2__extract_nonhost: medium,large,highmem,longrun,highmem_longrun
-preprocess__bowtie2__extract_nonhost_run: small, medium, large,highmem,longrun,highmem_longrun
-preprocess__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
-preprocess__fastp__run: medium,large
-preprocess__samtools__stats_cram: small, medium, large
-preprocess__store_final_fastq: small,medium,large,highmem,longrun,highmem_longrun
+preprocess__bowtie2__build: medium
+preprocess__bowtie2__extract_nonhost: medium
+preprocess__bowtie2__extract_nonhost_run: small
+preprocess__bowtie2__map: medium
+preprocess__fastp__run: medium
+preprocess__samtools__stats_cram: small
+preprocess__store_final_fastq: small
 
-quantify__bowtie2__build: small, medium,large
-quantify__bowtie2__map: medium,large,highmem,longrun,highmem_longrun
-quantify__coverm__contig_aggregate: small, medium,large
-quantify__coverm__contig_one: small, medium,large
-quantify__coverm__genome_aggregate: small, medium,large
-quantify__coverm__genome_run: small, medium,large
-quantify__samtools__stats_cram: small, medium,large
+quantify__bowtie2__build: small
+quantify__bowtie2__map: medium
+quantify__coverm__contig_aggregate: small
+quantify__coverm__contig_one: small
+quantify__coverm__genome_aggregate: small
+quantify__coverm__genome_run: small
+quantify__samtools__stats_cram: small
 
-read_annotate__diamond__assign: medium_nvme,large_nvme,highmem,longrun,highmem_longrun
-read_annotate__diamond__summarise: small,medium,large
-read_annotate__humann__run: medium,large,highmem,longrun,highmem_longrun
-read_annotate__humann_condense: small, medium, large
-read_annotate__kraken2__assign: full_node      # The full_node setting is for the /dev/shm ramdisc speedup. If you have nvme discs, better pick a set with those
-read_annotate__krona__visualize: medium,large
-read_annotate__metaphlan__condense: small, medium, large
-read_annotate__metaphlan__run: medium,large
-read_annotate__nonpareil__aggregate: small, medium,large
-read_annotate__nonpareil__run: medium,large
-read_annotate__phyloflash__condense: small, medium,large
-read_annotate__phyloflash__run: medium_nvme,large_nvme
-read_annotate__singlem__condense: small, medium, large
-read_annotate__singlem__microbial_fraction: small, medium, large
-read_annotate__singlem__pipe:  medium_nvme, large_nvme
-read_annotate__singlem__aggregate_microbial_fraction: small, medium,large
-read_annotate__sylph_profile: medium_nvme, large_nvme
+read_annotate__diamond__assign: medium_nvme
+read_annotate__diamond__summarise: small
+read_annotate__humann__run: medium
+read_annotate__humann_condense: small
+read_annotate__kraken2__assign: full_node
+read_annotate__krona__visualize: medium
+read_annotate__metaphlan__condense: small
+read_annotate__metaphlan__run: medium
+read_annotate__nonpareil__aggregate: small
+read_annotate__nonpareil__run: medium
+read_annotate__phyloflash__condense: small
+read_annotate__phyloflash__run: medium_nvme
+read_annotate__singlem__condense: small
+read_annotate__singlem__microbial_fraction: small
+read_annotate__singlem__pipe: medium_nvme
+read_annotate__singlem__aggregate_microbial_fraction: small
+read_annotate__sylph_profile: medium_nvme
 
-reference__hosts__recompress: small,medium,large
+reference__hosts__recompress: small
 
-report__preprocess: small,medium,large
-report__reads: small,medium,large
-report__sample__multiqc: small,medium,large
-report__step__reads: small,medium,large
-report__step__preprocess: small,medium,large
-report__step__assemble: small,medium,large
-report__step__quantify: small,medium,large
+report__preprocess: small
+report__reads: small
+report__sample__multiqc: small
+report__step__reads: small
+report__step__preprocess: small
+report__step__assemble: small
+report__step__quantify: small
 
-test_error: small,medium,large
+test_error: small
