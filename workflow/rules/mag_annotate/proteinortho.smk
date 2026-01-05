@@ -28,11 +28,6 @@ rule mag_annotate__proteinortho:
             -cpus={threads} \
             -project=proteinortho \
             2>> {log} 1>&2
-            
-        mv proteinortho.proteinortho.tsv {params.outdir} 
-        mv proteinortho.blast-graph {params.outdir}
-        mv proteinortho.info {params.outdir}
-        mv proteinortho.proteinortho-graph {params.outdir}
-        mv proteinortho.proteinortho-graph.summary {params.outdir}
-        mv proteinortho.proteinortho.html {params.outdir}
+        
+        mv proteinortho.* {params.outdir} 
         """
