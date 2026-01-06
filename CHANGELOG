@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+43: Rule 'assemble__drep__separate_bins' works now more robust, important for provided assemblies
 42: Changed mv command in mag_annotate__proteinortho from explicit to wildcards
 41: Reverted update 40, cram stays standard, but introduced a new parameter in params where cram/bam can be chosen
 40: Changed the default from cram to bam, as sometimes the header did not work

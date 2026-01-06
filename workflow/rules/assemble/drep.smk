@@ -18,18 +18,33 @@ rule assemble__drep__separate_bins:
     retries: len(get_escalation_order("assemble__drep__separate_bins"))
     shell:
         """
-        mkdir --parents {output.out_dir} 2> {log} 1>&2
+        mkdir -p {output.out_dir} 2> {log}
+        
+        for asm in {input.assemblies}; do
+            # get assembly ID from the filename
+            asm_id=$(basename "$asm" .fa.gz)
+        
+            gzip -dc "$asm" \
+            | awk -v outdir="{output.out_dir}" -v asm="$asm_id" '
+              /^>/ {{
+                header=$0
+                # extract bin_XXXXX from header
+                match(header, /bin_[0-9]+/, b)
+                if (b[0] == "") {{
+                  print "ERROR: no bin ID in header:", header > "/dev/stderr"
+                  exit 1
+                }}
+                bin=b[0]
+                fname = asm ":" bin ".fa"
+                print header > outdir "/" fname
+                next
+              }}
+              {{
+                print $0 > outdir "/" fname
+              }}
+            '
+        done >> {log} 2>&1
 
-        ( gzip \
-            --decompress \
-            --stdout \
-            {input.assemblies} \
-        | paste - - \
-        | tr -d ">" \
-        | tr "@" "\t" \
-        | awk \
-            '{{print ">" $1 "@" $2 "\\n" $3 > "{output.out_dir}/" $1 ".fa" }}' \
-        ) >> {log} 2>&1
         """
 
 

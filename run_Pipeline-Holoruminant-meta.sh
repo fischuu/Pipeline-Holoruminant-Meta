@@ -14,7 +14,7 @@ Profile=$projectFolder/config/profiles/Puhti
 # module system, but other systems might have it available per standard installation.
 # In that case you can comment out the follwing line
 ################################################################################
-module load snakemake/8.25.3
+module load snakemake/9.11.6
 
 # For use with Apptainer, set these variables
 ################################################################################
