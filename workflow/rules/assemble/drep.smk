@@ -20,7 +20,11 @@ rule assemble__drep__separate_bins:
         folder=config["pipeline_folder"],
     shell:
         """
-        {params.folder}/workflow/scripts/split_bins.sh {output.out_dir} {input.assemblies} > split_bins.log 2>&1
+        echo "=== Running assemble__drep__separate_bins ===" > {log} 2>&1
+
+        {params.folder}/workflow/scripts/split_bins.sh {output.out_dir} {input.assemblies} >> {log} 2>&1
+        
+        echo "=== Finished assemble__drep__separate_bins ===" >> {log} 2>&1
         """
 
 
