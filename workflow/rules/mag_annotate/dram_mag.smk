@@ -89,7 +89,7 @@ rule mag_annotate__dram_mag__distill:
     params:
         config=config["dram-config"],
         outdir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}",
-        outdir_tmp=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}/distill",
+        outdir_tmp=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}/",
     shell:
         """
         DRAM.py distill \
@@ -97,7 +97,7 @@ rule mag_annotate__dram_mag__distill:
             --input_file {input.annotation} \
             --rrna_path {input.rrnas} \
             --trna_path {input.trnas} \
-            --output_dir {params.outdir_tmp} \
+            --output_dir {params.outdir_tmp}/distill \
         2> {log} 1>&2
 
         mv {params.outdir_tmp}/* {params.outdir}/ 2>> {log} 1>&2

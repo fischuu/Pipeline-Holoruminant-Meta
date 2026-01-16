@@ -76,12 +76,16 @@ rule read_annotate__kraken2__assign:
         : "${{DB_NVME:=}}"
 
         echo "DB_SRC: $DB_SRC, COPY_DBS: $COPY_DBS" 2>> {log}.{resources.attempt} 1>&2
+        
+        echo "SHM: $SHM, NVME: $NVME" 2>> {log}.{resources.attempt} 1>&2
+        
+        echo "DB_SHM: $DB_SHM, DB_NVME: $DB_NVME" 2>> {log}.{resources.attempt} 1>&2
 
         if [ {params.copy_dbs} = "True" ]; then
         
             DB_SIZE=$(du -sb "$DB_SRC" | cut -f1)
-            SHM_AVAIL=$(timeout 10s df --output=avail -B1 "$SHM" 2>/dev/null | tail -1 || echo 0)
-            NVME_AVAIL=$(timeout 10s df --output=avail -B1 "$NVME" 2>/dev/null | tail -1 || echo 0)
+            SHM_AVAIL=$(timeout 100s df --output=avail -B1 "$SHM" 2>/dev/null | tail -1 || echo 0)
+            NVME_AVAIL=$(timeout 100s df --output=avail -B1 "$NVME" 2>/dev/null | tail -1 || echo 0)
         
             echo "DB_SIZE: $DB_SIZE, SHM_AVAIL: $SHM_AVAIL, NVME_AVAIL: $NVME_AVAIL" 2>> {log}.{resources.attempt} 1>&2
 

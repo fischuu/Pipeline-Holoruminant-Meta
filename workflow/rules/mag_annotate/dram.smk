@@ -88,7 +88,7 @@ rule mag_annotate__dram__distill:
     retries: len(get_escalation_order("mag_annotate__dram__distill"))
     params:
         config=config["dram-config"],
-        outdir_tmp=DRAM / "distill",
+        outdir_tmp=DRAM,
         outdir=DRAM,
     shell:
         """
@@ -97,7 +97,7 @@ rule mag_annotate__dram__distill:
             --input_file {input.annotations} \
             --rrna_path {input.rrnas} \
             --trna_path {input.trnas} \
-            --output_dir {params.outdir_tmp} \
+            --output_dir {params.outdir_tmp}/distill \
         2> {log} 1>&2
 
         mv {params.outdir_tmp}/* {params.outdir}/ 2>> {log} 1>&2

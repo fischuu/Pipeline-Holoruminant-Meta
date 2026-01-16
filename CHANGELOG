@@ -4,6 +4,8 @@
 
 Version 0.4.*: 
 ------------
+46: Adjusted the DRAM/distill path output for the tmp folder, which mihgt create problems on some systems.
+45: Added more debug messages and graceful waiting time to rule read_annotate__kraken2__assign 
 44: Turned the separate bin functions into a script file
 43: Rule 'assemble__drep__separate_bins' works now more robust, important for provided assemblies
 42: Changed mv command in mag_annotate__proteinortho from explicit to wildcards
