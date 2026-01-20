@@ -37,6 +37,7 @@ contig_annotate__diamond__assign: medium_nvme
 contig_annotate__diamond__summarise: small
 contig_annotate__eggnog_find_homology: medium_nvme
 contig_annotate__eggnog_orthology: large_nvme
+contig_annotate__eggnog7_run: medium
 contig_annotate__hmmer__assign: medium_nvme
 contig_annotate__cramToBam: small
 contig_annotate__featurecounts_run: medium

@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 ------------
+47: Added the eggnog 7 database for annotation
 46: Adjusted the DRAM/distill path output for the tmp folder, which mihgt create problems on some systems.
 45: Added more debug messages and graceful waiting time to rule read_annotate__kraken2__assign 
 44: Turned the separate bin functions into a script file

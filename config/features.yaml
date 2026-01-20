@@ -23,6 +23,7 @@ databases:
     hyddb: resources/databases/diamond/hyddb.20251125.dmnd 
   dram: resources/databases/dram/20240524/
   eggnog: resources/databases/eggnog/
+  eggnog7: resources/databases/eggnog7/eggnog7_20251223
   gtdbtk: resources/databases/gtdbtk/release220
   hmmer:
     #hyddb: resources/databases/hyddb/HydDB_all_MM2022.hmm
