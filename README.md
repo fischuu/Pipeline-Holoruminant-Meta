@@ -127,7 +127,13 @@ use them for unpacking the files, as this will significantly increase the speed.
   wget https://a3s.fi/Holoruminant-data/2025.04.04.phylophlan.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.singlem.tar.gz
   wget https://a3s.fi/Holoruminant-data/2025.04.04.sylph.tar.gz
-  
+
+  wget https://a3s.fi/eggnog7_annotator/eggnog7_20251223_master_search_table.tsv.gz
+  wget https://a3s.fi/eggnog7_annotator/eggnog7_20251223_proteins.dmnd
+  mkdir -p eggnog7
+  mv eggnog7_20251223_master_search_table.tsv.gz eggnog7/
+  mv eggnog7_20251223_proteins.dmnd eggnog7/
+
 # Unpack all the databases
   tar -xvf 2025.04.04.bakta.tar.gz
   tar -xvf 2025.04.04.camper.tar.gz
