@@ -58,6 +58,7 @@ graph <- grViz("
     # Define the contig annotate nodes
     contig_annotate_prodigal [label = 'Prodigal, v2.6.3']
     contig_annotate_eggnog [label = 'Eggnog, v2.1.12 \n emapperdb-5.0.2']
+    contig_annotate_eggnog7 [label = 'Eggnog7, v20251223 \n eggnog7-annotator, v0.1']
     contig_annotate_bowtie [label = 'Bowtie, v2.5.1']
     contig_annotate_camper [label = 'Camper, v1.0.0']
     contig_annotate_hmmer [label = 'HMMER, v3.3.2 \n HydDB 20251126 (2022)']
@@ -139,6 +140,7 @@ graph <- grViz("
     # Define the edges for contig annotate
     ass_assembly -> contig_annotate_prodigal
     contig_annotate_prodigal -> contig_annotate_eggnog
+    contig_annotate_prodigal -> contig_annotate_eggnog7
     contig_annotate_prodigal -> contig_annotate_bowtie
     contig_annotate_prodigal -> contig_annotate_camper
     contig_annotate_prodigal -> contig_annotate_hmmer
@@ -246,6 +248,7 @@ graph <- grViz("
       contig_annotate_prodigal
       contig_annotate_camper
       contig_annotate_eggnog
+      contig_annotate_eggnog7
       contig_annotate_bowtie
       contig_annotate_feature
       contig_annotate_hmmer
