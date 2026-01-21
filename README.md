@@ -26,7 +26,7 @@ SLURM executor / local execution
 docker/singularity/apptainer support
 
 ## Python dependencies
-Since Snakemake 8, it is required to install an executor plugin to submit jobs to a queueing system of a
+Starting from Snakemake 8 it is required to install an executor plugin to submit jobs to a queueing system of a
 HPC system. Please ensure you have installed the corresponding Snakemake plugins installed in case you want
 to submit your jobs to a queueing system
 
