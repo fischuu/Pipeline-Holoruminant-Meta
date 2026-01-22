@@ -153,14 +153,15 @@ use them for unpacking the files, as this will significantly increase the speed.
   tar -xvf 2025.11.25.reads.tar.gz
 ```
 
-If you have downloaded the resources already into another project, you can share
+If you have downloaded the resources already for another project, you can share
 the resources also to a new project, e.g. by creating a symbolic link
 
 ```
 cd $PROJECTFOLDER
 ln -s /project/with/existing/resources resources
-
 ```
+
+(Of course you can also adjsut the paths to the databases in the config file, if you prefer this option)
 
 Now we copy the configuration files from the pipeline folder to the project folder,
 to adjust the configurations to the project specifics
@@ -171,9 +172,13 @@ cp -r config $PROJECTFOLDER
 cp -r run_Pipeline-Holoruminant-meta.sh $PROJECTFOLDER
 ```
 
-The tar-balls were created with this command (here example for diamond)
+The tar-balls were created with this command (here example for diamond and the reads)
 
 ```
 tar -czf "$(date +%Y.%m.%d).diamond.tar.gz" -C resources/databases diamond
 tar -czf "$(date +%Y.%m.%d).reads.tar.gz" reads
 ```
+
+Now all files are in place and the pipeline is ready for setting it up.
+
+[Setup](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/03-Setup.md)
