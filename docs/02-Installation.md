@@ -181,4 +181,4 @@ tar -czf "$(date +%Y.%m.%d).reads.tar.gz" reads
 
 Now all files are in place and the pipeline is ready for setting it up.
 
-[Setup](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/03-Setup.md)
+Continue with preparing the configuration files: [Setup](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/03-Setup.md)

@@ -4,6 +4,8 @@
 
 Version 0.4.*: 
 ------------
+49: Moved large parts of the README.md to dedicated files located in docs/ 
+48: More adjustments to dram distill output folder names
 47: Added the eggnog 7 database for annotation
 46: Adjusted the DRAM/distill path output for the tmp folder, which mihgt create problems on some systems.
 45: Added more debug messages and graceful waiting time to rule read_annotate__kraken2__assign 
