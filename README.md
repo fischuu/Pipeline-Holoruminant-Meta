@@ -1,6 +1,5 @@
-<p align="right">
-  <img src="resources/logo.jpeg" alt="Logo" width="100px"/>
-</p>
+<img src="resources/logo.jpeg" alt="Logo" width="120" style="float: right; margin: 0 0 10px 10px;"/>
+
 
 # Overview
 This Snakemake pipeline dedicated to Metagenomic data analysis consists out of several modules that
