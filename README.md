@@ -27,16 +27,6 @@ For troubleshooting, please visit the collection of most common errors: [Trouble
 
 
 
-
-## assemble-module
-This module runs all the assembly related tasks, like creating the metagenome and then the binning and combination of different binners.
-
-Usage:
-
-```
-bash run_Pipeline-Holoruminant-meta.sh assemble
-```
-
 ## quantify-module
 
 After creating the assemblies, this module does the mapping of the reads and generates the quantification tables for the samples.
