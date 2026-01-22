@@ -1,4 +1,4 @@
-<img src="resources/logo.jpeg" alt="Logo" width="120" style="float: right; margin: 0 0 10px 10px;"/>
+<img src="resources/logo.jpeg" alt="Logo" width="200" align="right"/>
 
 
 # Overview
