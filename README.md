@@ -1,3 +1,7 @@
+<p align="right">
+  <img src="resources/logo.jpeg" alt="Logo" width="100px"/>
+</p>
+
 # Overview
 This Snakemake pipeline dedicated to Metagenomic data analysis consists out of several modules that
 cover a) read-based b) contig-based and c) MAG-based analyses as well as quantification, quality
