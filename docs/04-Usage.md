@@ -5,6 +5,9 @@
 - The [`preprocess`](#preprocess) module
 - The [`read_annotate`](#read_annotate) module
 - The [`assemble`](#assemble) module
+- The [`contig_annotate`](#contig_annotate) module
+- The [`mag_annotate`](#mag_annotate) module
+- The [`quantify`](#quantify) module
 
 # Usage
 
@@ -26,7 +29,7 @@ not produce any reasonable output and might crash even.
 Back to [Table of contents](#toc)
 
 <a name="reads"></a>
-## 'reads-module'
+## 'reads'-module
 Here are some basic steps for the reads are performed.
 
 Usage:
@@ -50,7 +53,7 @@ For all other modules this works in a similar fashion, just add the `-np`-option
 Back to [Table of contents](#toc)
 
 <a name="reference"></a>
-## reference-module
+## 'reference'-module
 
 The reference host genomes are recompressed in this module.
 
@@ -63,7 +66,7 @@ bash run_Pipeline-Holoruminant-meta.sh reference
 Back to [Table of contents](#toc)
 
 <a name="preprocess"></a>
-## preprocess-module
+## 'preprocess'-module
 This module covers the quality control and trimming of the reads
 
 Usage:
@@ -78,7 +81,7 @@ bash run_Pipeline-Holoruminant-meta.sh report_preprocess
 Back to [Table of contents](#toc)
 
 <a name="read_annotate"></a>
-## read_annotate-module
+## 'read_annotate'-module
 
 The command `read_annotate` triggers the analysis of the read-based annotation.
 
@@ -110,7 +113,7 @@ pipeline and can be used to run only subparts of the pipeline.
 Back to [Table of contents](#toc)
 
 <a name="assemble"></a>
-## assemble-module
+## 'assemble'-module
 This module runs all the assembly related tasks, like creating the metagenome and then the
 binning and combination of different binners.
 
@@ -133,3 +136,72 @@ bash run_Pipeline-Holoruminant-meta.sh assemble__metaspades
 ```
 
 Back to [Table of contents](#toc)
+
+<a name="contig_annotate"></a>
+## 'contig_annotate'-module
+
+This module is running the contig based analysis from beginning to end, meaning it first predicts
+genes on the metagenome assembly, annotates the predicted genes with eggnog, aligns the quality
+filtered reads to the assembly with bowtie and then quantifies it with coverm.
+
+Usage:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate
+```
+
+Usage for individual tools:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate__camper
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate__diamond
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate__eggnog
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate__eggnog7
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate__featurecounts
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate__hmmer
+bash run_Pipeline-Holoruminant-meta.sh contig_annotate__prodigal
+```
+
+Back to [Table of contents](#toc)
+
+<a name="mag_annotate"></a>
+## 'mag_annotate'-module
+
+
+This module is the MAG annotation workhorse, it aligns the mags against various databases and
+generates the annotation for them.
+
+Usage:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate
+```
+
+Individual tools can be accessed like:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__bakta
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__camper
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__checkm2
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__dram
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__dram_mag
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__eggnog
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__gtdbtk
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__phylophlan
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__proteinortho
+bash run_Pipeline-Holoruminant-meta.sh mag_annotate__quast
+```
+
+Back to [Table of contents](#toc)
+
+<a name="quantify"></a>
+## 'quantify'-module
+
+After creating the assemblies, this module does the mapping of the reads and generates the
+quantification tables for the samples.
+
+Usage:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh quantify
+```
