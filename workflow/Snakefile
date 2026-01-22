@@ -94,6 +94,9 @@ debug(f"EGGNOG fast temp storage: {EGGNOGSHM}")
 debug(f"EGGNOG fall-back temp storage: {EGGNOGNVME}")
 debug(f"Host names: {HOST_NAMES}, last host: {LAST_HOST}")
 
+config["pipeline_folder"] = config["pipeline_folder"].rstrip('/') + '/'
+debug(f"Used pipeline folder: " + config["pipeline_folder"]  )
+
 READS_R = os.path.join(config["pipeline_folder"], "workflow/scripts/R/reads.Rmd")
 PREPROCESS_R = os.path.join(config["pipeline_folder"], "workflow/scripts/R/preprocess.Rmd")
 

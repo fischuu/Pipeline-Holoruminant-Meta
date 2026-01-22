@@ -89,19 +89,22 @@ rule mag_annotate__dram_mag__distill:
     params:
         config=config["dram-config"],
         outdir=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}",
-        outdir_tmp=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}/",
+        outdir_tmp=lambda wildcards: f"{DRAMMAG}/{wildcards.assembly_id}/distill_tmp",
     shell:
         """
+        # This is maybe needed as snakemake creates the folders, but dram relies on creating it itself
+        rm -rf {params.outdir_tmp} 2> {log} 1>&2
+        
         DRAM.py distill \
             --config_loc {params.config} \
             --input_file {input.annotation} \
             --rrna_path {input.rrnas} \
             --trna_path {input.trnas} \
-            --output_dir {params.outdir_tmp}/distill \
+            --output_dir {params.outdir_tmp} \
         2> {log} 1>&2
 
         mv {params.outdir_tmp}/* {params.outdir}/ 2>> {log} 1>&2
-        rmdir {params.outdir_tmp} 2>> {log} 1>&2
+        rm -rf {params.outdir_tmp} 2>> {log} 1>&2
         """
 
 rule mag_annotate__dram_mags:
