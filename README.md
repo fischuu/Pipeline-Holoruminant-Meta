@@ -26,37 +26,6 @@ Guide for running the pipeline: [Usage](https://github.com/fischuu/Pipeline-Holo
 For troubleshooting, please visit the collection of most common errors: [Troubleshooting](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/10-Troubleshooting.md)
 
 
-## preprocess-module
-This module covers the quality control and triming of the reads
-
-Usage:
-
-```
-bash run_Pipeline-Holoruminant-meta.sh preprocess
-
-# Generate the module report
-bash run_Pipeline-Holoruminant-meta.sh report_preprocess
-```
-
-## read_annotate-module
-
-The command `read_annotate` triggers the analysis of the read-based annotation.
-
-Usage:
-
-```
-bash run_Pipeline-Holoruminant-meta.sh read_annotate
-```
-
-Individual tools can be called instead by running
-
-```
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__diamond
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__krona
-...
-```
-
-The underlying syntax is that an individual tool is always called by module name, followed by two underscores and the tool name. Please bear in mind that the pipeline automatically runs the required pre-steps. This syntax hold through-out the entire pipeline and can be used to run only subparts of the pipeline.
 
 
 ## assemble-module

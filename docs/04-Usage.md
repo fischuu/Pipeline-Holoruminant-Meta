@@ -1,9 +1,10 @@
-# Usage
-
-## Table of content
+# Table of content
 - [`reads` module](#reads)
+- [`reference` module](#reference)
+- [`preprocess` module](#preprocess)
+- [`read_annotate` module](#read_annotate)
 
-
+# Usage
 
 The pipeline can run the entire workflow at once. However, normally it is recommended to run different
 modules from the pipeline separated to get better control over the results and also to be able to react
@@ -42,6 +43,7 @@ bash run_Pipeline-Holoruminant-meta.sh reads -np
 For all other modules this works in a similar fashion, just add the `-np`-option for testing and
 `report_` to the module to generate a report for the module (not implemented yet for all modules).
 
+<a name="reference"></a>
 ## reference-module
 
 The reference host genomes are recompressed in this module.
@@ -52,3 +54,45 @@ Usage:
 bash run_Pipeline-Holoruminant-meta.sh reference
 ```
 
+<a name="preprocess"></a>
+## preprocess-module
+This module covers the quality control and trimming of the reads
+
+Usage:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh preprocess
+
+# Generate the module report
+bash run_Pipeline-Holoruminant-meta.sh report_preprocess
+```
+
+<a name="read_annotate"></a>
+## read_annotate-module
+
+The command `read_annotate` triggers the analysis of the read-based annotation.
+
+Usage:
+
+```
+bash run_Pipeline-Holoruminant-meta.sh read_annotate
+```
+
+Instead of the entire module, individual tools can also be called by running
+
+```
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__diamond
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__humann
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__kraken2
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__krona
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__metaphlan
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__nonpareil
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__phyloflash
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__singlem
+bash run_Pipeline-Holoruminant-meta.sh read_annotate__sylph
+```
+
+The underlying syntax (here and for all other modules) is that an individual tool is always
+called by module name, followed by two underscores and the tool name. Please bear in mind that
+the pipeline automatically runs the required pre-steps. This syntax hold through-out the entire
+pipeline and can be used to run only subparts of the pipeline.
