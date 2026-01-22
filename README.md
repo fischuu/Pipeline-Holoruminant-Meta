@@ -17,7 +17,7 @@ run individual tools, giving full flexibility on how to use and run the pipeline
 
 For a step-by-step tutorial on how to install the pipeline and all pre-compiled databases, please see
 
-[02 - Installation] https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/02-Installation.md
+[02 - Installation](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/02-Installation.md)
 
 
 
