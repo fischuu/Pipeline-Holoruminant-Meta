@@ -23,15 +23,8 @@ Guide to prepare the configuration files: [Setup](https://github.com/fischuu/Pip
 
 Guide for running the pipeline: [Usage](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/04-Usage.md)
 
+For troubleshooting, please visit the collection of most common errors: [Troubleshooting](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/10-Troubleshooting.md)
 
-## reference-module
-The reference host genomes are recompressed in this module
-
-Usage:
-
-```
-bash run_Pipeline-Holoruminant-meta.sh reference
-```
 
 ## preprocess-module
 This module covers the quality control and triming of the reads

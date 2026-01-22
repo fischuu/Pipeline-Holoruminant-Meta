@@ -10,6 +10,9 @@ It can also can be used to prepare the rulegraph of the pipeline.
 
 You need to enter the required values and paths according to the comments in the file. 
 
+Pay also attention to the binding points in the snakemake call, that all required paths and entry points are
+mounted to the apptainer container.
+
 ## config/config.yaml
 Here are the paths to the different configuration files stored, which might not need any adjustments
 from the user (e.g. for Holoruminant users). 
@@ -172,3 +175,9 @@ in the fie name)
 
 In case you have several lanes for samples, you can concatenate them prior to creating the samples.tsv
 script with the script `concatenateFiles.sh`which is in the pipeline folder `workflow/scripts`. Currently, you would need to run the script inside the same folder where the fastq files are located.
+
+# Next steps
+
+The pipeline is now properly configured and you can move on.
+
+Continue with running the pipeline: [Usage](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/04-Usage.md)

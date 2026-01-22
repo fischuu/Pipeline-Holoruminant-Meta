@@ -179,6 +179,8 @@ tar -czf "$(date +%Y.%m.%d).diamond.tar.gz" -C resources/databases diamond
 tar -czf "$(date +%Y.%m.%d).reads.tar.gz" reads
 ```
 
+# Next steps
+
 Now all files are in place and the pipeline is ready for setting it up.
 
 Continue with preparing the configuration files: [Setup](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/03-Setup.md)
