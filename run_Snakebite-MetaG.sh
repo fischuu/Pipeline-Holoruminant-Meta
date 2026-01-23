@@ -1,6 +1,6 @@
 # Set the project relevant paths
 ################################################################################
-pipelineFolder="/users/fischerd/git/Pipeline-Holoruminant-Meta"
+pipelineFolder="/users/fischerd/git/Snakebite-MetaG"
 projectFolder="/scratch/project_2009831/Pipe_dev"
 
 # Setup the server profile. You can copy the default profile and adjust it to your hpc.
