@@ -3,7 +3,8 @@
 
 
 Version 0.4.*: 
-------------
+-----------
+50: Changed name to Snakebite-Holoruminant-MetaG
 49: Moved large parts of the README.md to dedicated files located in docs/ 
 48: More adjustments to dram distill output folder names
 47: Added the eggnog 7 database for annotation
