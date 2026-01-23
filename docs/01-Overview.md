@@ -11,5 +11,5 @@ This makes it straight forward and as user-friendly as it can get.
 The pipeline is organised in modules, which can run one-by-one. Further, the user can also choose to
 run individual tools, giving full flexibility on how to use and run the pipeline.
 
-![Flow diagram of the pipeline](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/flowchart/flowchart.png?raw=true)
+![Flow diagram of the pipeline](https://github.com/fischuu/Snakebite-Holoruminant-MetaG/blob/main/flowchart/flowchart.png?raw=true)
 

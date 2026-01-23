@@ -35,16 +35,16 @@ Here are some basic steps for the reads are performed.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh reads
+bash run_Snakebite-Holoruminant-MetaG.sh reads
 
 # Generate the module report
-bash run_Pipeline-Holoruminant-meta.sh report_reads
+bash run_Snakebite-Holoruminant-MetaG.sh report_reads
 ```
 
 For testing, please check first the dry-run with commands printed by running the command like this
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh reads -np
+bash run_Snakebite-Holoruminant-MetaG.sh reads -np
 ```
 
 For all other modules this works in a similar fashion, just add the `-np`-option for testing and
@@ -60,7 +60,7 @@ The reference host genomes are recompressed in this module.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh reference
+bash run_Snakebite-Holoruminant-MetaG.sh reference
 ```
 
 Back to [Table of contents](#toc)
@@ -72,10 +72,10 @@ This module covers the quality control and trimming of the reads
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh preprocess
+bash run_Snakebite-Holoruminant-MetaG.sh preprocess
 
 # Generate the module report
-bash run_Pipeline-Holoruminant-meta.sh report_preprocess
+bash run_Snakebite-Holoruminant-MetaG.sh report_preprocess
 ```
 
 Back to [Table of contents](#toc)
@@ -88,21 +88,21 @@ The command `read_annotate` triggers the analysis of the read-based annotation.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh read_annotate
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate
 ```
 
 Instead of the entire module, individual tools can also be called by running
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__diamond
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__humann
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__kraken2
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__krona
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__metaphlan
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__nonpareil
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__phyloflash
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__singlem
-bash run_Pipeline-Holoruminant-meta.sh read_annotate__sylph
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__diamond
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__humann
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__kraken2
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__krona
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__metaphlan
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__nonpareil
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__phyloflash
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__singlem
+bash run_Snakebite-Holoruminant-MetaG.sh read_annotate__sylph
 ```
 
 The underlying syntax (here and for all other modules) is that an individual tool is always
@@ -120,19 +120,19 @@ binning and combination of different binners.
 Usage (full module):
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh assemble
+bash run_Snakebite-Holoruminant-MetaG.sh assemble
 ```
 
 Usage (individual tools):
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh assemble__concoct
-bash run_Pipeline-Holoruminant-meta.sh assemble__drep
-bash run_Pipeline-Holoruminant-meta.sh assemble__magscot
-bash run_Pipeline-Holoruminant-meta.sh assemble__maxbin2
-bash run_Pipeline-Holoruminant-meta.sh assemble__megahit
-bash run_Pipeline-Holoruminant-meta.sh assemble__metabat2
-bash run_Pipeline-Holoruminant-meta.sh assemble__metaspades
+bash run_Snakebite-Holoruminant-MetaG.sh assemble__concoct
+bash run_Snakebite-Holoruminant-MetaG.sh assemble__drep
+bash run_Snakebite-Holoruminant-MetaG.sh assemble__magscot
+bash run_Snakebite-Holoruminant-MetaG.sh assemble__maxbin2
+bash run_Snakebite-Holoruminant-MetaG.sh assemble__megahit
+bash run_Snakebite-Holoruminant-MetaG.sh assemble__metabat2
+bash run_Snakebite-Holoruminant-MetaG.sh assemble__metaspades
 ```
 
 Back to [Table of contents](#toc)
@@ -147,19 +147,19 @@ filtered reads to the assembly with bowtie and then quantifies it with coverm.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate
 ```
 
 Usage for individual tools:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate__camper
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate__diamond
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate__eggnog
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate__eggnog7
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate__featurecounts
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate__hmmer
-bash run_Pipeline-Holoruminant-meta.sh contig_annotate__prodigal
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate__camper
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate__diamond
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate__eggnog
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate__eggnog7
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate__featurecounts
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate__hmmer
+bash run_Snakebite-Holoruminant-MetaG.sh contig_annotate__prodigal
 ```
 
 Back to [Table of contents](#toc)
@@ -174,22 +174,22 @@ generates the annotation for them.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate
 ```
 
 Individual tools can be accessed like:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__bakta
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__camper
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__checkm2
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__dram
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__dram_mag
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__eggnog
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__gtdbtk
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__phylophlan
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__proteinortho
-bash run_Pipeline-Holoruminant-meta.sh mag_annotate__quast
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__bakta
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__camper
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__checkm2
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__dram
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__dram_mag
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__eggnog
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__gtdbtk
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__phylophlan
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__proteinortho
+bash run_Snakebite-Holoruminant-MetaG.sh mag_annotate__quast
 ```
 
 Back to [Table of contents](#toc)
@@ -203,5 +203,5 @@ quantification tables for the samples.
 Usage:
 
 ```
-bash run_Pipeline-Holoruminant-meta.sh quantify
+bash run_Snakebite-Holoruminant-MetaG.sh quantify
 ```
