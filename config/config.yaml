@@ -2,7 +2,7 @@
 ##
 ## File configuration configuration
 
-pipeline_folder: "/users/fischerd/git/Pipeline-Holoruminant-Meta/"
+pipeline_folder: "/users/fischerd/git/Snakebite-Holoruminant-MetaG/"
 
 features-file: "config/features.yaml"
 params-file: "config/params.yaml"
