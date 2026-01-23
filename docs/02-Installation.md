@@ -46,22 +46,22 @@ The steps to perform are
  cd /users/fischerd/git
 
 # First, clone the pipeline into that folder
-  git clone git@github.com:fischuu/Pipeline-Holoruminant-Meta.git
+  git clone git@github.com:fischuu/Snakebite-Holoruminant-MetaG.git
 
 # In case the previous steps fails with an error that contains
 # git@github.com: Permission denied (publickey)
 # it indicates that you do not have a ssh key exchanged with GitHub
 # and you could clone the repository then instead like this
 #
-# git clone https://github.com/fischuu/Pipeline-Holoruminant-Meta.git
+# git clone https://github.com/fischuu/Snakebite-Holoruminant-MetaG.git
   
 # Setting ENV variable to get downstream code more generic (so, this is the
 # directory to where you cloned the pipeline)
-  cd Pipeline-Holoruminant-Meta
+  cd Snakebite-Holoruminant-MetaG
   PIPELINEFOLDER=$(pwd)
   
 # If previous doesn't work, you can set it also manually like for example this
-  PIPELINEFOLDER="/users/fischerd/git/Pipeline-Holoruminant-Meta"
+  PIPELINEFOLDER="/users/fischerd/git/Snakebite-Holoruminant-MetaG"
 ```
 
 Next, we setup a project folder in our scratch space of the HPC, here we will run the pipeline
@@ -183,4 +183,4 @@ tar -czf "$(date +%Y.%m.%d).reads.tar.gz" reads
 
 Now all files are in place and the pipeline is ready for setting it up.
 
-Continue with preparing the configuration files: [Setup](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/03-Setup.md)
+Continue with preparing the configuration files: [Setup](https://github.com/fischuu/Snakebite-Holoruminant-MetaG/blob/main/docs/03-Setup.md)
