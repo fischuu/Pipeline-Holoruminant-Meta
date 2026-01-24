@@ -15,6 +15,7 @@ rule report__reads:
     params:
        script=READS_R,
        features=config["features-file"],
+       sampletsv=config["sample-file"],
        wd=WD
     threads: esc("cpus", "report__reads")
     resources:
@@ -28,5 +29,7 @@ rule report__reads:
     shell:"""
        R -e "working_dir <- '{params.wd}'; \
              features_file <- '{params.features}'; \
+             sample_file <- '{params.sampletsv}'; \
+             snakemake <- TRUE ; \
              rmarkdown::render('{params.script}',output_file='{params.wd}/{output}')" &> {log}
     """

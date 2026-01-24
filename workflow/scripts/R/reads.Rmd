@@ -34,15 +34,62 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = 'center', fig.height = 5, fig.width = 8.5)
 
 reportColours <- c("#FF8200", "#00B5E2", "#78BE20", "#7F3F98", "#E13C98", "#0033A0", "#54585A")
-```
 
-```{r, include=FALSE}
-# Init Step to make sure that the dependencies are loaded
-htmltools::tagList(datatable(cars))
-#htmltools::tagList(ggplotly(ggplot()))
+if(!is.element("snakemake",ls())){
+    working_dir <- '/scratch/project_2009831/Pipe_test';          
+    features_file <- 'config/features.yaml';          
+    sample_file <- 'config/samples.tsv';
+}
 ```
 
 
 ```{r}
+# Import sample file
+sample_tsv <- read.table(file.path(working_dir,sample_file), header=TRUE)
 list.files(file.path(working_dir, "results", "reads"))
+```
+
+# Sample summary
+
+```{r sample summary}
+n_samples    <- length(unique(sample_tsv$sample_id))
+n_assemblies <- length(unique(sample_tsv$assembly_ids))
+
+assembly_ids <- unique(sample_tsv$assembly_ids)
+
+assembly_summary <- data.frame(
+  assembly_id = assembly_ids,
+  n_samples   = sapply(assembly_ids, function(a) {
+    sum(sample_tsv$assembly_ids == a)
+  }),
+  samples = sapply(assembly_ids, function(a) {
+    paste(sample_tsv$sample_id[sample_tsv$assembly_ids == a],
+          collapse = ", ")
+  }),
+  stringsAsFactors = FALSE
+)
+
+xt <- xtable(
+  assembly_summary,
+  caption = "Summary of samples per assembly",
+  label   = "tab:assembly_summary"
+)
+
+print(
+  xt,
+  include.rownames = FALSE,
+  comment = FALSE
+)
+
+```
+
+# Import FastQC stats
+
+```{r, eval=FALSE}
+zipfile <- file.path(working_dir, "results", "reads")
+
+con <- unz(zipfile, "sample_fastqc/fastqc_data.txt")
+fastqc_raw <- readLines(con)
+close(con)
+
 ```
