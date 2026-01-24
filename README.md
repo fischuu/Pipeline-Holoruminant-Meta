@@ -28,6 +28,17 @@ Guide for running the pipeline: [Usage](https://github.com/fischuu/Pipeline-Holo
 
 For troubleshooting, please visit the collection of most common errors: [Troubleshooting](https://github.com/fischuu/Pipeline-Holoruminant-Meta/blob/main/docs/10-Troubleshooting.md)
 
+
+# Contributions
+
+List of contributing authors:
+...
+
+
+# Contact
+Please use the issue tracker from the GitHub or contact one of the contributors, if you'd prefer personal contact.
+
+
 ## References
 
 - [`fastp`](https://github.com/OpenGene/fastp)

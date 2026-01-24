@@ -1,6 +1,6 @@
 ---
-title: "Holoruminant MetaG pipeline"
-subtitle: "Reads module"
+title: "Snakebite - Holoruminant - MetaG"
+subtitle: "Reads module - report"
 author: "t.b.a."
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:

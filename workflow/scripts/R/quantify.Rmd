@@ -1,6 +1,6 @@
 ---
 title: "Snakebite - Holoruminant - MetaG"
-subtitle: "assemble module - report"
+subtitle: "quantify module - report"
 author: "t.b.a."
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
@@ -44,5 +44,5 @@ htmltools::tagList(datatable(cars))
 
 
 ```{r}
-list.files(file.path(working_dir, "results", "assemble"))
+list.files(file.path(working_dir, "results", "quantify"))
 ```

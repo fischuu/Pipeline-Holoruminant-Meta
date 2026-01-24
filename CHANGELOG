@@ -4,6 +4,7 @@
 
 Version 0.4.*: 
 -----------
+51: report skeletons added for all modules
 50: Changed name to Snakebite-Holoruminant-MetaG
 49: Moved large parts of the README.md to dedicated files located in docs/ 
 48: More adjustments to dram distill output folder names

@@ -88,8 +88,15 @@ read_annotate__sylph_profile: medium_nvme
 
 reference__hosts__recompress: small
 
+report__assemble: small
+report__contig_annotate: small
+report__mag_annotate: small
 report__preprocess: small
+report__quantify: small
+report__read_annotate: small
 report__reads: small
+report__reference: small
+
 report__sample__multiqc: small
 report__step__reads: small
 report__step__preprocess: small
