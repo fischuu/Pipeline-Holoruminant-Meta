@@ -1,7 +1,9 @@
+#!/usr/bin/env bash
+
 # Set the project relevant paths
 ################################################################################
-pipelineFolder="/users/fischerd/git/Snakebite-Holoruminant-MetaG"
-projectFolder="/scratch/project_2009831/Pipe_dev"
+projectFolder="/scratch/project_2009831/Pipe_test"
+configFile="${projectFolder}/config/config.yaml"
 
 # Setup the server profile. You can copy the default profile and adjust it to your hpc.
 # Check that the generic command meets the requirements from your (slurm) executor.
@@ -35,6 +37,29 @@ mkdir -p $APPTAINER_CACHEDIR
 #snakemake -s $pipelineFolder/workflow/Snakefile \
 #          --configfile $projectFolder/config/config.yaml \
 #          --rulegraph | dot -T png > $projectFolder/workflow.png
+
+
+# Helper: read YAML value (simple key: value, no nesting)
+################################################################################
+read_yaml() {
+    local key="$1"
+    local file="$2"
+    grep -E "^[[:space:]]*${key}:" "$file" \
+        | sed -E "s/^[^:]+:[[:space:]]*//" \
+        | tr -d '"'
+}
+
+# Helper: Extract pipeline_folder from pipeline config
+################################################################################
+pipelineFolder="$(read_yaml pipeline_folder "$configFile")"
+
+if [[ -z "$pipelineFolder" ]]; then
+    echo "ERROR: pipeline_folder not defined in $pipelineConfigPath" >&2
+    exit 1
+fi
+
+echo "config file      : ${configFile}"
+echo "Project folder   : ${projectFolder}"
 
 
 # Run the pipeline (singularity/apptainer)

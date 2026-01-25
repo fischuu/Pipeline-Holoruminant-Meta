@@ -7,7 +7,38 @@ import yaml
 import os
 
 DEBUG = True
-version = "0.4.51"
+
+import re
+
+def get_version_from_changelog(default="XX.XX"):
+    try:
+        # workflow.basedir is the folder containing Snakefile
+        changelog = os.path.abspath(os.path.join(workflow.basedir, "..", "CHANGELOG"))
+
+        with open(changelog) as f:
+            text = f.read()
+
+        # extract major.minor
+        major_minor = re.search(r"Version\s+([0-9]+\.[0-9]+)\.\*:", text)
+        # extract first patch number
+        patch = re.search(r"^\s*([0-9]+):", text, re.MULTILINE)
+
+        if not major_minor or not patch:
+            raise ValueError("Version pattern not found")
+
+        return f"{major_minor.group(1)}.{patch.group(1)}"
+
+    except Exception as e:
+        print(
+            f"[WARN] Could not resolve pipeline version from CHANGELOG "
+            f"({e}); using fallback '{default}'"
+        )
+        return default
+
+# set the pipeline version
+version = get_version_from_changelog()
+
+
 
 def debug(msg):
     if DEBUG:
