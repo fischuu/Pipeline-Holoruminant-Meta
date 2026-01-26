@@ -44,6 +44,29 @@ Then, you can provide the assemblies as gezipped fasta files, in the format
 
 where `{assembly_id}` refers to the assembly_id provided in the `sample.tsv` file.
 
+Currently, the contig naming within the self-provided genomes is not very flexible (at least arbitrary naming
+caused unexpected behaviour). For that reason, it is advisable to call the contigs like they would look like
+they would come from the embedded assembler looking like this
+
+```
+>LPMS:bin_NA@contig_00000001
+ATCGACTTCA....
+>LPMS:bin_NA@contig_00000002
+GTGTTGATCA....
+>LPMS:bin_NA@contig_00000003
+TAGCTACGTA...
+```
+
+meaning, it follows the naming scheme `>'assebly_name'>bin_NA@contig_00000000`.
+
+We provide a script for renaming the header of self-provided assemblies that can be used like this
+
+```
+python ~/git/Snakebite-Holoruminant-MetaG/workflow/scripts/rename_provided_assemblies.py -i CPMS_orig.fa -o CPMS.fa -a CPMS
+```
+
+where `-i` provided the original fasta file and `-a` the name of the assembly to be used. 
+
 
 ## config/escalation.yaml
 
