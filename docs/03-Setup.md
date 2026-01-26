@@ -65,7 +65,9 @@ We provide a script for renaming the header of self-provided assemblies that can
 python ~/git/Snakebite-Holoruminant-MetaG/workflow/scripts/rename_provided_assemblies.py -i CPMS_orig.fa -a CPMS
 ```
 
-where `-i` provided the original fasta file and `-a` the name of the assembly to be used. 
+where `-i` provided the original fasta file and `-a` the name of the assembly to be used. Sometimes the zipping
+of the output file was very slow, so there is a also a `--no-gzip`-option so that the gzip function can be run
+afterwards manually, what was much faster in test runs.
 
 
 ## config/escalation.yaml
