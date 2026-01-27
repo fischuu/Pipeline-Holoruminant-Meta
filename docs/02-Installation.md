@@ -158,7 +158,7 @@ the resources also to a new project, e.g. by creating a symbolic link
 
 ```
 cd $PROJECTFOLDER
-ln -s /project/with/existing/resources resources
+ln -s /work/users/fischerd/RESOURCES/resources .
 ```
 
 (Of course you can also adjsut the paths to the databases in the config file, if you prefer this option)
